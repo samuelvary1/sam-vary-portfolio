@@ -6,7 +6,7 @@ const HomePage = () => {
     <HomeContainer>
       <HeroSection>
         <h1>Welcome to My Portfolio</h1>
-        <p>I'm Samuel Vary, a developer and creator.</p>
+        <p>I'm Sam Vary, a developer and creator.</p>
         <Button href="/projects">View My Work</Button>
       </HeroSection>
     </HomeContainer>
