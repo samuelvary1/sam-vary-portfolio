@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <Nav>
       <NavContainer>
-        <Logo>Samuel Vary</Logo>
+        <Logo>Sam Vary</Logo>
         <NavLinks>
           <NavItem to="/">Home</NavItem>
           <NavItem to="/about">About</NavItem>
