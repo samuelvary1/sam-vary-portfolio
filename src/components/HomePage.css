@@ -1,4 +1,22 @@
-.map-wrapper {
+  .hero-name {
+    position: absolute;
+    top: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    text-align: center;
+    color: #fdf6e3;
+    font-family: 'MedievalSharp', serif;
+    text-shadow: 2px 2px 8px #000;
+  }
+
+  .hero-name h1 {
+    font-size: 48px;
+    margin: 0;
+    letter-spacing: 2px;
+  }
+  
+  .map-wrapper {
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -24,8 +42,8 @@
   }
   
   .map-icon img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     transition: transform 0.3s ease;
   }
   
@@ -56,4 +74,9 @@
   .scriptorium {
     top: 60%;
     left: 70%;
+  }
+
+  .experience {
+    top: 30%;
+    right: 25%;
   }

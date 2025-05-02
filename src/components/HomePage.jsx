@@ -6,8 +6,13 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   return (
+    
     <div className="map-wrapper">
       <img src="/assets/fantasy-map.png" alt="Fantasy Map" className="map-background" />
+
+      <div className="hero-name">
+        <h1>Samuel (Sam) Vary</h1>
+      </div>
 
       {/* The Forge - Miniatures */}
       <div className="map-icon forge" onClick={() => navigate('/miniatures')}>
@@ -22,6 +27,12 @@ const HomePage = () => {
       </div>
 
       {/* Add other locations here... */}
+
+      {/* Experience - Resume and GitHub */}
+      <div className="map-icon experience" onClick={() => navigate('/experience')}>
+        <img src="/icons/resume.png" alt="Experience" />
+        <span className="label">Experience</span>
+      </div>
     </div>
   );
 };
