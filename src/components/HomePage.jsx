@@ -23,15 +23,19 @@ const HomePage = () => {
       {/* The Scriptorium - Drawing Gallery */}
       <div className="map-icon scriptorium" onClick={() => navigate('/gallery')}>
         <img src="/icons/scribe.png" alt="The Scriptorium" />
-        <span className="label">The Scriptorium</span>
+        <span className="label">Art Gallery</span>
       </div>
-
-      {/* Add other locations here... */}
 
       {/* Experience - Resume and GitHub */}
       <div className="map-icon experience" onClick={() => navigate('/experience')}>
         <img src="/icons/resume.png" alt="Experience" />
         <span className="label">Experience</span>
+      </div>
+
+      {/* Music - Basement Tapes */}
+      <div className="map-icon music" onClick={() => navigate('/music')}>
+        <img src="/icons/bard-music.png" alt="Music" />
+        <span className="label">Music</span>
       </div>
     </div>
   );

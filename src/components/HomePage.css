@@ -46,6 +46,12 @@
     height: 150px;
     transition: transform 0.3s ease;
   }
+
+  .map-icon.music img {
+    width: 100px;
+    height: 170px;
+    transition: transform 0.3s ease;
+  }
   
   .map-icon .label {
     font-family: 'UnifrakturCook', cursive;
@@ -79,4 +85,9 @@
   .experience {
     top: 30%;
     right: 25%;
+  }
+
+  .music {
+    top: 60%;
+    left: 15%;
   }
