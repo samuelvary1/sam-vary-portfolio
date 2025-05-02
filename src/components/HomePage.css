@@ -52,6 +52,11 @@
     height: 170px;
     transition: transform 0.3s ease;
   }
+
+  .map-icon.film img {
+    width: 100px;
+    height: 100px;
+  }
   
   .map-icon .label {
     font-family: 'UnifrakturCook', cursive;
@@ -90,4 +95,14 @@
   .music {
     top: 60%;
     left: 15%;
+  }
+
+  .film {
+    top: 70%;
+    left: 45%;
+  }
+
+  .chef {
+    top: 10%;
+    left: 10%;
   }

@@ -17,7 +17,7 @@ const HomePage = () => {
       {/* The Forge - Miniatures */}
       <div className="map-icon forge" onClick={() => navigate('/miniatures')}>
         <img src="/icons/dragon-fire.png" alt="The Forge" />
-        <span className="label">The Forge</span>
+        <span className="label">Miniatures</span>
       </div>
 
       {/* The Scriptorium - Drawing Gallery */}
@@ -36,6 +36,18 @@ const HomePage = () => {
       <div className="map-icon music" onClick={() => navigate('/music')}>
         <img src="/icons/bard-music.png" alt="Music" />
         <span className="label">Music</span>
+      </div>
+
+      {/* Filmmaking - YouTube and Vimeo */}
+      <div className="map-icon film" onClick={() => navigate('/filmmaking')}>
+        <img src="/icons/knight-camera.png" alt="Filmmaking" />
+        <span className="label">Filmmaking</span>
+      </div>
+
+      {/* Recipes & Cooking */}
+      <div className="map-icon chef" onClick={() => navigate('/cooking')}>
+        <img src="/icons/chef-recipes.png" alt="Cooking" />
+        <span className="label">Recipes</span>
       </div>
     </div>
   );
