@@ -1,0 +1,59 @@
+.map-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .map-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  
+  .map-icon {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1;
+    transition: transform 0.3s ease;
+  }
+  
+  .map-icon img {
+    width: 200px;
+    height: 200px;
+    transition: transform 0.3s ease;
+  }
+  
+  .map-icon .label {
+    font-family: 'UnifrakturCook', cursive;
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 1px 1px 3px #000;
+    margin-top: 6px;
+    transition: font-size 0.3s ease;
+    letter-spacing: 0.5px;
+  }
+  
+  .map-icon:hover img {
+    transform: scale(1.15);
+  }
+  
+  .map-icon:hover .label {
+    font-size: 18px;
+  }
+  
+  /* Example icon positions — tweak these */
+  .forge {
+    top: 30%;
+    left: 25%;
+  }
+  
+  .scriptorium {
+    top: 60%;
+    left: 70%;
+  }
