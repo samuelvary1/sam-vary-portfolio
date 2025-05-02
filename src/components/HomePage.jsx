@@ -11,7 +11,7 @@ const HomePage = () => {
       <img src="/assets/fantasy-map.png" alt="Fantasy Map" className="map-background" />
 
       <div className="hero-name">
-        <h1>Samuel (Sam) Vary</h1>
+        <h1>Sam C. Vary</h1>
       </div>
 
       {/* The Forge - Miniatures */}
@@ -23,7 +23,7 @@ const HomePage = () => {
       {/* The Scriptorium - Drawing Gallery */}
       <div className="map-icon scriptorium" onClick={() => navigate('/gallery')}>
         <img src="/icons/scribe.png" alt="The Scriptorium" />
-        <span className="label">Art Gallery</span>
+        <span className="label">Writing & Art</span>
       </div>
 
       {/* Experience - Resume and GitHub */}
@@ -39,15 +39,33 @@ const HomePage = () => {
       </div>
 
       {/* Filmmaking - YouTube and Vimeo */}
-      <div className="map-icon film" onClick={() => navigate('/filmmaking')}>
-        <img src="/icons/knight-camera.png" alt="Filmmaking" />
-        <span className="label">Filmmaking</span>
+      <div className="map-icon film" onClick={() => navigate('/film')}>
+        <img src="/icons/knight-camera.png" alt="Film" />
+        <span className="label">Film</span>
       </div>
 
       {/* Recipes & Cooking */}
       <div className="map-icon chef" onClick={() => navigate('/cooking')}>
         <img src="/icons/chef-recipes.png" alt="Cooking" />
         <span className="label">Recipes</span>
+      </div>
+
+      {/* Contact, About Me, Socials */}
+      <div className="map-icon trumpet" onClick={() => navigate('/bio')}>
+        <img src="/icons/trumpet.png" alt="About Me" />
+        <span className="label">About Me</span>
+      </div>
+
+      {/* LLM */}
+      <div className="map-icon robot" onClick={() => navigate('/llm')}>
+        <img src="/icons/medieval-robot.png" alt="Personal LLM Project" />
+        <span className="label">AI Project</span>
+      </div>
+
+      {/* Text Adventure Game */}
+      <div className="map-icon adventure" onClick={() => navigate('/game')}>
+        <img src="/icons/adventurer.png" alt="Text Adventure Game" />
+        <span className="label">Adventure Game</span>
       </div>
     </div>
   );

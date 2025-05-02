@@ -54,18 +54,26 @@
   }
 
   .map-icon.film img {
-    width: 100px;
-    height: 100px;
+    width: 125px;
+    height: 125px;
+  }
+
+  .map-icon.experience img {
+    width: 125px;
+    height: 170px;
   }
   
   .map-icon .label {
-    font-family: 'UnifrakturCook', cursive;
+    font-family: 'MedievalSharp', cursive;
     font-size: 16px;
     color: #fff;
-    text-shadow: 1px 1px 3px #000;
+    font-weight: bold; /* Add bold weight */
+    text-shadow:
+      2px 2px 6px #000,   /* Deeper shadow */
+      0 0 8px rgba(255, 255, 255, 0.2); /* Soft glow */
     margin-top: 6px;
-    transition: font-size 0.3s ease;
-    letter-spacing: 0.5px;
+    transition: font-size 0.3s ease, text-shadow 0.3s ease;
+    letter-spacing: 0.75px;
   }
   
   .map-icon:hover img {
@@ -74,35 +82,53 @@
   
   .map-icon:hover .label {
     font-size: 18px;
+    text-shadow:
+      3px 3px 10px #000,
+      0 0 12px rgba(255, 255, 255, 0.3);
   }
   
   /* Example icon positions — tweak these */
   .forge {
     top: 30%;
-    left: 25%;
+    right: 40%;
   }
   
   .scriptorium {
-    top: 60%;
+    top: 55%;
     left: 70%;
   }
 
   .experience {
-    top: 30%;
+    top: 20%;
     right: 25%;
   }
 
   .music {
-    top: 60%;
+    top: 50%;
     left: 15%;
   }
 
   .film {
-    top: 70%;
-    left: 45%;
+    top: 65%;
+    right: 41%;
   }
 
   .chef {
-    top: 10%;
+    top: 15%;
     left: 10%;
+  }
+
+  .trumpet {
+    top: 20%;
+    left: 25%;
+  }
+
+  .robot {
+    top: 60%;
+    right: 60%;
+  }
+
+  .adventure {
+    top: 10%;
+    right: 10%;
   }
