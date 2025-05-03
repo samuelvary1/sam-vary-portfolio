@@ -5,7 +5,10 @@ const Contact = () => {
   return (
     <PageContainer>
       <h1>Contact Me</h1>
-      <p>Reach out to me at <a href="mailto:youremail@example.com">sam.vary@gmail.com</a></p>
+      <p>
+        Reach out to me at{" "}
+        <a href="mailto:youremail@example.com">sam.vary@gmail.com</a>
+      </p>
     </PageContainer>
   );
 };

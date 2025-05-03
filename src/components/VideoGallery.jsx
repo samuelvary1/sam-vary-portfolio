@@ -1,14 +1,14 @@
-import React from 'react';
-import './VideoGallery.css'; // Make sure this path matches your project structure
+import React from "react";
+import "./VideoGallery.css"; // Make sure this path matches your project structure
 
 const videoLinks = [
   {
-    title: 'The Black Bear Knight – Short Film',
-    url: 'https://www.youtube.com/watch?v=example1',
+    title: "The Black Bear Knight – Short Film",
+    url: "https://www.youtube.com/watch?v=example1",
   },
   {
-    title: 'Sword & Lens – Behind the Scenes',
-    url: 'https://www.youtube.com/watch?v=example2',
+    title: "Sword & Lens – Behind the Scenes",
+    url: "https://www.youtube.com/watch?v=example2",
   },
 ];
 

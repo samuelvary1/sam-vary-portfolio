@@ -1,134 +1,136 @@
-  .hero-name {
-    position: absolute;
-    top: 4%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    text-align: center;
-    color: #fdf6e3;
-    font-family: 'MedievalSharp', serif;
-    text-shadow: 2px 2px 8px #000;
-  }
+.hero-name {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  color: #fdf6e3;
+  font-family: "MedievalSharp", serif;
+  text-shadow: 2px 2px 8px #000;
+}
 
-  .hero-name h1 {
-    font-size: 48px;
-    margin: 0;
-    letter-spacing: 2px;
-  }
-  
-  .map-wrapper {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  .map-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-  }
-  
-  .map-icon {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    z-index: 1;
-    transition: transform 0.3s ease;
-  }
-  
-  .map-icon img {
-    width: 150px;
-    height: 150px;
-    transition: transform 0.3s ease;
-  }
+.hero-name h1 {
+  font-size: 48px;
+  margin: 0;
+  letter-spacing: 2px;
+}
 
-  .map-icon.music img {
-    width: 100px;
-    height: 170px;
-    transition: transform 0.3s ease;
-  }
+.map-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  .map-icon.film img {
-    width: 125px;
-    height: 125px;
-  }
+.map-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
 
-  .map-icon.experience img {
-    width: 125px;
-    height: 170px;
-  }
-  
-  .map-icon .label {
-    font-family: 'MedievalSharp', cursive;
-    font-size: 16px;
-    color: #fff;
-    font-weight: bold; /* Add bold weight */
-    text-shadow:
-      2px 2px 6px #000,   /* Deeper shadow */
-      0 0 8px rgba(255, 255, 255, 0.2); /* Soft glow */
-    margin-top: 6px;
-    transition: font-size 0.3s ease, text-shadow 0.3s ease;
-    letter-spacing: 0.75px;
-  }
-  
-  .map-icon:hover img {
-    transform: scale(1.15);
-  }
-  
-  .map-icon:hover .label {
-    font-size: 18px;
-    text-shadow:
-      3px 3px 10px #000,
-      0 0 12px rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Example icon positions — tweak these */
-  .forge {
-    top: 30%;
-    right: 40%;
-  }
-  
-  .scriptorium {
-    top: 20%;
-    left: 25%;
-  }
+.map-icon {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
 
-  .experience {
-    top: 20%;
-    right: 25%;
-  }
+.map-icon img {
+  width: 150px;
+  height: 150px;
+  transition: transform 0.3s ease;
+}
 
-  .music {
-    top: 50%;
-    left: 15%;
-  }
+.map-icon.music img {
+  width: 100px;
+  height: 170px;
+  transition: transform 0.3s ease;
+}
 
-  .film {
-    top: 65%;
-    right: 41%;
-  }
+.map-icon.film img {
+  width: 125px;
+  height: 125px;
+}
 
-  .chef {
-    top: 15%;
-    left: 10%;
-  }
+.map-icon.experience img {
+  width: 125px;
+  height: 170px;
+}
 
-  .trumpet {
-    top: 55%;
-    left: 70%;
-  }
+.map-icon .label {
+  font-family: "MedievalSharp", cursive;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold; /* Add bold weight */
+  text-shadow:
+    2px 2px 6px #000,
+    /* Deeper shadow */ 0 0 8px rgba(255, 255, 255, 0.2); /* Soft glow */
+  margin-top: 6px;
+  transition:
+    font-size 0.3s ease,
+    text-shadow 0.3s ease;
+  letter-spacing: 0.75px;
+}
 
-  .robot {
-    top: 60%;
-    right: 60%;
-  }
+.map-icon:hover img {
+  transform: scale(1.15);
+}
 
-  .adventure {
-    top: 10%;
-    right: 10%;
-  }
+.map-icon:hover .label {
+  font-size: 18px;
+  text-shadow:
+    3px 3px 10px #000,
+    0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Example icon positions — tweak these */
+.forge {
+  top: 30%;
+  right: 40%;
+}
+
+.scriptorium {
+  top: 20%;
+  left: 25%;
+}
+
+.experience {
+  top: 20%;
+  right: 25%;
+}
+
+.music {
+  top: 50%;
+  left: 15%;
+}
+
+.film {
+  top: 65%;
+  right: 41%;
+}
+
+.chef {
+  top: 15%;
+  left: 10%;
+}
+
+.trumpet {
+  top: 55%;
+  left: 70%;
+}
+
+.robot {
+  top: 60%;
+  right: 60%;
+}
+
+.adventure {
+  top: 10%;
+  right: 10%;
+}

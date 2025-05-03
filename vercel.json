@@ -1,15 +1,15 @@
 {
-    "redirects": [
-      {
-        "source": "/(.*)",
-        "has": [
-          {
-            "type": "host",
-            "value": "samvary.com"
-          }
-        ],
-        "destination": "https://samuelvary.com/$1",
-        "permanent": true
-      }
-    ]
-  }
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "samvary.com"
+        }
+      ],
+      "destination": "https://samuelvary.com/$1",
+      "permanent": true
+    }
+  ]
+}

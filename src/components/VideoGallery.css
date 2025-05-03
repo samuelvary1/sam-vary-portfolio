@@ -1,58 +1,58 @@
 .video-gallery {
-    background-color: #f2e6d9;
-    color: #2b1d0e;
-    padding: 24px;
-    max-width: 700px;
-    margin: 40px auto;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    font-family: 'Georgia', serif;
-  }
-  
-  .video-gallery-title {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #c69c6d;
-    padding-bottom: 10px;
-  }
-  
-  .video-list {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
-  }
-  
-  .video-link {
-    display: block;
-    background-color: #fff5e1;
-    border: 1px solid #c69c6d;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    text-decoration: none;
-    color: #2b1d0e;
-    transition: background-color 0.2s;
-  }
-  
-  .video-link:hover {
-    background-color: #e5d4a3;
-  }
-  
-  .channel-button-wrapper {
-    text-align: center;
-  }
-  
-  .channel-button {
-    background-color: #c69c6d;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 10px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background-color 0.2s;
-  }
-  
-  .channel-button:hover {
-    background-color: #b58c5a;
-  }
+  background-color: #f2e6d9;
+  color: #2b1d0e;
+  padding: 24px;
+  max-width: 700px;
+  margin: 40px auto;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  font-family: "Georgia", serif;
+}
+
+.video-gallery-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #c69c6d;
+  padding-bottom: 10px;
+}
+
+.video-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.video-link {
+  display: block;
+  background-color: #fff5e1;
+  border: 1px solid #c69c6d;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: #2b1d0e;
+  transition: background-color 0.2s;
+}
+
+.video-link:hover {
+  background-color: #e5d4a3;
+}
+
+.channel-button-wrapper {
+  text-align: center;
+}
+
+.channel-button {
+  background-color: #c69c6d;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.channel-button:hover {
+  background-color: #b58c5a;
+}
