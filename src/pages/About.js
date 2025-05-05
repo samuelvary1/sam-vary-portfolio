@@ -5,10 +5,6 @@ const About = () => {
   return (
     <PageContainer>
       <h1>About Me</h1>
-      <p>
-        This is the about page where I'll share my background, skills, and
-        experience.
-      </p>
     </PageContainer>
   );
 };

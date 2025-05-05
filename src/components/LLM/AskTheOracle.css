@@ -1,0 +1,64 @@
+.oracle-box {
+    padding: 2rem;
+    max-width: 600px;
+    margin: 3rem auto;
+    font-family: 'MedievalSharp', cursive;
+    color: #3b2f2f;
+  }
+
+  .oracle-wrapper {
+    min-height: 100vh;
+    background: url('/public/assets/parchment-background.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .oracle-box h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #472e1f;
+  }
+  
+  .oracle-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .oracle-box input {
+    padding: 0.75rem;
+    font-size: 16px;
+    border: 2px solid #a9825a;
+    border-radius: 8px;
+    background-color: rgba(255, 248, 220, 0.9);
+    color: #3b2f2f;
+  }
+  
+  .oracle-box button {
+    background-color: #8b4513;
+    color: white;
+    padding: 0.75rem;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  
+  .oracle-box button:hover {
+    background-color: #a0522d;
+  }
+  
+  .oracle-answer {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 240, 0.9);
+    border-left: 4px solid #c9a84e;
+    border-radius: 8px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  }
