@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./components/Homepage/HomePage";
 import About from "./pages/About";
-import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import GlobalStyle from "./styles/GlobalStyles";
 import NavBar from "./components/Navbar";
 import VideoGallery from "./components/VideoGallery/VideoGallery";
+import MiniaturesGallery from "./components/Miniatures/MiniaturesGallery";
 import Experience from "./components/Experience/Experience";
 import AskTheOracle from "./components/LLM/AskTheOracle";
 
@@ -22,7 +22,7 @@ const AppWrapper = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
+        <Route path="/miniatures" element={<MiniaturesGallery />} />        
         <Route path="/contact" element={<Contact />} />
         <Route path="/film" element={<VideoGallery />} />
         <Route path="/experience" element={<Experience />} />
