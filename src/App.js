@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import HomePage from "./components/Homepage/HomePage";
 import AboutMe from "./components/AboutMe/AboutMe";
 import Contact from "./pages/Contact";
@@ -9,6 +14,7 @@ import VideoGallery from "./components/VideoGallery/VideoGallery";
 import MiniaturesGallery from "./components/Miniatures/MiniaturesGallery";
 import Experience from "./components/Experience/Experience";
 import AskTheOracle from "./components/LLM/AskTheOracle";
+import GameUI from "./components/FieldsOfPeril/GameUI";
 
 // Create a wrapper to use hooks like useLocation inside Router
 const AppWrapper = () => {
@@ -22,11 +28,12 @@ const AppWrapper = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutMe />} />
-        <Route path="/miniatures" element={<MiniaturesGallery />} />        
+        <Route path="/miniatures" element={<MiniaturesGallery />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/film" element={<VideoGallery />} />
         <Route path="/experience" element={<Experience />} />
         <Route path="/llm" element={<AskTheOracle />} />
+        <Route path="/adventure-game" element={<GameUI />} />
       </Routes>
     </>
   );

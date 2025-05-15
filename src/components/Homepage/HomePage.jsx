@@ -72,7 +72,10 @@ const HomePage = () => {
       </div>
 
       {/* Text Adventure Game */}
-      <div className="map-icon adventure" onClick={() => navigate("/game")}>
+      <div
+        className="map-icon adventure"
+        onClick={() => navigate("/adventure-game")}
+      >
         <img src="/icons/adventurer.png" alt="Text Adventure Game" />
         <span className="label">Adventure Game</span>
       </div>

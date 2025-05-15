@@ -25,7 +25,6 @@ const Navbar = () => {
 
 export default Navbar;
 
-
 const Nav = styled.nav`
   width: 100%;
   padding: 15px 20px;
@@ -35,8 +34,8 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   z-index: 1000;
-  font-family: 'MedievalSharp', cursive;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  font-family: "MedievalSharp", cursive;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 `;
 
 const NavContainer = styled.div`

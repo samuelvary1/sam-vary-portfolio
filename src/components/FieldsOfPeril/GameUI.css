@@ -1,0 +1,59 @@
+.game-container {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 24px;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  font-family: "Courier New", Courier, monospace;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  overflow-x: hidden; /* prevent horizontal scroll from children */
+}
+
+.game-output {
+  white-space: pre-wrap; /* Keep line breaks, wrap long text */
+  word-break: break-word; /* Break long strings like URLs */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-y: auto; /* Allow vertical scroll */
+  background-color: #121212;
+  padding: 16px;
+  border-radius: 8px;
+  height: 400px;
+  margin-bottom: 16px;
+  border: 1px solid #333;
+  max-width: 100%; /* Prevent overflow */
+}
+
+.game-input-form {
+  display: flex;
+  gap: 12px;
+}
+
+.game-input-form input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background-color: #2e2e2e;
+  color: #fff;
+  font-size: 16px;
+}
+
+.game-input-form input:focus {
+  outline: none;
+  border-color: #6c9eff;
+}
+
+.game-input-form button {
+  padding: 10px 16px;
+  background-color: #6c9eff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.game-input-form button:hover {
+  background-color: #4a87e0;
+}
