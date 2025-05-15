@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./components/Homepage/HomePage";
-import About from "./pages/About";
+import AboutMe from "./components/AboutMe/AboutMe";
 import Contact from "./pages/Contact";
 import GlobalStyle from "./styles/GlobalStyles";
 import NavBar from "./components/Navbar";
@@ -21,7 +21,7 @@ const AppWrapper = () => {
       {!hideNav && <NavBar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<AboutMe />} />
         <Route path="/miniatures" element={<MiniaturesGallery />} />        
         <Route path="/contact" element={<Contact />} />
         <Route path="/film" element={<VideoGallery />} />

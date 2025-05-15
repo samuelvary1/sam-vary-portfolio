@@ -60,7 +60,7 @@ const HomePage = () => {
       </div>
 
       {/* Contact, About Me, Socials */}
-      <div className="map-icon trumpet" onClick={() => navigate("/bio")}>
+      <div className="map-icon trumpet" onClick={() => navigate("/about")}>
         <img src="/icons/trumpet.png" alt="About Me" />
         <span className="label">About Me</span>
       </div>
