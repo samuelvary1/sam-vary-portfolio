@@ -35,7 +35,7 @@ const AppWrapper = () => {
         <Route path="/film" element={<VideoGallery />} />
         <Route path="/experience" element={<Experience />} />
         <Route path="/llm" element={<AskTheOracle />} />
-        <Route path="/adventure-game" element={<GamePage />} />
+        <Route path="/adventure" element={<GamePage />} />
         <Route path="/music" element={<MusicGallery />} />
         <Route path="/artwork" element={<DrawingsGallery />} />
       </Routes>

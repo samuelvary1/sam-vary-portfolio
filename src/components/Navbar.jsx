@@ -12,7 +12,7 @@ const Navbar = () => {
           <NavItem to="/writing">Writing</NavItem>
           <NavItem to="/artwork">Visual Art</NavItem>
           <NavItem to="/experience">Experience</NavItem>
-          <NavItem to="/adventure-game">Adventure Game</NavItem>
+          <NavItem to="/adventure">Adventure Game</NavItem>
           <NavItem to="/recipes">Recipes</NavItem>
           <NavItem to="/music">Music</NavItem>
           <NavItem to="/film">Film</NavItem>

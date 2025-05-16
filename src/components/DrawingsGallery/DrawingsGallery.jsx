@@ -12,7 +12,9 @@ const DrawingsGallery = () => {
       if (e.key === "ArrowRight") {
         setSelectedIndex((prev) => (prev + 1) % drawings.length);
       } else if (e.key === "ArrowLeft") {
-        setSelectedIndex((prev) => (prev - 1 + drawings.length) % drawings.length);
+        setSelectedIndex(
+          (prev) => (prev - 1 + drawings.length) % drawings.length,
+        );
       } else if (e.key === "Escape") {
         setSelectedIndex(null);
       }
@@ -50,7 +52,9 @@ const DrawingsGallery = () => {
             className="lightbox-arrow left"
             onClick={(e) => {
               e.stopPropagation();
-              setSelectedIndex((prev) => (prev - 1 + drawings.length) % drawings.length);
+              setSelectedIndex(
+                (prev) => (prev - 1 + drawings.length) % drawings.length,
+              );
             }}
           >
             ‹

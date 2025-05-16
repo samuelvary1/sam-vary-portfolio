@@ -63,6 +63,11 @@
   height: 170px;
 }
 
+.map-icon.artwork img {
+  width: 125px;
+  height: 170px;
+}
+
 .map-icon .label {
   font-family: "MedievalSharp", cursive;
   font-size: 16px;
@@ -90,29 +95,24 @@
 }
 
 /* Example icon positions — tweak these */
-.forge {
+.miniatures {
   top: 30%;
-  right: 40%;
-}
-
-.scriptorium {
-  top: 20%;
-  left: 25%;
+  left: 45%;
 }
 
 .experience {
   top: 20%;
-  right: 25%;
+  right: 20%;
 }
 
 .music {
-  top: 50%;
+  top: 55%;
   left: 15%;
 }
 
 .film {
-  top: 65%;
-  right: 41%;
+  top: 70%;
+  right: 40%;
 }
 
 .chef {
@@ -120,17 +120,27 @@
   left: 10%;
 }
 
-.trumpet {
-  top: 55%;
-  left: 70%;
+.about {
+  top: 60%;
+  right: 20%;
 }
 
 .robot {
-  top: 60%;
+  top: 65%;
   right: 60%;
 }
 
 .adventure {
   top: 10%;
   right: 10%;
+}
+
+.writing {
+  top: 25%;
+  left: 25%;
+}
+
+.artwork {
+  top: 25%;
+  right: 33%;
 }
