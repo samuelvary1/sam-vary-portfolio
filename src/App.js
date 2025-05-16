@@ -14,7 +14,7 @@ import VideoGallery from "./components/VideoGallery/VideoGallery";
 import MiniaturesGallery from "./components/Miniatures/MiniaturesGallery";
 import Experience from "./components/Experience/Experience";
 import AskTheOracle from "./components/LLM/AskTheOracle";
-import GameUI from "./components/FieldsOfPeril/GameUI";
+import GamePage from "./components/FieldsOfPeril/GamePage";
 
 // Create a wrapper to use hooks like useLocation inside Router
 const AppWrapper = () => {
@@ -33,7 +33,7 @@ const AppWrapper = () => {
         <Route path="/film" element={<VideoGallery />} />
         <Route path="/experience" element={<Experience />} />
         <Route path="/llm" element={<AskTheOracle />} />
-        <Route path="/adventure-game" element={<GameUI />} />
+        <Route path="/adventure-game" element={<GamePage />} />
       </Routes>
     </>
   );
