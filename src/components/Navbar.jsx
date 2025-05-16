@@ -9,7 +9,8 @@ const Navbar = () => {
         <Logo to="/">Sam Vary</Logo>
         <NavLinks>
           <NavItem to="/miniatures">Miniatures</NavItem>
-          <NavItem to="/writing">Writing & Art</NavItem>
+          <NavItem to="/writing">Writing</NavItem>
+          <NavItem to="/artwork">Visual Art</NavItem>
           <NavItem to="/experience">Experience</NavItem>
           <NavItem to="/adventure-game">Adventure Game</NavItem>
           <NavItem to="/recipes">Recipes</NavItem>

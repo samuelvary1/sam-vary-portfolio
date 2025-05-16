@@ -1,5 +1,5 @@
-import GameUI from './GameUI';
-import '../FieldsOfPeril/GameUI.css';
+import GameUI from "./GameUI";
+import "../FieldsOfPeril/GameUI.css";
 
 const GamePage = () => {
   return (

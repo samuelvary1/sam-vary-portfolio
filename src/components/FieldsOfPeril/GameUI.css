@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -10,10 +11,10 @@ html, body {
   max-width: 400px;
   margin: 0 auto;
   padding: 24px;
-  padding-top: 80px;      /* 👈 This pushes it below the navbar */
+  padding-top: 80px; /* 👈 This pushes it below the navbar */
   background-color: #1e1e1e;
   color: #d4d4d4;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
   height: 100vh;
@@ -23,13 +24,17 @@ html, body {
 
 .game-page-background {
   min-height: 100vh;
-  background: 
-    url('../../../public/assets/left-background.png') left center no-repeat,
-    url('../../../public/assets/right-background.png') right center no-repeat;
-  background-size: 50% 100%, 50% 100%;
+  background:
+    url("../../../public/assets/left-background.png") left center no-repeat,
+    url("../../../public/assets/right-background.png") right center no-repeat;
+  background-size:
+    50% 100%,
+    50% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: left top, right top;
+  background-position:
+    left top,
+    right top;
 
   display: flex;
   justify-content: center;
@@ -37,7 +42,7 @@ html, body {
 }
 
 .game-output {
-  flex-grow: 1;               /* Take all available vertical space */
+  flex-grow: 1; /* Take all available vertical space */
   white-space: pre-wrap;
   word-break: break-word;
   overflow-x: hidden;
@@ -48,7 +53,7 @@ html, body {
   margin-bottom: 16px;
   border: 1px solid #333;
   max-width: 100%;
-  min-height: 0;              /* Ensure it doesn't force overflow */
+  min-height: 0; /* Ensure it doesn't force overflow */
 }
 
 .game-input-form {
@@ -90,7 +95,7 @@ html, body {
   top: 120px;
   left: 2%;
   font-size: 48px;
-  font-family: 'Russo One', sans-serif;
+  font-family: "Russo One", sans-serif;
   color: #e63946;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   z-index: 1;

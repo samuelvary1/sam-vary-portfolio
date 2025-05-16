@@ -1,7 +1,10 @@
 export const musicTracks = [
   { title: "Canadian Club", file: "/music/canadian club.mp3" },
   { title: "Ghost Story", file: "/music/ghost story.mp3" },
-  { title: "Grim Fandango (Early Version)", file: "/music/grim fandango early version.mp3" },
+  {
+    title: "Grim Fandango (Early Version)",
+    file: "/music/grim fandango early version.mp3",
+  },
   { title: "Grim Fandango (w/ Bass)", file: "/music/grim fandango w bass.mp3" },
   { title: "Grim Fandango", file: "/music/grim fandango.mp3" },
   { title: "Hans & Frieda", file: "/music/hans & frieda.mp3" },

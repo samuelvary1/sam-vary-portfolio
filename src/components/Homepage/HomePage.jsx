@@ -26,10 +26,10 @@ const HomePage = () => {
       {/* The Scriptorium - Drawing Gallery */}
       <div
         className="map-icon scriptorium"
-        onClick={() => navigate("/gallery")}
+        onClick={() => navigate("/artwork")}
       >
-        <img src="/icons/scribe.png" alt="The Scriptorium" />
-        <span className="label">Writing & Art</span>
+        <img src="/icons/scribe.png" alt="Drawings Gallery" />
+        <span className="label">Visual Art</span>
       </div>
 
       {/* Experience - Resume and GitHub */}
