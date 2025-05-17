@@ -1,0 +1,39 @@
+.writing-list-page {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 24px;
+  text-align: center;
+  font-family: "Georgia", serif;
+}
+
+.writing-heading {
+  font-size: 36px;
+  margin-bottom: 40px;
+  font-family: "MedievalSharp", cursive;
+}
+
+.writing-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+
+.writing-card {
+  width: 220px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.writing-card:hover {
+  transform: scale(1.05);
+}
+
+.writing-thumb {
+  width: 100%;
+  height: auto;
+  border: 3px solid #5d3c1c;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
