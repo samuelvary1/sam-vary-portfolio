@@ -17,6 +17,8 @@ import AskTheOracle from "./components/LLM/AskTheOracle";
 import GamePage from "./components/FieldsOfPeril/GamePage";
 import MusicGallery from "./components/MusicGallery/MusicGallery";
 import DrawingsGallery from "./components/DrawingsGallery/DrawingsGallery";
+import RecipesList from "./components/Recipes/RecipesList";
+import RecipePage from "./components/Recipes/RecipePage";
 
 // Create a wrapper to use hooks like useLocation inside Router
 const AppWrapper = () => {
@@ -38,6 +40,8 @@ const AppWrapper = () => {
         <Route path="/adventure" element={<GamePage />} />
         <Route path="/music" element={<MusicGallery />} />
         <Route path="/artwork" element={<DrawingsGallery />} />
+        <Route path="/recipes" element={<RecipesList />} />
+        <Route path="/recipes/:slug" element={<RecipePage />} />
       </Routes>
     </>
   );

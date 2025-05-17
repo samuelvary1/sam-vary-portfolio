@@ -49,7 +49,7 @@ const HomePage = () => {
         <span className="label">Film</span>
       </div>
 
-      <div className="map-icon chef" onClick={() => navigate("/cooking")}>
+      <div className="map-icon chef" onClick={() => navigate("/recipes")}>
         <img src="/icons/chef-recipes.png" alt="Recipes" />
         <span className="label">Recipes</span>
       </div>
