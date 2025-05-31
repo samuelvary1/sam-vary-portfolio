@@ -8,6 +8,14 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Set background styling via body class for consistency
+  useEffect(() => {
+    document.body.classList.add("recipes-body");
+    return () => {
+      document.body.classList.remove("recipes-body");
+    };
+  }, []);
+
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -15,7 +23,6 @@ const RecipePage = () => {
         if (!res.ok) throw new Error(`HTTP ${res.status} on ${slug}.yml`);
         const text = await res.text();
         const parsed = yaml.load(text);
-        console.log("Parsed recipe:", parsed); // ✅ debug
         setRecipe(parsed);
       } catch (err) {
         console.error("Failed to load recipe", err);

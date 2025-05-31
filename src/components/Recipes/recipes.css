@@ -1,18 +1,34 @@
-/* Shared Styles */
-body {
+/* ========== Page Background ========== */
+body.recipes-body {
   font-family: "Georgia", serif;
-  background-color: #f4f1e9;
-  color: #3b2f2f;
+  margin: 0;
+  padding: 0;
+  background: url("../../../public/assets/parchment-background.png") no-repeat
+    center center fixed;
+  background-size: cover;
+  color: #2d1f1f;
+}
+
+/* Wrapper to push content below nav */
+.recipes-body-wrapper {
+  padding-top: 100px; /* adjust based on navbar height */
+  min-height: 100vh;
+  background: url("../../../public/assets/parchment-background.png") no-repeat
+    center center fixed;
+  background-size: cover;
 }
 
 /* ========== Recipes List Page ========== */
 .recipes-list-page {
   max-width: 800px;
-  margin: 60px auto;
+  margin: 0 auto 60px auto;
   padding: 32px;
-  background: url("../../../public/assets/parchment-background.png") no-repeat
-    center center;
-  background-size: cover;
+  background-color: rgba(
+    255,
+    248,
+    220,
+    0.92
+  ); /* semi-transparent parchment overlay */
   border: 6px solid #8b5e3c;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -23,12 +39,13 @@ body {
   font-size: 36px;
   text-align: center;
   margin-bottom: 24px;
-  color: #5b3e2b;
+  color: #4a2f1b;
 }
 
 .recipes-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .recipe-link {
@@ -38,31 +55,34 @@ body {
   border-bottom: 1px dashed #996633;
   transition: all 0.2s ease-in-out;
   text-align: left;
+  color: #3b2f2f;
 }
 
 .recipe-link:hover {
-  color: #8b0000;
+  color: #7a1500;
+  background-color: rgba(255, 255, 255, 0.2);
   text-decoration: underline;
-  background-color: rgba(255, 248, 220, 0.3);
 }
 
 /* ========== Individual Recipe Page ========== */
 .recipe-page {
   display: flex;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 100px 20px 60px;
+  background: url("../../../public/assets/parchment-background.png") no-repeat
+    center center fixed;
+  background-size: cover;
+  min-height: 100vh;
 }
 
 .parchment-box {
-  background: url("../../../public/assets/parchment-background.png") no-repeat
-    center center;
-  background-size: cover;
+  background-color: rgba(255, 250, 225, 0.95);
   border: 6px solid #8b5e3c;
   border-radius: 10px;
   padding: 32px;
   max-width: 700px;
   width: 100%;
-  color: #3b2f2f;
+  color: #2d1f1f;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
 }
 
@@ -94,6 +114,7 @@ body {
   margin-bottom: 8px;
 }
 
+/* ========== Responsive ========== */
 @media (max-width: 600px) {
   .recipes-list-page,
   .parchment-box {
