@@ -1,7 +1,7 @@
 import React from "react";
 
 const SawyerTokenLanding = () => {
-  const contractAddress = "0xca6059bb703e95b10688c56a09f5a76375f9cf47";
+  const contractAddress = "0xYourContractAddressHere";
   const sawyerImageUrl = "/assets/sawyer.png"; // Update with your actual image path
   const sawyerLogoUrl = "/icons/sawyer-logo.png"; // Add your logo file here
 
@@ -29,16 +29,22 @@ const SawyerTokenLanding = () => {
 
       <main style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
         <section style={sectionStyle}>
-          <img
-            src={sawyerLogoUrl}
-            alt="SWYR Logo"
-            style={{
-              width: "150px",
-              height: "150px",
-              display: "block",
-              margin: "0 auto 2rem",
-            }}
-          />
+          <a
+            href="https://polygonscan.com/token/0xca6059bb703e95b10688c56a09f5a76375f9cf47"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src={sawyerLogoUrl}
+              alt="SWYR Logo"
+              style={{
+                width: "150px",
+                height: "150px",
+                display: "block",
+                margin: "0 auto 2rem",
+              }}
+            />
+          </a>
           <img
             src={sawyerImageUrl}
             alt="Sawyer the Dog"
