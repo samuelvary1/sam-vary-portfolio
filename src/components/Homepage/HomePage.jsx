@@ -76,6 +76,10 @@ const HomePage = () => {
         <img src="/icons/adventurer.png" alt="Adventure Game" />
         <span className="label">Adventure Game</span>
       </div>
+
+      <div className="map-icon sawyer" onClick={() => navigate("/sawyer")}>
+        <img src="/icons/sawyer-logo.png" alt="Sawyer Token Project" />
+      </div>
     </div>
   );
 };

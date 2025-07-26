@@ -1,8 +1,9 @@
 import React from "react";
 
 const SawyerTokenLanding = () => {
-  const contractAddress = "0xca6059bb703e95b10688c56a09f5a76375f9cf47";
-  const sawyerImageUrl = "/assets/sawyer.png"; // Replace with actual image path or URL
+  const contractAddress = "0xYourContractAddressHere";
+  const sawyerImageUrl = "/assets/sawyer.png"; // Update with your actual image path
+  const sawyerLogoUrl = "/icons/sawyer-logo.png"; // Add your logo file here
 
   return (
     <div
@@ -29,12 +30,26 @@ const SawyerTokenLanding = () => {
       <main style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
         <section style={sectionStyle}>
           <img
+            src={sawyerLogoUrl}
+            alt="SWYR Logo"
+            style={{
+              width: "150px",
+              height: "150px",
+              display: "block",
+              margin: "0 auto 2rem",
+            }}
+          />
+          <img
             src={sawyerImageUrl}
             alt="Sawyer the Dog"
             style={{
-              maxWidth: "100%",
-              borderRadius: "10px",
-              marginBottom: "1.5rem",
+              width: "60%",
+              height: "auto",
+              display: "block",
+              margin: "0 auto 1.5rem",
+              borderRadius: "12px",
+              border: "4px solid #3a86ff",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             }}
           />
           <h2>Token Details</h2>
