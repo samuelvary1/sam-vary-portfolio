@@ -54,7 +54,7 @@ const SawyerTokenLanding = () => {
               display: "block",
               margin: "0 auto 1.5rem",
               borderRadius: "12px",
-              border: "4px solid #3a86ff",
+              border: "4px solid black",
               boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             }}
           />
