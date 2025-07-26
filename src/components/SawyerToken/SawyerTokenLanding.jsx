@@ -1,7 +1,7 @@
 import React from "react";
 
 const SawyerTokenLanding = () => {
-  const contractAddress = "0xYourContractAddressHere";
+  const contractAddress = "0xca6059bb703e95b10688c56a09f5a76375f9cf47";
   const sawyerImageUrl = "/assets/sawyer.png"; // Update with your actual image path
   const sawyerLogoUrl = "/icons/sawyer-logo.png"; // Add your logo file here
 
