@@ -21,6 +21,7 @@ import RecipesList from "./components/Recipes/RecipesList";
 import RecipePage from "./components/Recipes/RecipePage";
 import WritingList from "./components/Writing/WritingList";
 import WritingPage from "./components/Writing/WritingPage";
+import SawyerLandingPage from "./components/SawyerToken/SawyerTokenLanding";
 
 // Create a wrapper to use hooks like useLocation inside Router
 const AppWrapper = () => {
@@ -46,6 +47,7 @@ const AppWrapper = () => {
         <Route path="/recipes/:slug" element={<RecipePage />} />
         <Route path="/writing" element={<WritingList />} />
         <Route path="/writing/:slug" element={<WritingPage />} />
+        <Route path="/sawyer" element={<SawyerLandingPage />} />
       </Routes>
     </>
   );
