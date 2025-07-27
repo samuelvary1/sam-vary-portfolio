@@ -4,6 +4,8 @@ const SawyerTokenLanding = () => {
   const contractAddress = "0xca6059bb703e95b10688c56a09f5a76375f9cf47";
   const sawyerImageUrl = "/assets/sawyer.png"; // Update with your actual image path
   const sawyerLogoUrl = "/icons/sawyer-logo.png"; // Add your logo file here
+  const dexScreenerEmbedUrl =
+    "https://dexscreener.com/polygon/0xd9354b99a9c83c4062d4001f3a12440aac36288e?embed=1";
 
   return (
     <div
@@ -29,6 +31,19 @@ const SawyerTokenLanding = () => {
 
       <main style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
         <section style={sectionStyle}>
+          <img
+            src={sawyerImageUrl}
+            alt="Sawyer the Dog"
+            style={{
+              width: "60%",
+              height: "auto",
+              display: "block",
+              margin: "0 auto 1.5rem",
+              borderRadius: "12px",
+              border: "4px solid black",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            }}
+          />
           <a
             href="https://polygonscan.com/token/0xca6059bb703e95b10688c56a09f5a76375f9cf47"
             target="_blank"
@@ -45,19 +60,6 @@ const SawyerTokenLanding = () => {
               }}
             />
           </a>
-          <img
-            src={sawyerImageUrl}
-            alt="Sawyer the Dog"
-            style={{
-              width: "60%",
-              height: "auto",
-              display: "block",
-              margin: "0 auto 1.5rem",
-              borderRadius: "12px",
-              border: "4px solid black",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            }}
-          />
           <h2>Token Details</h2>
           <p>
             <strong>Name:</strong> Sawyer Token
@@ -85,16 +87,43 @@ const SawyerTokenLanding = () => {
         </section>
 
         <section style={sectionStyle}>
+          <h2>Live Price Chart</h2>
+          <iframe
+            src={dexScreenerEmbedUrl}
+            width="100%"
+            height="500"
+            style={{ border: 0, borderRadius: "8px", overflow: "hidden" }}
+            allowFullScreen
+          ></iframe>
+        </section>
+
+        <section style={sectionStyle}>
           <h2>How to Buy</h2>
-          <p>You can buy SWYR on QuickSwap once liquidity is available.</p>
-          <a
-            href="https://quickswap.exchange/#/swap"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={buttonStyle}
-          >
-            Trade on QuickSwap
-          </a>
+          <ol>
+            <li>
+              Download{" "}
+              <a
+                href="https://metamask.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                MetaMask
+              </a>
+            </li>
+            <li>Fund your wallet with POL (Polygon)</li>
+            <li>
+              Visit{" "}
+              <a
+                href="https://dapp.quickswap.exchange/swap/best/ETH/0xCa6059bB703E95B10688c56a09f5a76375f9CF47"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                QuickSwap
+              </a>
+            </li>
+            <li>Swap POL → SWYR</li>
+            <li>Add SWYR to MetaMask to view it</li>
+          </ol>
         </section>
 
         <section style={sectionStyle}>
