@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+export const NAV_HEIGHT = 64; // px
+
 const Navbar = () => {
   return (
     <Nav>
@@ -26,9 +28,14 @@ const Navbar = () => {
 
 export default Navbar;
 
+/** Use this directly under <Navbar /> to reserve space on pages with a fixed nav */
+export const NavSpacer = styled.div`
+  height: ${NAV_HEIGHT}px;
+`;
+
 const Nav = styled.nav`
   width: 100%;
-  padding: 15px 20px;
+  padding: 18px 20px; /* was 15px 20px */
   background: url("/assets/blue-marble.png");
   background-size: cover;
   position: fixed;
@@ -41,10 +48,11 @@ const Nav = styled.nav`
 
 const NavContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
+  gap: 12px; /* optional */
 `;
 
 const Logo = styled(Link)`
@@ -53,6 +61,7 @@ const Logo = styled(Link)`
   color: #f0f0f0;
   text-decoration: none;
   letter-spacing: 1px;
+  white-space: nowrap;
 
   &:hover {
     color: #ffd700;
@@ -61,16 +70,27 @@ const Logo = styled(Link)`
 
 const NavLinks = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex: 1; /* take remaining space */
+  justify-content: flex-end;
+  min-width: 0; /* <-- critical for scrolling inside flex */
+  flex-wrap: nowrap;
   gap: 15px;
+  overflow-x: auto; /* scroll horizontally if needed */
+  white-space: nowrap;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const NavItem = styled(Link)`
   color: #f8f8f8;
   text-decoration: none;
   font-size: 16px;
-  padding: 5px 10px;
+  padding: 8px 10px; /* was 5px 10px */
   border-radius: 6px;
+  line-height: 1.4; /* helps center text vertically */
   transition: 0.3s ease-in-out;
 
   &:hover {

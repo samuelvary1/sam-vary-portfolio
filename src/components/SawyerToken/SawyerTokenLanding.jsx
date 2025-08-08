@@ -94,6 +94,7 @@ const SawyerTokenLanding = () => {
             height="500"
             style={{ border: 0, borderRadius: "8px", overflow: "hidden" }}
             allowFullScreen
+            title="Sawyer Token Live Price Chart"
           ></iframe>
         </section>
 

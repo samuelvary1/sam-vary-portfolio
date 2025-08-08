@@ -9,7 +9,7 @@ import HomePage from "./components/Homepage/HomePage";
 import AboutMe from "./components/AboutMe/AboutMe";
 import Contact from "./pages/Contact";
 import GlobalStyle from "./styles/GlobalStyles";
-import NavBar from "./components/Navbar";
+import Navbar, { NavSpacer } from "./components/Navbar";
 import VideoGallery from "./components/VideoGallery/VideoGallery";
 import MiniaturesGallery from "./components/Miniatures/MiniaturesGallery";
 import Experience from "./components/Experience/Experience";
@@ -31,7 +31,8 @@ const AppWrapper = () => {
   return (
     <>
       <GlobalStyle />
-      {!hideNav && <NavBar />}
+      {!hideNav && <Navbar />}
+      {!hideNav && <NavSpacer />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutMe />} />
