@@ -5,6 +5,7 @@ import yaml from "js-yaml";
 const recipeSlugs = [
   "italian-beef-meatballs",
   "sourdough-pancakes",
+  "pickled-red-onions",
   // Add more slugs here
 ];
 
