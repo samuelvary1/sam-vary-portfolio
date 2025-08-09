@@ -16,9 +16,14 @@ const WritingPage = () => {
         const match = meta.find((entry) => entry.slug === slug);
         setTitle(match?.title || "Untitled");
 
-        const textRes = await fetch(`/data/writing/${slug}.txt`);
-        const text = await textRes.text();
-        setContent(text);
+        // If this is the Crimson Harvester novel, skip loading .txt
+        if (slug === "the-crimson-harvester") {
+          setContent(null);
+        } else {
+          const textRes = await fetch(`/data/writing/${slug}.txt`);
+          const text = await textRes.text();
+          setContent(text);
+        }
       } catch (err) {
         console.error("Error loading writing:", err);
         setContent("Could not load writing.");
@@ -36,7 +41,18 @@ const WritingPage = () => {
     <div className="writing-page">
       <div className="writing-scroll-box">
         <h1 className="writing-title">{title}</h1>
-        <pre className="writing-content">{content}</pre>
+        {slug === "the-crimson-harvester" ? (
+          <iframe
+            src="/data/writing/crimson_harvester_novel/crimson_harvester_manuscript.pdf"
+            title="Crimson Harvester Manuscript"
+            width="100%"
+            height="800px"
+            style={{ border: "none", maxWidth: "100%" }}
+            allowFullScreen
+          />
+        ) : (
+          <pre className="writing-content">{content}</pre>
+        )}
       </div>
     </div>
   );
