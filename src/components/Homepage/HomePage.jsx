@@ -102,6 +102,7 @@ const HomePage = () => {
           <div className="icon-bg">
             <img src="/icons/sawyer-logo.png" alt="Sawyer Token Project" />
           </div>
+          <span className="label">Sawyer Token</span>
         </div>
       </div>
     </div>
