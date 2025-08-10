@@ -29,8 +29,6 @@ if [ -z "$(ls -A /workspace/artifacts 2>/dev/null)" ]; then
     elif [ -d "$WRITING_PATH" ] && [ -n "$(ls -A "$WRITING_PATH" 2>/dev/null)" ]; then
         echo "[INFO] Found writing folder at $WRITING_PATH. Rebuilding artifacts..."
         cd /workspace/sam-vary-portfolio
-        # If you use a venv, uncomment:
-        # source .venv/bin/activate
         pip install --no-cache-dir -r requirements.txt
         python tools/build_corpus.py --input "$WRITING_PATH" --out /workspace/artifacts
         python tools/audit_corpus.py --input /workspace/artifacts
@@ -52,11 +50,18 @@ sleep 3
 
 # ====== Pull model if missing ======
 if ! ollama list | grep -q "$MODEL_NAME"; then
-  echo "[INFO] Pulling model: $MODEL_NAME"
-  ollama pull "$MODEL_NAME"
+    echo "[INFO] Pulling model: $MODEL_NAME"
+    ollama pull "$MODEL_NAME"
 else
-  echo "[INFO] Model already present: $MODEL_NAME"
+    echo "[INFO] Model already present: $MODEL_NAME"
 fi
+
+# ====== Warm the model ======
+echo "[INFO] Warming model $MODEL_NAME..."
+curl -s -X POST "$OLLAMA_BASE_URL/api/generate" \
+     -H "Content-Type: application/json" \
+     -d "{\"model\": \"$MODEL_NAME\", \"prompt\": \"Say OK.\", \"stream\": false}" > /dev/null || true
+echo "[INFO] Model warmed."
 
 # ====== Start FastAPI backend ======
 echo "[INFO] Starting FastAPI..."
