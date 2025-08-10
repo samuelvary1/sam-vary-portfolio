@@ -1,16 +1,17 @@
-# LLM python script.py
-
 # tools/build_corpus.py
-# Steps 2 to 5: convert, clean, label, chunk
+# Steps 2 to 5: convert, clean, label, chunk -> artifacts/corpus
 
+import os
 import re
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import List, Tuple
 from unidecode import unidecode
 import tiktoken
 
-# Paths
+# ------------- Paths -------------
 SITE_ROOT = Path(__file__).resolve().parents[1]
 INPUT_ROOT = SITE_ROOT / "public" / "data" / "writing"
 ARTIFACTS = SITE_ROOT / "artifacts" / "corpus"
@@ -21,19 +22,44 @@ REPORT_PATH = ARTIFACTS / "report.txt"
 ARTIFACTS.mkdir(parents=True, exist_ok=True)
 TXT_STAGE.mkdir(parents=True, exist_ok=True)
 
-# Converters
+# ------------- Converters -------------
 try:
     from pypdf import PdfReader
-except Exception as e:
+except Exception:
     PdfReader = None
 
 try:
     from docx import Document as DocxDocument
-except Exception as e:
+except Exception:
     DocxDocument = None
+
+def convert_doc_to_docx(src: Path) -> Path | None:
+    """
+    Optional helper: if LibreOffice is installed, convert .doc to .docx.
+    Returns the new .docx path or None on failure.
+    """
+    soffice = shutil.which("soffice") or r"C:\Program Files\LibreOffice\program\soffice.exe"
+    if not Path(str(soffice)).exists():
+        return None
+    try:
+        subprocess.run(
+            [soffice, "--headless", "--convert-to", "docx", str(src), "--outdir", str(src.parent)],
+            check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        outp = src.with_suffix(".docx")
+        return outp if outp.exists() else None
+    except Exception:
+        return None
 
 def read_any(path: Path) -> str:
     ext = path.suffix.lower()
+    if ext == ".doc":
+        maybe = convert_doc_to_docx(path)
+        if maybe and maybe.exists():
+            path = maybe
+            ext = ".docx"
+        else:
+            return ""
     if ext == ".pdf":
         assert PdfReader, "Install pypdf"
         text_parts = []
@@ -49,25 +75,20 @@ def read_any(path: Path) -> str:
         return path.read_text(errors="ignore", encoding="utf-8")
     return ""
 
-def normalize_text(txt: str) -> str:
-    # unify newlines
-    txt = txt.replace("\r\n", "\n").replace("\r", "\n")
-    # de hyphenate line breaks like know-\nledge
-    txt = re.sub(r"(\w)-\n(\w)", r"\1\2", txt)
-    # remove trailing spaces
-    txt = re.sub(r"[ \t]+\n", "\n", txt)
-    # collapse long blank runs
-    txt = re.sub(r"\n{3,}", "\n\n", txt)
-    # normalize unicode punctuation
-    txt = unidecode(txt)
-    return txt.strip()
-
-# Simple repeated header and page number cleaner
+# ------------- Normalization and cleaning -------------
 HEADER_PATTERNS = [
-    r"^\s*\d+\s*$",                 # bare page number line
+    r"^\s*\d+\s*$",                 # bare page number
     r"^Page\s+\d+\s*$",             # Page 12
-    r"^Sam(uel)?\s+Vary\s*\d*\s*$", # your name header variant
+    r"^Sam(uel)?\s+Vary\s*\d*\s*$", # example name header
 ]
+
+def normalize_text(txt: str) -> str:
+    txt = txt.replace("\r\n", "\n").replace("\r", "\n")
+    txt = re.sub(r"(\w)-\n(\w)", r"\1\2", txt)           # de hyphenate line wraps
+    txt = re.sub(r"[ \t]+\n", "\n", txt)                 # trim trailing spaces
+    txt = re.sub(r"\n{3,}", "\n\n", txt)                 # collapse long blank runs
+    txt = unidecode(txt)                                 # normalize unicode punctuation
+    return txt.strip()
 
 def strip_headers_footers(txt: str) -> str:
     keep = []
@@ -80,68 +101,104 @@ def strip_headers_footers(txt: str) -> str:
     return out.strip()
 
 def title_from_path(p: Path) -> str:
-    # Use folder and file stem to create a nice default section title
     parts = p.relative_to(INPUT_ROOT).parts
     if len(parts) >= 2:
         return f"{parts[0]} • {p.stem}"
     return p.stem
 
 def ensure_section_headers(txt: str, default_title: str) -> str:
-    # If the text already has lines that begin with "# " keep them
     if any(line.startswith("# ") for line in txt.splitlines()):
         return txt
-    # Otherwise add one header at top
     return f"# {default_title}\n\n{txt}"
 
-# Chunking
+# ------------- Chunking -------------
 enc = tiktoken.get_encoding("cl100k_base")
 TARGET = 1000
 OVERLAP = 120
 
-def token_count(s: str) -> int:
-    return len(enc.encode(s))
+def token_ids(text):
+    # Ensure we always pass a plain string to tiktoken
+    if text is None:
+        text = ""
+    elif not isinstance(text, str):
+        text = str(text)
+    return enc.encode(text)
 
-def chunk_paragraphs(paras: List[str]) -> List[str]:
+def ids_to_text(ids: List[int]) -> str:
+    return enc.decode(ids)
+
+def chunk_by_tokens(text: str, target: int = TARGET, overlap: int = OVERLAP) -> List[str]:
+    """
+    Robust token window chunker. Produces windows near target size
+    even if the input has no blank lines or has very long paragraphs.
+    """
+    ids = token_ids(text)
+    n = len(ids)
+    if n == 0:
+        return []
     chunks: List[str] = []
-    cur: List[str] = []
-    cur_tokens = 0
-    for p in paras:
-        ptok = token_count(p)
-        if cur and cur_tokens + ptok > TARGET:
-            joined = "\n\n".join(cur)
-            chunks.append(joined)
-            # create overlap tail
-            tail_ids = enc.encode(joined)[-OVERLAP:]
-            tail = enc.decode(tail_ids)
-            cur = [tail, p]
-            cur_tokens = token_count("\n\n".join(cur))
-        else:
-            cur.append(p)
-            cur_tokens += ptok
-    if cur:
-        chunks.append("\n\n".join(cur))
+    start = 0
+    while start < n:
+        end = min(start + target, n)
+        window = ids[start:end]
+        chunks.append(ids_to_text(window))
+        if end == n:
+            break
+        start = max(0, end - overlap)  # slide with overlap
     return chunks
 
-def chunk_text(txt: str) -> List[Tuple[str, str]]:
-    # split on blank lines as paragraphs
-    paras = [p.strip() for p in txt.split("\n\n") if p.strip()]
-    return [(f"Section {i+1}", ck) for i, ck in enumerate(chunk_paragraphs(paras))]
+def chunk_section(title: str, body: str) -> List[Tuple[str, str]]:
+    """
+    Try to respect blank line paragraphs, but fall back to token windows
+    so we always get sensible chunk sizes.
+    """
+    paras = [p.strip() for p in body.split("\n\n") if p.strip()]
+    chunks: List[str] = []
+    cur_texts: List[str] = []
+    cur_ids: List[int] = []
 
+    for p in paras:
+        p_ids = token_ids(p)
+        if len(p_ids) >= TARGET:
+            if cur_ids:
+                text = "\n\n".join(cur_texts)
+                chunks.extend(chunk_by_tokens(text))
+                cur_texts, cur_ids = [], []
+            chunks.extend(chunk_by_tokens(p))  # hard split this big paragraph
+            continue
+
+        if cur_ids and len(cur_ids) + len(p_ids) > TARGET:
+            text = "\n\n".join(cur_texts)
+            chunks.extend(chunk_by_tokens(text))
+            cur_texts, cur_ids = [p], p_ids
+        else:
+            cur_texts.append(p)
+            cur_ids += p_ids
+
+    if cur_texts:
+        text = "\n\n".join(cur_texts)
+        chunks.extend(chunk_by_tokens(text))
+
+    return [(title, c) for c in chunks]
+
+# ------------- Processing -------------
 def process_file(src: Path):
     raw = read_any(src)
-    if not raw.strip():
+    if not raw or not raw.strip():
+        print(f"[WARN] No text extracted from {src}")
         return []
+
     cleaned = normalize_text(raw)
     cleaned = strip_headers_footers(cleaned)
     titled = ensure_section_headers(cleaned, title_from_path(src))
 
-    # write a clean txt for audit
+    # write audit friendly clean text
     out_txt = TXT_STAGE / src.relative_to(INPUT_ROOT)
     out_txt = out_txt.with_suffix(".txt")
     out_txt.parent.mkdir(parents=True, exist_ok=True)
     out_txt.write_text(titled, encoding="utf-8")
 
-    # section aware chunking
+    # split by explicit section headers that start with "# "
     records = []
     lines = titled.splitlines()
     sections = []
@@ -159,21 +216,20 @@ def process_file(src: Path):
         sections.append((cur_title, "\n".join(buf).strip()))
 
     for title, body in sections:
-        paras = [p.strip() for p in body.split("\n\n") if p.strip()]
-        for i, chunk in enumerate(chunk_paragraphs(paras), 1):
+        for i, chunk in enumerate(chunk_section(title, body), 1):
             records.append({
                 "id": f"{src.relative_to(INPUT_ROOT)}__{title}__{i:04d}".replace("\\", "/"),
                 "work": src.parts[-2] if len(src.parts) >= 2 else "writing",
                 "source": str(src.relative_to(INPUT_ROOT)).replace("\\", "/"),
                 "title": title,
                 "section": title,
-                "text": chunk
+                "text": str(chunk)  # ensure plain string
             })
     return records
 
 def main():
     sources = []
-    for ext in (".pdf", ".docx", ".txt"):
+    for ext in (".pdf", ".docx", ".txt", ".doc"):
         sources.extend(INPUT_ROOT.rglob(f"*{ext}"))
 
     all_recs = []
@@ -183,16 +239,17 @@ def main():
             all_recs.extend(recs)
             print(f"Processed {p} with {len(recs)} chunks")
         except Exception as e:
-            print(f"Skip {p} due to error: {e}")
+            print(f"[ERROR] Skip {p} due to: {e}")
 
     with open(CHUNKS_PATH, "w", encoding="utf-8") as f:
         for r in all_recs:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    avg_tokens = 0
+    avg_tokens = 0.0
     if all_recs:
-        counts = [token_count(r["text"]) for r in all_recs]
-        avg_tokens = sum(counts) / len(counts)
+        # lazy token count by characters is fine for a quick report, but we can estimate tokens too
+        tok_counts = [len(token_ids(r["text"])) for r in all_recs]
+        avg_tokens = sum(tok_counts) / len(tok_counts)
 
     report = [
         f"Input root: {INPUT_ROOT}",
