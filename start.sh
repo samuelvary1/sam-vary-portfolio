@@ -3,61 +3,58 @@ set -e
 
 echo "[INFO] Booting Oracle backend..."
 
-# ====== Persistent paths ======
-export OLLAMA_MODELS=/workspace/ollama
-export ARTIFACTS_DIR=/workspace/artifacts
-export MODEL_NAME=qwen2.5:7b-instruct
-export OLLAMA_HOST=0.0.0.0
-export OLLAMA_BASE_URL=http://127.0.0.1:11434
+# ====== 1. Set working directory ======
+cd /workspace/sam-vary-portfolio
 
-# ====== Ensure persistent folders exist ======
-mkdir -p "$OLLAMA_MODELS" "$ARTIFACTS_DIR"
+# ====== 2. Create & activate persistent venv ======
+if [ ! -d "/workspace/.venv" ]; then
+    echo "[INFO] Creating Python virtual environment..."
+    python3 -m venv /workspace/.venv
+fi
+source /workspace/.venv/bin/activate
 
-# ====== Install Ollama if not present ======
-if ! command -v ollama &> /dev/null; then
-    echo "[INFO] Ollama not found. Installing..."
-    curl -fsSL https://ollama.com/install.sh | sh
-    echo "[INFO] Ollama installed."
+# ====== 3. Install Python dependencies ======
+if [ -f "requirements.txt" ]; then
+    echo "[INFO] Installing Python dependencies..."
+    pip install --upgrade pip
+    pip install -r requirements.txt
+else
+    echo "[WARN] requirements.txt not found — skipping pip install."
 fi
 
-# ====== Start Ollama in background immediately ======
+# ====== 4. Install Ollama if not installed ======
+if ! command -v ollama &> /dev/null; then
+    echo "[INFO] Installing Ollama..."
+    curl -fsSL https://ollama.com/install.sh | sh
+else
+    echo "[INFO] Ollama already installed."
+fi
+
+# ====== 5. Use persistent Ollama models folder ======
+export OLLAMA_MODELS=/workspace/ollama
+
+# ====== 6. Start Ollama in background ======
 echo "[INFO] Starting Ollama..."
 ollama serve &
-OLLAMA_PID=$!
+sleep 5
 
-# Wait for Ollama API to be responsive
-echo "[INFO] Waiting for Ollama to start..."
-until curl -s http://127.0.0.1:11434/api/tags > /dev/null; do
-    sleep 1
-done
-echo "[INFO] Ollama is running."
-
-# ====== Pull model if missing ======
+# ====== 7. Pull model if not already present ======
+MODEL_NAME="qwen2.5:7b-instruct"
 if ! ollama list | grep -q "$MODEL_NAME"; then
-    echo "[INFO] Pulling model: $MODEL_NAME"
-    ollama pull "$MODEL_NAME"
+    echo "[INFO] Pulling model $MODEL_NAME..."
+    ollama pull $MODEL_NAME
 else
-    echo "[INFO] Model already present: $MODEL_NAME"
+    echo "[INFO] Model $MODEL_NAME already present."
 fi
 
-# ====== Build artifacts if folder is empty ======
-if [ -z "$(ls -A "$ARTIFACTS_DIR" 2>/dev/null)" ]; then
-    if [ -d "/workspace/sam-vary-portfolio/public/data/writing" ]; then
-        echo "[INFO] No artifacts found — building from /public/data/writing..."
-        cd /workspace/sam-vary-portfolio
-        python tools/build_corpus.py
-        echo "[INFO] Build complete."
-    else
-        echo "[WARN] No /public/data/writing folder found — skipping build."
-    fi
+# ====== 8. Build artifacts if missing ======
+if [ ! -d "artifacts" ] || [ -z "$(ls -A artifacts)" ]; then
+    echo "[INFO] Building artifacts from corpus..."
+    python tools/build_corpus.py
 else
-    echo "[INFO] /workspace/artifacts already populated. Skipping rebuild."
+    echo "[INFO] Artifacts folder already exists."
 fi
 
-# ====== Start FastAPI backend ======
-echo "[INFO] Starting FastAPI..."
-cd /workspace/sam-vary-portfolio
-uvicorn server:app --host 0.0.0.0 --port 5000 --reload &
-
-# ====== Keep processes alive ======
-wait $OLLAMA_PID
+# ====== 9. Start FastAPI server ======
+echo "[INFO] Starting FastAPI server..."
+uvicorn server:app --host 0.0.0.0 --port 5000 --reload
