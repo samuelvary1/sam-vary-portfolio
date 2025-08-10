@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# ====== Config ======
+echo "[INFO] Booting Oracle backend..."
+
+# ====== Persistent paths ======
 export OLLAMA_MODELS=/workspace/ollama
 export ARTIFACTS_DIR=/workspace/artifacts
 export OLLAMA_BASE_URL=http://127.0.0.1:11434
@@ -30,10 +32,10 @@ fi
 # ====== Start FastAPI backend ======
 echo "[INFO] Starting FastAPI..."
 cd /workspace/sam-vary-portfolio
-# If you use a venv, uncomment the next line
+# If you use a venv, uncomment:
 # source .venv/bin/activate
 
-uvicorn server:app --host 0.0.0.0 --port 5000 --reload
+uvicorn server:app --host 0.0.0.0 --port 5000
 
-# ====== Cleanup ======
+# ====== Keep Ollama alive if uvicorn exits ======
 wait $OLLAMA_PID
