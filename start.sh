@@ -13,6 +13,13 @@ export OLLAMA_HOST=0.0.0.0
 # ====== Ensure persistent folders exist ======
 mkdir -p "$OLLAMA_MODELS" "$ARTIFACTS_DIR"
 
+# ====== If artifacts.zip exists and artifacts folder is empty, extract it ======
+if [ -f /workspace/artifacts.zip ] && [ -z "$(ls -A /workspace/artifacts 2>/dev/null)" ]; then
+    echo "[INFO] Extracting artifacts.zip into /workspace/artifacts..."
+    python -m zipfile -e /workspace/artifacts.zip /workspace/artifacts
+    echo "[INFO] Extraction complete."
+fi
+
 # ====== Start Ollama in background ======
 echo "[INFO] Starting Ollama..."
 ollama serve &
