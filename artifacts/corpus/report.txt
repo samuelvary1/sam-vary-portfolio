@@ -1,0 +1,6 @@
+Input root: C:\Users\samva\Development\sam-vary-portfolio\public\data\writing
+Clean txt folder: C:\Users\samva\Development\sam-vary-portfolio\artifacts\corpus\txt_clean
+Chunks file: C:\Users\samva\Development\sam-vary-portfolio\artifacts\corpus\chunks.jsonl
+Files seen: 13
+Chunks written: 43
+Average chunk tokens: 5144.3
