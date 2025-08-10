@@ -1,5 +1,5 @@
 # server.py
-# Oracle backend: FAISS retrieval + BM25 blend + cross encoder rerank + local Ollama
+# Oracle backend: FAISS retrieval + BM25 blend + cross-encoder rerank + local Ollama
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,32 +11,42 @@ import numpy as np
 import faiss
 import requests
 
-# ---------- Environment aware paths ----------
+# ---------- Auto-detect paths ----------
 ROOT = Path(__file__).resolve().parent
 
-# ARTIFACTS_DIR logic
-# 1) Use env if set
-# 2) Else if /workspace/artifacts exists, use that
-# 3) Else use repo local artifacts
-_env_art = os.getenv("ARTIFACTS_DIR")
-if _env_art:
-    ARTIFACTS_DIR = Path(_env_art)
-elif Path("/workspace/artifacts").exists():
-    ARTIFACTS_DIR = Path("/workspace/artifacts")
-else:
-    ARTIFACTS_DIR = ROOT / "artifacts"
+# Detect persistent pod paths
+POD_ARTIFACTS = Path("/workspace/artifacts")
+POD_OLLAMA = Path("/workspace/ollama")
 
+# Choose artifacts dir
+ARTIFACTS_DIR = Path(
+    os.getenv("ARTIFACTS_DIR") or
+    (POD_ARTIFACTS if POD_ARTIFACTS.exists() else ROOT / "artifacts")
+)
+
+# Default Ollama model store for pod
+if POD_OLLAMA.exists():
+    os.environ.setdefault("OLLAMA_MODELS", str(POD_OLLAMA))
+
+# Choose Ollama base URL
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_URL = f"{OLLAMA_BASE_URL.rstrip('/')}/api/generate"
+
+# Choose model
+GEN_MODEL = os.getenv("MODEL_NAME", "qwen2.5:7b-instruct")
+
+# Generation settings
+TEMPERATURE = float(os.getenv("GEN_TEMPERATURE", "0.2"))
+TOP_P = float(os.getenv("GEN_TOP_P", "0.9"))
+NUM_CTX = int(os.getenv("GEN_NUM_CTX", "8192"))
+
+# ---------- Load artifacts ----------
 IDX_DIR = ARTIFACTS_DIR / "index"
-
-# Load docs and FAISS index
 DOCS_PATH = IDX_DIR / "docs.jsonl"
 INDEX_PATH = IDX_DIR / "faiss.index"
 
 if not DOCS_PATH.exists() or not INDEX_PATH.exists():
-    raise RuntimeError(
-        f"Artifacts missing. Expected {DOCS_PATH} and {INDEX_PATH}. "
-        f"Set ARTIFACTS_DIR or place artifacts in {ARTIFACTS_DIR}."
-    )
+    raise RuntimeError(f"Artifacts missing in {ARTIFACTS_DIR}")
 
 DOCS = [json.loads(l) for l in open(DOCS_PATH, "r", encoding="utf-8")]
 INDEX = faiss.read_index(str(INDEX_PATH))
@@ -60,50 +70,29 @@ def tokenize(text: str) -> List[str]:
 BM25_CORPUS = [tokenize(d["text"]) for d in DOCS]
 bm25 = BM25Okapi(BM25_CORPUS)
 
-# ---------- Model server settings ----------
-# 1) OLLAMA_BASE_URL env wins
-# 2) Else default to local 127.0.0.1
-# This works both on pod and local since we run Ollama inside the same host
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-OLLAMA_URL = f"{OLLAMA_BASE_URL.rstrip('/')}/api/generate"
-
-GEN_MODEL = os.getenv("MODEL_NAME", os.getenv("GEN_MODEL", "qwen2.5:7b-instruct"))
-TEMPERATURE = float(os.getenv("GEN_TEMPERATURE", "0.2"))
-TOP_P = float(os.getenv("GEN_TOP_P", "0.9"))
-NUM_CTX = int(os.getenv("GEN_NUM_CTX", "8192"))
-
 # ---------- FastAPI app with CORS ----------
 app = FastAPI(title="Oracle Backend")
 
-# Allow list from env FRONTEND_ORIGINS as a comma list
-# Fallback to common localhost dev ports
-_frontend_env = os.getenv("FRONTEND_ORIGINS")
-if _frontend_env:
-    origins = [o.strip() for o in _frontend_env.split(",") if o.strip()]
-else:
-    origins = [
-        "http://localhost:3000", "http://127.0.0.1:3000",
-        "http://localhost:5173", "http://127.0.0.1:5173",
-        "http://localhost:8080", "http://127.0.0.1:8080",
-    ]
-
+origins = os.getenv("FRONTEND_ORIGINS", "").split(",") if os.getenv("FRONTEND_ORIGINS") else [
+    "http://localhost:3000", "http://127.0.0.1:3000",
+    "http://localhost:5173", "http://127.0.0.1:5173",
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[o.strip() for o in origins if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------- Retrieval: vector + BM25 union, then cross encoder rerank ----------
+# ---------- Retrieval ----------
 def retrieve(query: str, vec_k: int = 12, bm_k: int = 12, final_k: int = 6) -> List[Dict]:
     qv = embedder.encode(["query: " + query], normalize_embeddings=True).astype("float32")
     _, I = INDEX.search(qv, vec_k)
     vec_idxs = set(int(i) for i in I[0])
 
     bm_scores = bm25.get_scores(tokenize(query))
-    top_bm = list(np.argsort(-bm_scores)[:bm_k])
-    bm_idxs = set(int(i) for i in top_bm)
+    bm_idxs = set(int(i) for i in np.argsort(-bm_scores)[:bm_k])
 
     cand_idxs = list(vec_idxs.union(bm_idxs))
     if not cand_idxs:
@@ -114,17 +103,15 @@ def retrieve(query: str, vec_k: int = 12, bm_k: int = 12, final_k: int = 6) -> L
     scores = reranker.predict(pairs).tolist()
     ranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)
 
-    hits = []
-    for rank, (d, score) in enumerate(ranked[:final_k], 1):
-        hits.append({
-            "rank": rank,
-            "title": d["title"],
-            "source": d["source"],
-            "text": d["text"],
-            "score": float(score),
-        })
-    return hits
+    return [{
+        "rank": rank,
+        "title": d["title"],
+        "source": d["source"],
+        "text": d["text"],
+        "score": float(score),
+    } for rank, (d, score) in enumerate(ranked[:final_k], 1)]
 
+# ---------- Prompt & generation ----------
 def build_prompt(question: str, passages: List[Dict]) -> str:
     context = "\n\n".join(f"[{p['title']} • {p['source']}]\n{p['text']}" for p in passages)
     system = (
@@ -153,7 +140,7 @@ def generate_with_ollama(prompt: str) -> str:
         )
         resp.raise_for_status()
     except requests.RequestException as e:
-        return f"Oracle backend error talking to the local model: {e}"
+        return f"Error talking to model: {e}"
 
     out = []
     for line in resp.iter_lines():
@@ -177,6 +164,7 @@ def health():
         "status": "ok",
         "docs": len(DOCS),
         "artifacts_dir": str(ARTIFACTS_DIR),
+        "ollama_models": os.getenv("OLLAMA_MODELS", ""),
         "embed_model": EMBED_MODEL_NAME,
         "rerank_model": RERANK_MODEL_NAME,
         "gen_model": GEN_MODEL,
