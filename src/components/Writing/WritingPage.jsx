@@ -43,7 +43,7 @@ const WritingPage = () => {
         <h1 className="writing-title">{title}</h1>
         {slug === "the-crimson-harvester" ? (
           <iframe
-            src="/data/writing/crimson_harvester_manuscript.pdf"
+            src="/data/writing/novels/crimson_harvester_manuscript.pdf"
             title="Crimson Harvester Manuscript"
             width="100%"
             height="800px"
