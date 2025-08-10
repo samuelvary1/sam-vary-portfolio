@@ -37,7 +37,7 @@ bm25 = BM25Okapi(BM25_CORPUS)
 
 # ---- Model server settings
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://127.0.0.1:11434/api/generate")
-GEN_MODEL = os.getenv("GEN_MODEL", "qwen2.5:14b-instruct")
+GEN_MODEL = os.getenv("GEN_MODEL", "qwen2.5:7b-instruct")
 TEMPERATURE = float(os.getenv("GEN_TEMPERATURE", "0.2"))
 TOP_P = float(os.getenv("GEN_TOP_P", "0.9"))
 NUM_CTX = int(os.getenv("GEN_NUM_CTX", "8192"))
