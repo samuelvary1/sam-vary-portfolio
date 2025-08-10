@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
-echo "[INFO] Booting Oracle backend..."
+echo "[INFO] Booting Oracle backend (no venv)..."
 
 # ====== 1. Set working directory ======
 cd /workspace/sam-vary-portfolio
 
-# ====== 2. Create & activate persistent venv ======
-if [ ! -d "/workspace/.venv" ]; then
-    echo "[INFO] Creating Python virtual environment..."
-    python3 -m venv /workspace/.venv
-fi
-source /workspace/.venv/bin/activate
+# ====== 2. Persistent Python package location ======
+export PATH="/workspace/.local/bin:$PATH"
+export PYTHONPATH="/workspace/.local/lib/python3.11/site-packages:$PYTHONPATH"
 
-# ====== 3. Install Python dependencies ======
+# ====== 3. Install Python dependencies if requirements.txt exists ======
 if [ -f "requirements.txt" ]; then
-    echo "[INFO] Installing Python dependencies..."
-    pip install --upgrade pip
-    pip install -r requirements.txt
+    echo "[INFO] Installing Python dependencies to /workspace/.local..."
+    pip3 install --user --no-cache-dir -r requirements.txt
 else
     echo "[WARN] requirements.txt not found — skipping pip install."
 fi
@@ -50,11 +46,11 @@ fi
 # ====== 8. Build artifacts if missing ======
 if [ ! -d "artifacts" ] || [ -z "$(ls -A artifacts)" ]; then
     echo "[INFO] Building artifacts from corpus..."
-    python tools/build_corpus.py
+    python3 tools/build_corpus.py
 else
     echo "[INFO] Artifacts folder already exists."
 fi
 
-# ====== 9. Start FastAPI server ======
+# ====== 9. Start FastAPI server (no reload to save RAM) ======
 echo "[INFO] Starting FastAPI server..."
-uvicorn server:app --host 0.0.0.0 --port 5000 --reload
+python3 -m uvicorn server:app --host 0.0.0.0 --port 5000
