@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AskTheOracle.css";
 
 const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
@@ -9,7 +9,7 @@ function baseName(path = "") {
   return parts[parts.length - 1] || noChunk;
 }
 
-// strong, flexible cleaner for [file#chunk123] style tags
+// Strong, flexible cleaner for [file#chunk123] style tags
 function stripCitations(t = "") {
   return t
     .replace(/\[[^\[\]]*?#\s*chunk\s*\d+\]/gi, "") // remove [anything#chunkN]
@@ -17,11 +17,33 @@ function stripCitations(t = "") {
     .trim();
 }
 
+// Wake the server and let it rebuild the index after idle.
+// Tries up to 4 times with gentle backoff; each attempt has a 4s timeout.
+async function ensureAwake(retries = 4) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 4000);
+      const r = await fetch(`${API_BASE}/health`, {
+        cache: "no-store",
+        signal: controller.signal,
+      });
+      clearTimeout(id);
+      if (r.ok) return true;
+    } catch {
+      // ignore and retry with backoff
+    }
+    await new Promise((res) => setTimeout(res, 500 * (i + 1)));
+  }
+  return false;
+}
+
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [waking, setWaking] = useState(false);
   const [sources, setSources] = useState([]);
 
   // "quick" => /answer, "deep" => /deep_answer
@@ -36,6 +58,19 @@ const AskTheOracle = () => {
     } catch {}
   }
 
+  // Wake on mount so first question feels snappy
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      setWaking(true);
+      await ensureAwake();
+      if (isMounted) setWaking(false);
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   async function handleAsk(e) {
     e.preventDefault();
     setAnswer("");
@@ -45,6 +80,11 @@ const AskTheOracle = () => {
 
     setLoading(true);
     try {
+      // Wake the service (cold start) & let it rebuild the index if needed
+      setWaking(true);
+      await ensureAwake();
+      setWaking(false);
+
       const endpoint = mode === "deep" ? "/deep_answer" : "/answer";
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
@@ -63,10 +103,10 @@ const AskTheOracle = () => {
         text =
           "No model answer available yet. Showing the most relevant passages from your writing.";
       }
-      // 🔑 strip citations in BOTH modes
+      // Strip citations in BOTH modes
       setAnswer(stripCitations(text));
 
-      // Build compact source list (we'll show it in Deep; keep anyway)
+      // Build compact source list from matches (unique filenames)
       const uniq = Array.from(
         new Set((data.matches || []).map((m) => (m.file || "").split("#")[0])),
       ).slice(0, 4);
@@ -75,6 +115,7 @@ const AskTheOracle = () => {
       setError("Could not reach the Oracle");
     } finally {
       setLoading(false);
+      setWaking(false);
     }
   }
 
@@ -144,9 +185,11 @@ const AskTheOracle = () => {
             </button>
           </div>
           <div style={{ fontSize: 12, opacity: 0.8, marginTop: 6 }}>
-            {mode === "quick"
-              ? "Fast, concise answers."
-              : "Thorough map→reduce answer for big questions."}
+            {waking
+              ? "Waking the Oracle…"
+              : mode === "quick"
+                ? "Fast, concise answers."
+                : "Thorough map→reduce answer for big questions."}
           </div>
         </div>
 
@@ -157,8 +200,14 @@ const AskTheOracle = () => {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-          <button type="submit" disabled={loading}>
-            {loading ? "Consulting..." : mode === "deep" ? "Ask (Deep)" : "Ask"}
+          <button type="submit" disabled={loading || waking}>
+            {loading
+              ? "Consulting..."
+              : waking
+                ? "Waking…"
+                : mode === "deep"
+                  ? "Ask (Deep)"
+                  : "Ask"}
           </button>
         </form>
 
