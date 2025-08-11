@@ -1,7 +1,5 @@
 flask
 flask-cors
-groq
-numpy
-sentence-transformers
-torch     # (let Render resolve CPU wheels; if build fails, remove and let s-t pull a minimal runtime)
 gunicorn
+numpy
+scikit-learn
