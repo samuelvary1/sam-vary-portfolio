@@ -9,6 +9,14 @@ function baseName(path = "") {
   return parts[parts.length - 1] || noChunk;
 }
 
+// strong, flexible cleaner for [file#chunk123] style tags
+function stripCitations(t = "") {
+  return t
+    .replace(/\[[^\[\]]*?#\s*chunk\s*\d+\]/gi, "") // remove [anything#chunkN]
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
   const [answer, setAnswer] = useState("");
@@ -50,21 +58,15 @@ const AskTheOracle = () => {
         return;
       }
 
-      // Clean inline [file#chunkN] citations for Deep mode only
       let text = data.answer || "";
-      if (mode === "deep" && text) {
-        text = text
-          .replace(/\[[^\[\]]+#chunk\d+\]/g, "")
-          .replace(/\s{2,}/g, " ")
-          .trim();
-      }
       if (!text && data.note) {
         text =
           "No model answer available yet. Showing the most relevant passages from your writing.";
       }
-      setAnswer(text);
+      // 🔑 strip citations in BOTH modes
+      setAnswer(stripCitations(text));
 
-      // Build compact source list from matches (unique filenames, max 3–4)
+      // Build compact source list (we'll show it in Deep; keep anyway)
       const uniq = Array.from(
         new Set((data.matches || []).map((m) => (m.file || "").split("#")[0])),
       ).slice(0, 4);
