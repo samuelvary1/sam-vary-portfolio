@@ -4,6 +4,7 @@ from flask_cors import CORS
 import os
 import pathlib
 import threading
+import re
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -21,6 +22,13 @@ ALLOWED_ORIGINS = os.getenv(
     "https://www.samvary.com,https://samvary.com,http://localhost:3000"
 ).split(",")
 
+# Compact context defaults
+CTX_DOCS = int(os.getenv("CTX_DOCS", "3"))               # top docs to include
+CTX_WINDOW_CHARS = int(os.getenv("CTX_WINDOW_CHARS", "1200"))  # chars per doc
+CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3500"))    # total context cap
+MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
+
+# Groq
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 ADMIN_TOKEN = os.getenv("ORACLE_ADMIN_TOKEN", "")
@@ -68,7 +76,7 @@ def _rebuild_index():
             if p.is_file() and p.suffix.lower() in {".txt", ".md"}:
                 txt = _read_text(p)
                 if txt and txt.strip():
-                    local_docs.append(txt)
+                    local_docs.append(" ".join(txt.split()))
                     local_files.append(str(p.relative_to(ARTIFACTS_DIR)))
 
     if local_docs:
@@ -95,6 +103,47 @@ def _auth_ok(req: request) -> bool:
     if not ADMIN_TOKEN:
         return True
     return req.headers.get("X-Oracle-Admin") == ADMIN_TOKEN
+
+def best_window(text: str, query: str, window_chars: int) -> str:
+    if not text:
+        return ""
+    t = text
+    q_terms = re.findall(r"\w+", (query or "").lower())
+    q_terms = [w for w in q_terms if len(w) > 2]
+
+    pos = None
+    low = t.lower()
+    for term in q_terms:
+        i = low.find(term)
+        if i != -1:
+            pos = i if pos is None else min(pos, i)
+    if pos is None:
+        pos = 0
+
+    start = max(0, pos - window_chars // 2)
+    end = min(len(t), start + window_chars)
+    return t[start:end]
+
+def generate_answer_with_fallback(messages, primary, fallback="llama-3.1-8b-instant"):
+    if not groq_client:
+        return ""
+    try:
+        return groq_client.chat.completions.create(
+            model=primary,
+            messages=messages,
+            temperature=0.2,
+            max_tokens=MAX_ANSWER_TOKENS,
+        ).choices[0].message.content.strip()
+    except Exception as e:
+        msg = str(e)
+        if "decommissioned" in msg or "Request too large" in msg or "tokens per minute" in msg:
+            return groq_client.chat.completions.create(
+                model=fallback,
+                messages=messages,
+                temperature=0.2,
+                max_tokens=MAX_ANSWER_TOKENS,
+            ).choices[0].message.content.strip()
+        raise
 
 # -----------------
 # Routes
@@ -158,7 +207,21 @@ def answer():
     idxs, sims = _retrieve(question, TOP_K)
     matches = [{"score": float(sims[i]), "file": files[i], "text": docs[i]} for i in idxs]
 
-    # If no model key, return matches only
+    # Build a compact context
+    top_ctx = []
+    total = 0
+    for i in idxs[:CTX_DOCS]:
+        snippet = best_window(docs[i], question, CTX_WINDOW_CHARS)
+        block = f"[{files[i]}]\n{snippet}"
+        if total + len(block) > CTX_TOTAL_CHARS:
+            remain = max(0, CTX_TOTAL_CHARS - total)
+            block = block[:remain]
+        top_ctx.append(block)
+        total += len(block)
+        if total >= CTX_TOTAL_CHARS:
+            break
+    context = "\n\n".join(top_ctx)
+
     if not groq_client:
         return jsonify({
             "answer": "",
@@ -166,30 +229,21 @@ def answer():
             "note": "set GROQ_API_KEY to enable natural language answers"
         }), 200
 
-    # Build compact context from top few docs
-    top_ctx = []
-    for i in idxs[:3]:
-        top_ctx.append(f"[{files[i]}]\n{docs[i]}")
-    context = "\n\n".join(top_ctx)
-
     system_msg = (
-        "You must answer using only the provided context. "
+        "Answer using only the provided context. "
         "Cite document names inline when helpful. "
         "If the answer is not in the context, say you do not know."
     )
     user_msg = f"Question:\n{question}\n\nContext:\n{context}\n\nAnswer clearly and concisely."
 
     try:
-        resp = groq_client.chat.completions.create(
-            model=GROQ_MODEL,
-            messages=[
+        answer_text = generate_answer_with_fallback(
+            [
                 {"role": "system", "content": system_msg},
                 {"role": "user", "content": user_msg},
             ],
-            temperature=0.2,
-            max_tokens=600,
+            primary=GROQ_MODEL,
         )
-        answer_text = resp.choices[0].message.content.strip()
     except Exception as e:
         return jsonify({
             "answer": "",
