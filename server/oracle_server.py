@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 try:
-    from rank_bm25 import BM25Okapi  # optional
+    from rank_bm25 import BM25Okapi  # optional; app falls back to TF-IDF if missing
 except Exception:
     BM25Okapi = None
 from groq import Groq
@@ -55,6 +55,7 @@ groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 # -----------------
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}}, supports_credentials=True)
+app.config["INDEX_READY"] = False  # for Flask 3.x: we'll ensure index via before_request
 
 # -----------------
 # State
@@ -286,18 +287,25 @@ def _reduce_summaries(question: str, summaries: list[str]) -> str:
     )
 
 # -----------------
-# Index on cold start + first request
+# Build index now; ensure on first request (Flask 3.x safe)
 # -----------------
 try:
     _rebuild_index()  # build at import time so cold starts have an index
+    app.config["INDEX_READY"] = True
 except Exception as e:
     print("[index] initial build failed:", e)
+    app.config["INDEX_READY"] = False
 
-@app.before_first_request
-def _ensure_index():
-    if not docs:
-        print("[index] empty on first request; rebuilding…")
-        _rebuild_index()
+@app.before_request
+def _ensure_index_on_request():
+    # Only rebuild once if import-time build failed OR index got cleared
+    if not app.config.get("INDEX_READY") or not docs:
+        print("[index] ensuring index on request…")
+        try:
+            _rebuild_index()
+            app.config["INDEX_READY"] = True
+        except Exception as e:
+            print("[index] rebuild on request failed:", e)
 
 # -----------------
 # Routes
