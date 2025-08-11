@@ -22,10 +22,11 @@ ALLOWED_ORIGINS = os.getenv(
     "https://www.samvary.com,https://samvary.com,http://localhost:3000"
 ).split(",")
 
-# Compact context defaults
-CTX_DOCS = int(os.getenv("CTX_DOCS", "3"))               # top docs to include
-CTX_WINDOW_CHARS = int(os.getenv("CTX_WINDOW_CHARS", "1200"))  # chars per doc
-CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3500"))    # total context cap
+# Chunked indexing and compact context
+CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1200"))          # size of each text chunk in characters
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "200"))       # overlap between consecutive chunks
+CTX_DOCS = int(os.getenv("CTX_DOCS", "4"))                   # how many top chunks to include in context
+CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3500"))  # total context character cap
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
 
 # Groq
@@ -44,8 +45,8 @@ CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}}, supports_credentials=
 # -----------------
 # State
 # -----------------
-docs: list[str] = []
-files: list[str] = []
+docs: list[str] = []          # list of chunk texts
+files: list[str] = []         # list of "relative_path#chunkN" labels
 vectorizer: TfidfVectorizer | None = None
 doc_matrix = None
 _reload_lock = threading.Lock()
@@ -62,8 +63,22 @@ def _read_text(path: pathlib.Path) -> str | None:
         except Exception:
             return None
 
+def chunk_text(t: str, size: int, overlap: int):
+    """Split normalized text into overlapping chunks. Returns list of (start_index, chunk_text)."""
+    if not t:
+        return []
+    t = " ".join(t.split())  # normalize whitespace
+    chunks = []
+    step = max(1, size - overlap)
+    for i in range(0, len(t), step):
+        chunk = t[i:i + size]
+        if len(chunk) < 120:  # skip very small tails
+            break
+        chunks.append((i, chunk))
+    return chunks
+
 def _rebuild_index():
-    """Scan artifacts recursively and build a TF IDF index."""
+    """Scan artifacts recursively, chunk large files, and build the TF IDF index."""
     global docs, files, vectorizer, doc_matrix
 
     local_docs: list[str] = []
@@ -71,13 +86,17 @@ def _rebuild_index():
 
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    if ARTIFACTS_DIR.exists():
-        for p in ARTIFACTS_DIR.rglob("*"):
-            if p.is_file() and p.suffix.lower() in {".txt", ".md"}:
-                txt = _read_text(p)
-                if txt and txt.strip():
-                    local_docs.append(" ".join(txt.split()))
-                    local_files.append(str(p.relative_to(ARTIFACTS_DIR)))
+    for p in ARTIFACTS_DIR.rglob("*"):
+        if not p.is_file() or p.suffix.lower() not in {".txt", ".md"}:
+            continue
+        txt = _read_text(p)
+        if not txt or not txt.strip():
+            continue
+
+        rel = str(p.relative_to(ARTIFACTS_DIR))
+        for j, (start, ch) in enumerate(chunk_text(txt, CHUNK_CHARS, CHUNK_OVERLAP)):
+            local_docs.append(ch)
+            local_files.append(f"{rel}#chunk{j}")
 
     if local_docs:
         vec = TfidfVectorizer(stop_words="english")
@@ -86,7 +105,7 @@ def _rebuild_index():
         vec, mat = None, None
 
     docs, files, vectorizer, doc_matrix = local_docs, local_files, vec, mat
-    print(f"Loaded {len(docs)} docs from {ARTIFACTS_DIR}")
+    print(f"Indexed {len(docs)} chunks from {ARTIFACTS_DIR}")
 
 # Build index at startup
 _rebuild_index()
@@ -103,26 +122,6 @@ def _auth_ok(req: request) -> bool:
     if not ADMIN_TOKEN:
         return True
     return req.headers.get("X-Oracle-Admin") == ADMIN_TOKEN
-
-def best_window(text: str, query: str, window_chars: int) -> str:
-    if not text:
-        return ""
-    t = text
-    q_terms = re.findall(r"\w+", (query or "").lower())
-    q_terms = [w for w in q_terms if len(w) > 2]
-
-    pos = None
-    low = t.lower()
-    for term in q_terms:
-        i = low.find(term)
-        if i != -1:
-            pos = i if pos is None else min(pos, i)
-    if pos is None:
-        pos = 0
-
-    start = max(0, pos - window_chars // 2)
-    end = min(len(t), start + window_chars)
-    return t[start:end]
 
 def generate_answer_with_fallback(messages, primary, fallback="llama-3.1-8b-instant"):
     if not groq_client:
@@ -167,7 +166,7 @@ def list_docs():
     return jsonify({
         "dir": str(ARTIFACTS_DIR),
         "count": len(docs),
-        "files_indexed": files,
+        "files_indexed": files[:25],   # sample to keep payload small
         "total_files_in_dir": len(entries),
         "files_in_dir_sample": entries[:25],
     }), 200
@@ -207,12 +206,10 @@ def answer():
     idxs, sims = _retrieve(question, TOP_K)
     matches = [{"score": float(sims[i]), "file": files[i], "text": docs[i]} for i in idxs]
 
-    # Build a compact context
-    top_ctx = []
-    total = 0
+    # Build a compact context from the top chunks
+    top_ctx, total = [], 0
     for i in idxs[:CTX_DOCS]:
-        snippet = best_window(docs[i], question, CTX_WINDOW_CHARS)
-        block = f"[{files[i]}]\n{snippet}"
+        block = f"[{files[i]}]\n{docs[i]}"
         if total + len(block) > CTX_TOTAL_CHARS:
             remain = max(0, CTX_TOTAL_CHARS - total)
             block = block[:remain]

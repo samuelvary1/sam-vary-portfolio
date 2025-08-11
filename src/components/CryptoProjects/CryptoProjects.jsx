@@ -1,4 +1,6 @@
 import React from "react";
+import "./CryptoProjects.css";
+import "./CryptoProjects.css";
 
 const CryptoProjects = () => {
   const sawyerImageUrl = "/assets/sawyer-beach.png"; // Update with your actual image path
@@ -14,10 +16,6 @@ const CryptoProjects = () => {
         color: "#333",
         padding: 0,
         margin: 0,
-        position: "fixed",
-        top: 0,
-        left: 0,
-        zIndex: -1,
         width: "100vw",
         height: "100vh",
       }}
@@ -26,68 +24,112 @@ const CryptoProjects = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
-          gap: "2rem",
-          minHeight: "calc(100vh - 80px)",
-          marginTop: "64px",
+          minHeight: "100vh",
+          paddingTop: "80px",
         }}
       >
-        {/* Sawyer Token Card */}
-        <div
+        <h1
           style={{
-            background: "#fff",
-            borderRadius: "12px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-            padding: "1.5rem",
-            width: "260px",
-            textAlign: "center",
+            fontSize: "2.2rem",
+            fontWeight: 800,
+            marginBottom: "2.5rem",
+            letterSpacing: "-1px",
+            color: "#222",
+            textShadow: "0 2px 8px rgba(0,0,0,0.07)",
           }}
         >
-          <img
-            src={sawyerImageUrl}
-            alt="Sawyer Token"
-            style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
-          />
-          <h3>Sawyer Token</h3>
+          Homemade Cryptocurrencies
+        </h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "2rem",
+          }}
+        >
+          {/* Sawyer Token Card */}
           <a
             href="https://sawyertoken.com"
             target="_blank"
             rel="noopener noreferrer"
-            style={buttonStyle}
+            className="crypto-card-link"
+            style={{ height: 420, boxSizing: "border-box" }}
           >
-            Visit SawyerToken.com
+            <div
+              style={{
+                width: "100%",
+                aspectRatio: "1 / 1",
+                overflow: "hidden",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+                background: "#eee",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={sawyerImageUrl}
+                alt="Sawyer Token"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+            <h3>Sawyer Token</h3>
+            <div
+              style={{
+                fontSize: "0.98rem",
+                color: "#666",
+                marginBottom: "0.5rem",
+              }}
+            >
+              Built on <b>Polygon</b>
+            </div>
+            <div style={buttonStyle}>Visit SawyerToken.com</div>
           </a>
-        </div>
-        {/* Twan Token Card */}
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: "12px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-            padding: "1.5rem",
-            width: "260px",
-            textAlign: "center",
-          }}
-        >
-          <img
-            src={twanImageUrl}
-            alt="Twan Token"
-            style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
-          />
-          <h3>Twan Token</h3>
+          {/* Twan Token Card */}
           <a
             href="https://twantoken.com"
             target="_blank"
             rel="noopener noreferrer"
-            style={buttonStyle}
+            className="crypto-card-link"
+            style={{ height: 420, boxSizing: "border-box" }}
           >
-            Visit TwanToken.com
+            <div
+              style={{
+                width: "100%",
+                aspectRatio: "1 / 1",
+                overflow: "hidden",
+                borderRadius: "8px",
+                marginBottom: "1rem",
+                background: "#eee",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={twanImageUrl}
+                alt="Twan Token"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+            <h3>Twan Token</h3>
+            <div
+              style={{
+                fontSize: "0.98rem",
+                color: "#666",
+                marginBottom: "0.5rem",
+              }}
+            >
+              Built on <b>Ethereum</b>
+            </div>
+            <div style={buttonStyle}>Visit TwanToken.com</div>
           </a>
         </div>
       </div>
-
-      {/* ...no main content or footer... */}
     </div>
   );
 };
