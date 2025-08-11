@@ -50,8 +50,9 @@ const AskTheOracle = () => {
       }
 
       const data = await res.json();
-      // proxy returns { output }, older version might return { response }
-      setAnswer(data.output || data.response || "");
+
+      // Expecting: { answer: "...", citations: [...] }
+      setAnswer(data.answer || data.output || data.response || "");
       setCitations(Array.isArray(data.citations) ? data.citations : []);
       setStatus("ready");
     } catch {
@@ -140,7 +141,7 @@ const AskTheOracle = () => {
                 <small>
                   {citations.map((c, i) => (
                     <span key={i} style={{ marginRight: 8 }}>
-                      [{c.title} • {c.source}]
+                      [{c.title || "Unknown"} • {c.source || "N/A"}]
                     </span>
                   ))}
                 </small>
