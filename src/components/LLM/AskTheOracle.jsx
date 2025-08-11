@@ -3,15 +3,22 @@ import "./AskTheOracle.css";
 
 const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
 
+function baseName(path = "") {
+  const noChunk = path.split("#")[0] || path;
+  const parts = noChunk.split("/");
+  return parts[parts.length - 1] || noChunk;
+}
+
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sources, setSources] = useState([]);
 
   // "quick" => /answer, "deep" => /deep_answer
   const [mode, setMode] = useState(
-    () => window.localStorage?.getItem("oracleMode") || "quick",
+    () => window.localStorage?.getItem("oracleMode") || "deep",
   );
 
   function selectMode(m) {
@@ -25,6 +32,7 @@ const AskTheOracle = () => {
     e.preventDefault();
     setAnswer("");
     setError("");
+    setSources([]);
     if (!userInput.trim()) return;
 
     setLoading(true);
@@ -42,19 +50,25 @@ const AskTheOracle = () => {
         return;
       }
 
-      // graceful fallback if model disabled
-      if (!data.answer && data.note) {
-        setAnswer(
-          "No model answer available yet. Showing the most relevant passages from your writing.",
-        );
-      } else {
-        setAnswer(data.answer || "");
+      // Clean inline [file#chunkN] citations for Deep mode only
+      let text = data.answer || "";
+      if (mode === "deep" && text) {
+        text = text
+          .replace(/\[[^\[\]]+#chunk\d+\]/g, "")
+          .replace(/\s{2,}/g, " ")
+          .trim();
       }
+      if (!text && data.note) {
+        text =
+          "No model answer available yet. Showing the most relevant passages from your writing.";
+      }
+      setAnswer(text);
 
-      // (Optional) If you want to surface deep mode coverage:
-      // if (mode === "deep" && typeof data.notes_used === "number") {
-      //   setAnswer((prev) => `${prev}\n\n— (Built from ${data.notes_used} notes)`);
-      // }
+      // Build compact source list from matches (unique filenames, max 3–4)
+      const uniq = Array.from(
+        new Set((data.matches || []).map((m) => (m.file || "").split("#")[0])),
+      ).slice(0, 4);
+      setSources(uniq);
     } catch {
       setError("Could not reach the Oracle");
     } finally {
@@ -130,7 +144,7 @@ const AskTheOracle = () => {
           <div style={{ fontSize: 12, opacity: 0.8, marginTop: 6 }}>
             {mode === "quick"
               ? "Fast, concise answers."
-              : "Thorough map→reduce answer for big questions."}
+              : "Thorough map→reduce answer for big questions (citations hidden)."}
           </div>
         </div>
 
@@ -167,6 +181,20 @@ const AskTheOracle = () => {
             >
               {answer}
             </p>
+
+            {mode === "deep" && sources.length > 0 && (
+              <div style={{ marginTop: 12, opacity: 0.85 }}>
+                <small>
+                  <strong>Sources:</strong>{" "}
+                  {sources.map((s, i) => (
+                    <span key={s}>
+                      {baseName(s)}
+                      {i < sources.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </small>
+              </div>
+            )}
           </div>
         )}
       </div>

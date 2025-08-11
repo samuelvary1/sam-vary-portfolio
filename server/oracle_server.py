@@ -27,6 +27,7 @@ TOP_K = int(os.getenv("TOP_K", "6"))
 # Chunking / context
 CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1000"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
+MIN_CHARS = int(os.getenv("MIN_CHARS", "80"))  # min size for a chunk; short files still get 1 chunk
 CTX_DOCS = int(os.getenv("CTX_DOCS", "4"))
 CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3800"))
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
@@ -69,13 +70,15 @@ _reload_lock = threading.Lock()
 # Helpers
 # -----------------
 def _read_text(path: pathlib.Path) -> str | None:
+    """Robust text reader; strips NULs and handles common encodings."""
     try:
-        return path.read_text(encoding="utf-8")
+        t = path.read_text(encoding="utf-8")
     except Exception:
         try:
-            return path.read_text(encoding="latin-1")
+            t = path.read_text(encoding="latin-1")
         except Exception:
             return None
+    return t.replace("\x00", "")
 
 SENT_END = re.compile(r"([.!?])\s+")
 
@@ -89,8 +92,12 @@ def chunk_text(t: str, size: int, overlap: int):
     i = 0
     while i < len(t):
         piece = t[i:i + size]
-        if len(piece) < 120:
+        # allow a single short chunk for short files
+        if len(piece) < MIN_CHARS:
+            if i == 0 and len(piece) > 0:
+                chunks.append((i, piece))
             break
+        # try to end on sentence boundary
         ends = list(SENT_END.finditer(piece))
         if ends:
             piece = piece[:ends[-1].end()]
@@ -104,20 +111,28 @@ def _rebuild_index():
 
     local_docs: list[str] = []
     local_files: list[str] = []
+    scanned = eligible = decoded = produced = 0
 
     ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
 
     for p in ARTIFACTS_DIR.rglob("*"):
-        if not p.is_file() or p.suffix.lower() not in {".txt", ".md"}:
+        if not p.is_file():
             continue
+        scanned += 1
+        if p.suffix.lower() not in {".txt", ".md"}:
+            continue
+        eligible += 1
+
         txt = _read_text(p)
         if not txt or not txt.strip():
             continue
+        decoded += 1
 
         rel = str(p.relative_to(ARTIFACTS_DIR))
         for j, (start, ch) in enumerate(chunk_text(txt, CHUNK_CHARS, CHUNK_OVERLAP)):
             local_docs.append(ch)
             local_files.append(f"{rel}#chunk{j}")
+            produced += 1
 
     if local_docs:
         vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
@@ -131,7 +146,10 @@ def _rebuild_index():
         vectorizer, doc_matrix, bm25 = None, None, None
 
     docs, files = local_docs, local_files
-    print(f"Indexed {len(docs)} chunks from {ARTIFACTS_DIR}")
+    print(f"[index] scanned={scanned} eligible={eligible} decoded={decoded} chunks={produced} dir={ARTIFACTS_DIR}")
+    app.config["INDEX_STATS"] = dict(
+        scanned=scanned, eligible=eligible, decoded=decoded, chunks=produced, dir=str(ARTIFACTS_DIR)
+    )
 
 def _normalize(arr):
     a = np.asarray(arr, dtype=float)
@@ -299,7 +317,8 @@ def reload_index():
         return jsonify({"error": "unauthorized"}), 401
     with _reload_lock:
         _rebuild_index()
-        return jsonify({"ok": True, "docs": len(docs)}), 200
+        stats = app.config.get("INDEX_STATS", {})
+        return jsonify({"ok": True, "docs": len(docs), "stats": stats}), 200
 
 @app.route("/ask", methods=["POST"])
 def ask():
@@ -335,7 +354,6 @@ def answer():
     if should_pin_faq:
         faq_idxs = [i for i, f in enumerate(files) if f.split("#")[0].endswith(FAQ_FILE)]
         if faq_idxs:
-            # choose the best FAQ chunk by blended score if present
             best_faq = max(faq_idxs, key=lambda i: scores[i] if scores.size else 0.0)
             idxs = np.array([best_faq] + [j for j in idxs if j != best_faq])
 
