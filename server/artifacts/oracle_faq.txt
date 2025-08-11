@@ -1,0 +1,55 @@
+Oracle Reference and FAQ
+Last updated: 2025 08 11
+
+What do you know about?
+I index the writing stored on this site. I do not read the entire internet. I answer using only the passages I retrieve from the texts listed here.
+
+Current catalog
+Category  Novels
+* Crimson Harvester manuscript
+
+Category  Screenplays
+* Crimson Harvester feature film
+* Pretty as a Picture short film
+* Berga episode 1
+* Luke and Julia
+
+Category  Short stories
+* The Happy Prole
+* The Last Battle
+* O Green World
+* Family Entertainment
+* Breeding Ground
+* The Outpost
+* Wendell Jackson
+* the last raven
+
+Category  Thesis and academic work
+* Sam Vary Honors Thesis
+* report
+
+How current is this index?
+It reflects the files that have been added to the artifacts folder and indexed. When new files are added I can be reloaded and I will know them right away.
+
+Who is Sam Vary?
+Sam Vary is a writer and builder who enjoys fiction, screenwriting, pen and ink art, and software. Sam also works with AI tools, makes personal web apps, and tinkers with games and miniatures. On this site Sam shares creative work and experiments with a personal Oracle that can answer questions about the writing.
+
+How should I ask questions?
+Be specific. Ask for a summary of a book, a character, a theme, or a scene. Example prompts
+* Summarize the Honors Thesis
+* What is the central conflict in Crimson Harvester
+* What happens in Luke and Julia
+* Describe the mood of The Happy Prole
+* List the main characters in O Green World
+
+How do you answer?
+I retrieve the most relevant passages from the catalog above, then compose a short answer grounded in those passages. If a detail is not in the retrieved text, I will say that I do not know.
+
+Limits
+I can work with compact passages at a time. For large books I read many small chunks and only send the most relevant ones to the answer step. Very broad questions may be better if you ask for a chapter or a theme.
+
+Privacy
+I only read the files in this site’s artifacts folder. I do not store personal browsing data and I do not send private files anywhere except to the configured model for the purpose of answering your question.
+
+Maintenance
+To add new material place .txt files into the artifacts folder and trigger a reload. This FAQ is designed to be found when someone asks what I know or who Sam Vary is.
