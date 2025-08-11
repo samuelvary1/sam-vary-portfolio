@@ -160,6 +160,21 @@ def _normalize(arr):
         return np.zeros_like(a)
     return (a - mn) / (mx - mn + 1e-12)
 
+# Build the index at import time (cold starts)
+try:
+    _rebuild_index()
+except Exception as e:
+    print("[index] initial build failed:", e)
+
+
+@app.before_first_request
+def _ensure_index():
+    if not docs:
+        print("[index] empty on first request; rebuilding…")
+        _rebuild_index()
+
+
+
 def _expand_query(q: str) -> str:
     """Tiny synonym expansion to help retrieval."""
     SYN = {
