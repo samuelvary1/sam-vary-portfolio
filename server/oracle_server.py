@@ -1,10 +1,7 @@
 from __future__ import annotations
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import pathlib
-import threading
-import re
+import os, time, re, pathlib, threading
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -12,7 +9,7 @@ from rank_bm25 import BM25Okapi
 from groq import Groq
 
 # -----------------
-# Config (env-driven)
+# Config (env)
 # -----------------
 ROOT = pathlib.Path(__file__).parent.resolve()
 ARTIFACTS_DIR = (ROOT / os.getenv("ARTIFACTS_DIR", "artifacts")).resolve()
@@ -25,13 +22,13 @@ ALLOWED_ORIGINS = os.getenv(
 TOP_K = int(os.getenv("TOP_K", "6"))
 
 # Chunking / context
-CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1200"))
-CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "200"))
+CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1000"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
 CTX_DOCS = int(os.getenv("CTX_DOCS", "4"))
 CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3800"))
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
 
-# Retrieval blend (0..1) — 1.0 = pure TF-IDF, 0.0 = pure BM25
+# Retrieval blend (0..1): 1.0 = pure TF-IDF, 0.0 = pure BM25
 RETRIEVAL_ALPHA = float(os.getenv("RETRIEVAL_ALPHA", "0.6"))
 
 # Optional FAQ pinning
@@ -41,6 +38,11 @@ FAQ_FILE = os.getenv("FAQ_FILE", "oracle_faq.txt")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 ADMIN_TOKEN = os.getenv("ORACLE_ADMIN_TOKEN", "")
+
+# Map→Reduce env
+MAP_CHUNKS = int(os.getenv("MAP_CHUNKS", "12"))          # chunks to summarize
+MAP_SUMMARY_TOKENS = int(os.getenv("MAP_SUMMARY_TOKENS", "140"))
+REDUCE_TOKENS = int(os.getenv("REDUCE_TOKENS", "600"))
 
 groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
@@ -154,10 +156,9 @@ def _retrieve(prompt: str, k: int):
         return np.array([], dtype=int), np.array([])
 
     q = _expand_query(prompt)
-    # TF-IDF cosine
+
     tfidf_vec = vectorizer.transform([q])
     tfidf_scores = cosine_similarity(tfidf_vec, doc_matrix).ravel()
-    # BM25
     bm_scores = bm25.get_scores(q.lower().split())
 
     blended = RETRIEVAL_ALPHA * _normalize(tfidf_scores) + (1 - RETRIEVAL_ALPHA) * _normalize(bm_scores)
@@ -184,26 +185,73 @@ def _auth_ok(req: request) -> bool:
         return True
     return req.headers.get("X-Oracle-Admin") == ADMIN_TOKEN
 
+def _groq_chat(messages, model, max_tokens, temperature=0.2):
+    """Single Groq chat call with simple backoff on rate/TPM errors."""
+    if not groq_client:
+        return ""
+    for attempt in range(3):
+        try:
+            r = groq_client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+            return r.choices[0].message.content.strip()
+        except Exception as e:
+            msg = str(e).lower()
+            if "rate" in msg or "tokens per minute" in msg:
+                time.sleep(1.0 + attempt)
+                continue
+            if "decommissioned" in msg:
+                # auto fallback
+                return _groq_chat(messages, "llama-3.1-8b-instant", max_tokens, temperature)
+            raise
+    return ""
+
 def generate_answer_with_fallback(messages, primary, fallback="llama-3.1-8b-instant"):
     if not groq_client:
         return ""
     try:
-        return groq_client.chat.completions.create(
-            model=primary,
-            messages=messages,
-            temperature=0.2,
-            max_tokens=MAX_ANSWER_TOKENS,
-        ).choices[0].message.content.strip()
-    except Exception as e:
-        msg = str(e)
-        if "decommissioned" in msg or "Request too large" in msg or "tokens per minute" in msg:
-            return groq_client.chat.completions.create(
-                model=fallback,
-                messages=messages,
-                temperature=0.2,
-                max_tokens=MAX_ANSWER_TOKENS,
-            ).choices[0].message.content.strip()
-        raise
+        return _groq_chat(messages, primary, MAX_ANSWER_TOKENS, temperature=0.2)
+    except Exception:
+        return _groq_chat(messages, fallback, MAX_ANSWER_TOKENS, temperature=0.2)
+
+def _summarize_chunk_for(question: str, label: str, text: str) -> str:
+    """Map step: short, focused summary for one chunk with a citation label."""
+    sys = (
+        "You create short, factual, question-focused notes from a single passage. "
+        "Do not invent facts. Stay grounded in the passage. "
+        "Return 2–4 bullet points, each ending with the provided source label."
+    )
+    usr = (
+        f"Question:\n{question}\n\n"
+        f"Passage (source {label}):\n{text}\n\n"
+        f"Write 2–4 bullet points that help answer the question. "
+        f"End each bullet with {label}."
+    )
+    return _groq_chat(
+        [{"role": "system", "content": sys}, {"role": "user", "content": usr}],
+        GROQ_MODEL,
+        MAP_SUMMARY_TOKENS,
+        temperature=0.1,
+    )
+
+def _reduce_summaries(question: str, summaries: list[str]) -> str:
+    """Reduce step: synthesize a clear answer from multiple labeled notes."""
+    sys = (
+        "Synthesize a concise, well-structured answer using only the notes. "
+        "Preserve citations exactly as the source labels like [file#chunkN]. "
+        "If the notes don't contain an answer, say you don't know."
+    )
+    notes = "\n".join(summaries)
+    usr = f"Question:\n{question}\n\nNotes:\n{notes}\n\nWrite the final answer with inline citations."
+    return _groq_chat(
+        [{"role": "system", "content": sys}, {"role": "user", "content": usr}],
+        GROQ_MODEL,
+        REDUCE_TOKENS,
+        temperature=0.2,
+    )
 
 # -----------------
 # Routes
@@ -263,7 +311,7 @@ def answer():
     if not question:
         return jsonify({"error": "No prompt provided"}), 400
 
-    # Retrieve
+    # Retrieve a wider set, then select diverse context
     idxs, scores = _retrieve(question, max(TOP_K, CTX_DOCS * 2))
 
     # Optional: pin FAQ for certain questions
@@ -275,7 +323,6 @@ def answer():
             best_faq = max(faq_idxs, key=lambda i: scores[i] if scores.size else 0.0)
             idxs = np.array([best_faq] + [j for j in idxs if j != best_faq])
 
-    # Encourage diversity in the final context selection
     idxs_ctx = select_diverse(idxs, CTX_DOCS)
 
     # Build compact context under the cap
@@ -291,7 +338,7 @@ def answer():
             break
     context = "\n\n".join(top_ctx)
 
-    # Prepare matches for UI (use original top_k for citations)
+    # Provide matches for UI
     top_idxs = idxs[:TOP_K]
     matches = [{"score": float(scores[i]), "file": files[i], "text": docs[i]} for i in top_idxs]
 
@@ -308,23 +355,48 @@ def answer():
         "If the answer is not in the context, say you do not know."
     )
     user_msg = f"Question:\n{question}\n\nContext:\n{context}\n\nAnswer clearly and concisely."
-
-    try:
-        answer_text = generate_answer_with_fallback(
-            [
-                {"role": "system", "content": system_msg},
-                {"role": "user", "content": user_msg},
-            ],
-            primary=GROQ_MODEL,
-        )
-    except Exception as e:
-        return jsonify({
-            "answer": "",
-            "matches": matches,
-            "error": f"generation failed: {e}"
-        }), 500
-
+    answer_text = generate_answer_with_fallback(
+        [{"role": "system", "content": system_msg}, {"role": "user", "content": user_msg}],
+        primary=GROQ_MODEL,
+    )
     return jsonify({"answer": answer_text, "matches": matches}), 200
+
+@app.route("/deep_answer", methods=["POST"])
+def deep_answer():
+    """Map-Reduce answering for broad questions (multi-call but token-safe)."""
+    if vectorizer is None or doc_matrix is None or bm25 is None or not docs:
+        return jsonify({"answer": "", "matches": [], "note": "no documents loaded"}), 200
+
+    data = request.get_json(force=True, silent=True) or {}
+    question = (data.get("prompt") or "").strip()
+    if not question:
+        return jsonify({"error": "No prompt provided"}), 400
+    if not groq_client:
+        return jsonify({"answer": "", "matches": [], "note": "set GROQ_API_KEY"}), 200
+
+    # Retrieve a wide set, then pick diverse chunks for the map step
+    idxs, scores = _retrieve(question, max(TOP_K * 3, MAP_CHUNKS * 2))
+    if idxs.size == 0:
+        return jsonify({"answer": "", "matches": [], "note": "no relevant chunks found"}), 200
+    idxs_map = select_diverse(idxs, MAP_CHUNKS, max_sim=0.88)
+
+    # Map
+    summaries = []
+    for i in idxs_map:
+        label = f"[{files[i]}]"
+        text = docs[i]
+        summary = _summarize_chunk_for(question, label, text)
+        if summary:
+            summaries.append(summary)
+
+    # Reduce
+    final_answer = _reduce_summaries(question, summaries) if summaries else ""
+
+    # Top matches for UI
+    top_idxs = idxs[:TOP_K]
+    matches = [{"score": float(scores[i]), "file": files[i], "text": docs[i]} for i in top_idxs]
+
+    return jsonify({"answer": final_answer, "matches": matches, "notes_used": len(summaries)}), 200
 
 # -----------------
 # Local entry
