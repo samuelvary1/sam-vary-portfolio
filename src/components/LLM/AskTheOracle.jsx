@@ -3,34 +3,16 @@ import "./AskTheOracle.css";
 
 const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
 
-function snippet(text, query) {
-  const t = text || "";
-  const terms = (query || "").toLowerCase().split(/\s+/).filter(Boolean);
-  let idx = -1;
-  for (const term of terms) {
-    const i = t.toLowerCase().indexOf(term);
-    if (i !== -1) {
-      idx = i;
-      break;
-    }
-  }
-  if (idx === -1) idx = 0;
-  const start = Math.max(0, idx - 140);
-  const end = Math.min(t.length, idx + 280);
-  return t.slice(start, end).replace(/\s+/g, " ");
-}
-
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
   const [answer, setAnswer] = useState("");
-  const [matches, setMatches] = useState([]);
+  // ...existing code...
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function handleAsk(e) {
     e.preventDefault();
     setAnswer("");
-    setMatches([]);
     setError("");
     if (!userInput.trim()) return;
 
@@ -49,7 +31,6 @@ const AskTheOracle = () => {
       }
 
       setAnswer(data.answer || "");
-      setMatches(Array.isArray(data.matches) ? data.matches : []);
 
       // Friendly fallback when no model key is set server side
       if (!data.answer && data.note) {
@@ -67,7 +48,23 @@ const AskTheOracle = () => {
   return (
     <div className="oracle-wrapper">
       <div className="oracle-box">
-        <h2>🧙 Speak to the Oracle</h2>
+        <h2
+          style={{
+            background: "rgba(255,255,255,0.85)",
+            borderRadius: "10px",
+            padding: "0.75rem 1.5rem",
+            display: "inline-block",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            fontWeight: 700,
+            fontSize: "2rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <span role="img" aria-label="oracle" style={{ marginRight: 8 }}>
+            🧙
+          </span>
+          Speak to the Oracle
+        </h2>
 
         <form onSubmit={handleAsk}>
           <input
@@ -87,35 +84,19 @@ const AskTheOracle = () => {
           </div>
         )}
 
-        {(answer || matches.length > 0) && !error && (
+        {answer && !error && (
           <div className="oracle-answer">
-            {answer && (
-              <>
-                <h3>📜 The Oracle says</h3>
-                <p style={{ whiteSpace: "pre-wrap" }}>{answer}</p>
-              </>
-            )}
-
-            {matches.length > 0 && (
-              <div className="oracle-citations">
-                <h4 style={{ marginTop: 16 }}>Supporting passages</h4>
-                <ul className="oracle-passages">
-                  {matches.map((m, i) => (
-                    <li key={i} className="oracle-passage">
-                      <div className="oracle-file">
-                        {m.file} • score{" "}
-                        {typeof m.score === "number"
-                          ? m.score.toFixed(3)
-                          : m.score}
-                      </div>
-                      <div className="oracle-snippet">
-                        {snippet(m.text, userInput)}…
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <h3>📜 The Oracle says</h3>
+            <p
+              style={{
+                whiteSpace: "pre-wrap",
+                fontFamily: "Segoe UI, Verdana, Arial, sans-serif",
+                fontSize: "1.15rem",
+                lineHeight: 1.7,
+              }}
+            >
+              {answer}
+            </p>
           </div>
         )}
       </div>
