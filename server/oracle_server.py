@@ -5,7 +5,7 @@ from groq import Groq
 import os, json, pathlib
 import numpy as np
 
-# NEW: local embeddings (CPU)
+# Local embeddings (CPU)
 from sentence_transformers import SentenceTransformer
 
 # -----------------
@@ -16,8 +16,8 @@ EMBEDDINGS_FILE = (ROOT / os.getenv("EMBEDDINGS_PATH", "oracle_embeddings.json")
 
 TOP_K = int(os.getenv("TOP_K", "6"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-70b-versatile")
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 LOCAL_EMBED_MODEL = os.getenv("LOCAL_EMBED_MODEL", "all-MiniLM-L6-v2")  # ~90MB
+ALLOWED = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
 
 # -----------------
 # Init Groq client
@@ -49,7 +49,6 @@ _embedder: SentenceTransformer | None = None
 def get_embedder() -> SentenceTransformer:
     global _embedder
     if _embedder is None:
-        # downloads model on first run (~90MB), then cached on Render’s disk
         _embedder = SentenceTransformer(LOCAL_EMBED_MODEL)
     return _embedder
 
@@ -71,17 +70,48 @@ def build_context(indices):
     return "\n\n---\n\n".join(CHUNK_TEXTS[i] for i, _ in indices)
 
 # -----------------
-# Flask app
+# Flask app + CORS
 # -----------------
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
-@app.get("/health")
+# Base CORS config
+CORS(
+    app,
+    origins="*" if "*" in ALLOWED else ALLOWED,
+    methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
+    supports_credentials=False,
+    max_age=86400,
+)
+
+@app.after_request
+def add_cors_headers(resp):
+    # Ensure headers exist even on errors
+    origin = request.headers.get("Origin")
+    if "*" in ALLOWED:
+        resp.headers["Access-Control-Allow-Origin"] = "*"
+    elif origin and origin in ALLOWED:
+        resp.headers["Access-Control-Allow-Origin"] = origin
+        resp.headers["Vary"] = "Origin"
+    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return resp
+
+# -----------------
+# Routes
+# -----------------
+@app.route("/health", methods=["GET", "OPTIONS"])
 def health():
+    if request.method == "OPTIONS":
+        return ("", 204)
     return jsonify({"status": "ok", "chunks": len(CHUNK_TEXTS)})
 
-@app.post("/ask")
+@app.route("/ask", methods=["POST", "OPTIONS"])
 def ask():
+    # Preflight response
+    if request.method == "OPTIONS":
+        return ("", 204)
+
     try:
         data = request.get_json(force=True) or {}
         prompt = (data.get("prompt") or "").strip()
@@ -102,7 +132,7 @@ def ask():
         )
         user_msg = f"Context:\n{context}\n\nQuestion:\n{prompt}\n\nAnswer:"
 
-        # 4) Generate with Groq (fast, free-tier)
+        # 4) Generate with Groq
         comp = groq_client.chat.completions.create(
             model=GROQ_MODEL,
             messages=[
