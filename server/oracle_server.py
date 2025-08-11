@@ -5,7 +5,10 @@ import os, time, re, pathlib, threading
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from rank_bm25 import BM25Okapi
+try:
+    from rank_bm25 import BM25Okapi  # optional
+except Exception:
+    BM25Okapi = None
 from groq import Groq
 
 # -----------------
@@ -40,7 +43,7 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 ADMIN_TOKEN = os.getenv("ORACLE_ADMIN_TOKEN", "")
 
 # Map→Reduce env
-MAP_CHUNKS = int(os.getenv("MAP_CHUNKS", "12"))          # chunks to summarize
+MAP_CHUNKS = int(os.getenv("MAP_CHUNKS", "12"))
 MAP_SUMMARY_TOKENS = int(os.getenv("MAP_SUMMARY_TOKENS", "140"))
 REDUCE_TOKENS = int(os.getenv("REDUCE_TOKENS", "600"))
 
@@ -59,7 +62,7 @@ docs: list[str] = []          # chunk texts
 files: list[str] = []         # "relative_path#chunkN"
 vectorizer: TfidfVectorizer | None = None
 doc_matrix = None
-bm25: BM25Okapi | None = None
+bm25 = None  # type: ignore
 _reload_lock = threading.Lock()
 
 # -----------------
@@ -96,7 +99,7 @@ def chunk_text(t: str, size: int, overlap: int):
     return chunks
 
 def _rebuild_index():
-    """Scan artifacts recursively, chunk files, build TF-IDF (bigrams) and BM25."""
+    """Scan artifacts recursively, chunk files, build TF-IDF (bigrams) and optional BM25."""
     global docs, files, vectorizer, doc_matrix, bm25
 
     local_docs: list[str] = []
@@ -119,8 +122,11 @@ def _rebuild_index():
     if local_docs:
         vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
         doc_matrix = vectorizer.fit_transform(local_docs)
-        tokenized = [d.lower().split() for d in local_docs]
-        bm25 = BM25Okapi(tokenized)
+        if BM25Okapi is not None:
+            tokenized = [d.lower().split() for d in local_docs]
+            bm25 = BM25Okapi(tokenized)
+        else:
+            bm25 = None
     else:
         vectorizer, doc_matrix, bm25 = None, None, None
 
@@ -151,17 +157,25 @@ def _expand_query(q: str) -> str:
     return q if not extras else (q + " " + " ".join(extras))
 
 def _retrieve(prompt: str, k: int):
-    """Blend TF-IDF and BM25 scores; return (idxs, blended_scores)."""
-    if vectorizer is None or doc_matrix is None or bm25 is None or not docs:
+    """
+    Blend TF-IDF and (if available) BM25; return (idxs, blended_scores).
+    Falls back to pure TF-IDF when BM25 isn't initialized or installed.
+    """
+    if vectorizer is None or doc_matrix is None or not docs:
         return np.array([], dtype=int), np.array([])
 
     q = _expand_query(prompt)
 
+    # TF-IDF cosine
     tfidf_vec = vectorizer.transform([q])
     tfidf_scores = cosine_similarity(tfidf_vec, doc_matrix).ravel()
-    bm_scores = bm25.get_scores(q.lower().split())
+    blended = _normalize(tfidf_scores)
 
-    blended = RETRIEVAL_ALPHA * _normalize(tfidf_scores) + (1 - RETRIEVAL_ALPHA) * _normalize(bm_scores)
+    # Optional BM25 blend
+    if bm25 is not None:
+        bm_scores = bm25.get_scores(q.lower().split())
+        blended = RETRIEVAL_ALPHA * _normalize(tfidf_scores) + (1 - RETRIEVAL_ALPHA) * _normalize(bm_scores)
+
     idxs = np.argsort(-blended)[:k]
     return idxs, blended
 
@@ -289,7 +303,8 @@ def reload_index():
 
 @app.route("/ask", methods=["POST"])
 def ask():
-    if vectorizer is None or doc_matrix is None or bm25 is None or not docs:
+    # NOTE: do NOT require bm25 here — TF-IDF fallback should still work
+    if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"matches": [], "note": "no documents loaded"}), 200
 
     data = request.get_json(force=True, silent=True) or {}
@@ -303,7 +318,7 @@ def ask():
 
 @app.route("/answer", methods=["POST"])
 def answer():
-    if vectorizer is None or doc_matrix is None or bm25 is None or not docs:
+    if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"answer": "", "matches": [], "note": "no documents loaded"}), 200
 
     data = request.get_json(force=True, silent=True) or {}
@@ -320,6 +335,7 @@ def answer():
     if should_pin_faq:
         faq_idxs = [i for i, f in enumerate(files) if f.split("#")[0].endswith(FAQ_FILE)]
         if faq_idxs:
+            # choose the best FAQ chunk by blended score if present
             best_faq = max(faq_idxs, key=lambda i: scores[i] if scores.size else 0.0)
             idxs = np.array([best_faq] + [j for j in idxs if j != best_faq])
 
@@ -364,7 +380,7 @@ def answer():
 @app.route("/deep_answer", methods=["POST"])
 def deep_answer():
     """Map-Reduce answering for broad questions (multi-call but token-safe)."""
-    if vectorizer is None or doc_matrix is None or bm25 is None or not docs:
+    if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"answer": "", "matches": [], "note": "no documents loaded"}), 200
 
     data = request.get_json(force=True, silent=True) or {}
