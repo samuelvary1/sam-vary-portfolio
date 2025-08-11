@@ -19,7 +19,7 @@ const Navbar = () => {
           <NavItem to="/film">Film</NavItem>
           <NavItem to="/llm">AI Project</NavItem>
           <NavItem to="/about">About Me</NavItem>
-          <NavItem to="/sawyer">Crypto Project</NavItem>
+          <NavItem to="/sawyer">Crypto Projects</NavItem>
         </NavLinks>
       </NavContainer>
     </Nav>
