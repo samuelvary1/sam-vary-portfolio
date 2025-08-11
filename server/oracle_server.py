@@ -55,10 +55,6 @@ def build_context(indices):
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
-@app.get("/health")
-def health():
-    return jsonify({"status": "ok", "chunks": len(CHUNK_TEXTS)})
-
 @app.post("/ask")
 def ask():
     try:
