@@ -5,6 +5,9 @@ from groq import Groq
 import os, json, pathlib
 import numpy as np
 
+# NEW: local embeddings (CPU)
+from sentence_transformers import SentenceTransformer
+
 # -----------------
 # Config
 # -----------------
@@ -13,18 +16,19 @@ EMBEDDINGS_FILE = (ROOT / os.getenv("EMBEDDINGS_PATH", "oracle_embeddings.json")
 
 TOP_K = int(os.getenv("TOP_K", "6"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-70b-versatile")
-EMBED_MODEL = os.getenv("GROQ_EMBED_MODEL", "text-embedding-3-large")
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+LOCAL_EMBED_MODEL = os.getenv("LOCAL_EMBED_MODEL", "all-MiniLM-L6-v2")  # ~90MB
 
 # -----------------
 # Init Groq client
 # -----------------
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-if not os.getenv("GROQ_API_KEY"):
+api_key = os.getenv("GROQ_API_KEY")
+if not api_key:
     raise RuntimeError("GROQ_API_KEY is not set in environment variables")
+groq_client = Groq(api_key=api_key)
 
 # -----------------
-# Load embeddings
+# Load artifacts index (precomputed doc chunk embeddings)
 # -----------------
 if not EMBEDDINGS_FILE.exists():
     raise FileNotFoundError(f"Embeddings file not found: {EMBEDDINGS_FILE}")
@@ -34,11 +38,28 @@ with EMBEDDINGS_FILE.open("r", encoding="utf-8") as f:
 
 CHUNK_IDS = [r.get("id", "") for r in rows]
 CHUNK_TEXTS = [r.get("text", "") for r in rows]
-EMBEDS = np.array([r["embedding"] for r in rows], dtype=np.float32)
+EMBEDS = np.array([r["embedding"] for r in rows], dtype=np.float32)  # (N, D)
 EMB_NORMS = np.linalg.norm(EMBEDS, axis=1) + 1e-8
 
 # -----------------
-# Helpers
+# Local embedder (loads once on startup)
+# -----------------
+_embedder: SentenceTransformer | None = None
+
+def get_embedder() -> SentenceTransformer:
+    global _embedder
+    if _embedder is None:
+        # downloads model on first run (~90MB), then cached on Render’s disk
+        _embedder = SentenceTransformer(LOCAL_EMBED_MODEL)
+    return _embedder
+
+def embed_query_local(text: str) -> np.ndarray:
+    model = get_embedder()
+    vec = model.encode([text], normalize_embeddings=True)[0]  # (D,)
+    return np.asarray(vec, dtype=np.float32)
+
+# -----------------
+# Retrieval helpers
 # -----------------
 def top_k_similar(qv: np.ndarray, k: int):
     qn = np.linalg.norm(qv) + 1e-8
@@ -55,48 +76,45 @@ def build_context(indices):
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
+@app.get("/health")
+def health():
+    return jsonify({"status": "ok", "chunks": len(CHUNK_TEXTS)})
+
 @app.post("/ask")
 def ask():
     try:
         data = request.get_json(force=True) or {}
         prompt = (data.get("prompt") or "").strip()
-
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
 
-        # Generate embedding for the prompt if not provided
-        if not data.get("query_embedding"):
-            emb = groq_client.embeddings.create(
-                model=EMBED_MODEL,
-                input=prompt
-            )
-            qvec = np.array(emb.data[0].embedding, dtype=np.float32)
-        else:
-            qvec = np.array(data["query_embedding"], dtype=np.float32)
+        # 1) Embed the user question locally (CPU)
+        qv = embed_query_local(prompt)
 
-        # Find similar chunks
-        hits = top_k_similar(qvec, TOP_K)
+        # 2) Retrieve top chunks
+        hits = top_k_similar(qv, TOP_K)
         context = build_context(hits)
 
+        # 3) Grounded prompt
         system_msg = (
             "You are the Oracle. Use ONLY the provided context when possible. "
             "If the answer is not clearly supported by the context, say you do not know."
         )
         user_msg = f"Context:\n{context}\n\nQuestion:\n{prompt}\n\nAnswer:"
 
+        # 4) Generate with Groq (fast, free-tier)
         comp = groq_client.chat.completions.create(
             model=GROQ_MODEL,
             messages=[
                 {"role": "system", "content": system_msg},
-                {"role": "user", "content": user_msg}
+                {"role": "user", "content": user_msg},
             ],
             temperature=0.2,
             max_tokens=600,
         )
-
         answer = comp.choices[0].message.content
-        citations = [{"title": CHUNK_IDS[i], "source": "artifacts"} for i, _ in hits]
 
+        citations = [{"title": CHUNK_IDS[i], "source": "artifacts"} for i, _ in hits]
         return jsonify({"response": answer, "citations": citations})
 
     except Exception as e:
