@@ -27,7 +27,7 @@ TOP_K = int(os.getenv("TOP_K", "6"))
 # Chunking / context
 CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1000"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
-MIN_CHARS = int(os.getenv("MIN_CHARS", "80"))  # min size for a chunk; short files still get 1 chunk
+MIN_CHARS = int(os.getenv("MIN_CHARS", "80"))  # short files still get 1 chunk
 CTX_DOCS = int(os.getenv("CTX_DOCS", "4"))
 CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3800"))
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
@@ -160,21 +160,6 @@ def _normalize(arr):
         return np.zeros_like(a)
     return (a - mn) / (mx - mn + 1e-12)
 
-# Build the index at import time (cold starts)
-try:
-    _rebuild_index()
-except Exception as e:
-    print("[index] initial build failed:", e)
-
-
-@app.before_first_request
-def _ensure_index():
-    if not docs:
-        print("[index] empty on first request; rebuilding…")
-        _rebuild_index()
-
-
-
 def _expand_query(q: str) -> str:
     """Tiny synonym expansion to help retrieval."""
     SYN = {
@@ -301,6 +286,20 @@ def _reduce_summaries(question: str, summaries: list[str]) -> str:
     )
 
 # -----------------
+# Index on cold start + first request
+# -----------------
+try:
+    _rebuild_index()  # build at import time so cold starts have an index
+except Exception as e:
+    print("[index] initial build failed:", e)
+
+@app.before_first_request
+def _ensure_index():
+    if not docs:
+        print("[index] empty on first request; rebuilding…")
+        _rebuild_index()
+
+# -----------------
 # Routes
 # -----------------
 @app.route("/health", methods=["GET"])
@@ -337,7 +336,7 @@ def reload_index():
 
 @app.route("/ask", methods=["POST"])
 def ask():
-    # NOTE: do NOT require bm25 here — TF-IDF fallback should still work
+    # NOTE: TF-IDF fallback means we do not require bm25 here
     if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"matches": [], "note": "no documents loaded"}), 200
 
