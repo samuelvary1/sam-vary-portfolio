@@ -144,7 +144,7 @@ const AskTheOracle = () => {
           <div style={{ fontSize: 12, opacity: 0.8, marginTop: 6 }}>
             {mode === "quick"
               ? "Fast, concise answers."
-              : "Thorough map→reduce answer for big questions."}
+              : "Thorough map→reduce answer for big questions (citations hidden)."}
           </div>
         </div>
 
