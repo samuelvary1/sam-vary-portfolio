@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./AskTheOracle.css";
-import { pipeline } from "@xenova/transformers";
 
 const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
 
@@ -9,55 +8,32 @@ const AskTheOracle = () => {
   const [answer, setAnswer] = useState("");
   const [citations, setCitations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [embedder, setEmbedder] = useState(null);
-
-  async function ensureEmbedder() {
-    if (!embedder) {
-      const pipe = await pipeline(
-        "feature-extraction",
-        "Xenova/all-MiniLM-L6-v2",
-      );
-      setEmbedder(pipe);
-      return pipe;
-    }
-    return embedder;
-  }
+  const [error, setError] = useState("");
 
   async function handleAsk(e) {
     e.preventDefault();
-    if (!userInput.trim()) return;
-
     setAnswer("");
     setCitations([]);
+    setError("");
     setLoading(true);
 
     try {
-      const embedPipe = await ensureEmbedder();
-      const output = await embedPipe(userInput, {
-        pooling: "mean",
-        normalize: true,
-      });
-      const queryEmbedding = Array.from(output.data);
-
       const res = await fetch(`${API_BASE}/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: userInput,
-          query_embedding: queryEmbedding,
-        }),
+        body: JSON.stringify({ prompt: userInput }),
       });
 
+      const data = await res.json();
       if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
+        setError(data.error || "Error contacting the Oracle");
+        return;
       }
 
-      const data = await res.json();
       setAnswer(data.response || "");
       setCitations(Array.isArray(data.citations) ? data.citations : []);
     } catch (err) {
-      console.error(err);
-      setAnswer("❌ There was an error asking the Oracle.");
+      setError("Could not reach the Oracle");
     } finally {
       setLoading(false);
     }
@@ -79,6 +55,12 @@ const AskTheOracle = () => {
             {loading ? "Consulting..." : "Ask"}
           </button>
         </form>
+
+        {error && (
+          <div className="oracle-error">
+            <p>{error}</p>
+          </div>
+        )}
 
         {answer && (
           <div className="oracle-answer">

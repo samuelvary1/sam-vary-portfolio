@@ -13,14 +13,15 @@ EMBEDDINGS_FILE = (ROOT / os.getenv("EMBEDDINGS_PATH", "oracle_embeddings.json")
 
 TOP_K = int(os.getenv("TOP_K", "6"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-70b-versatile")
+GROQ_EMBED_MODEL = os.getenv("GROQ_EMBED_MODEL", "text-embedding-3-large")  # adjust if Groq uses a different name
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 # -----------------
 # Init Groq client
 # -----------------
-groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 if not os.getenv("GROQ_API_KEY"):
     raise RuntimeError("GROQ_API_KEY is not set in environment variables")
+groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # -----------------
 # Load embeddings
@@ -39,6 +40,15 @@ EMB_NORMS = np.linalg.norm(EMBEDS, axis=1) + 1e-8
 # -----------------
 # Helpers
 # -----------------
+def get_embedding(text: str) -> np.ndarray:
+    """Generate embedding for the query text using Groq."""
+    embed_resp = groq_client.embeddings.create(
+        model=GROQ_EMBED_MODEL,
+        input=text
+    )
+    vec = embed_resp.data[0].embedding
+    return np.array(vec, dtype=np.float32)
+
 def top_k_similar(qv: np.ndarray, k: int):
     qn = np.linalg.norm(qv) + 1e-8
     sims = (EMBEDS @ qv) / (EMB_NORMS * qn)
@@ -63,23 +73,25 @@ def ask():
     try:
         data = request.get_json(force=True) or {}
         prompt = (data.get("prompt") or "").strip()
-        qvec = data.get("query_embedding")  # list of numbers from the browser
 
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
-        if not isinstance(qvec, list) or not qvec:
-            return jsonify({"error": "Missing query_embedding"}), 400
 
-        qv = np.array(qvec, dtype=np.float32)
+        # Generate query embedding server-side
+        qv = get_embedding(prompt)
+
+        # Find top similar chunks
         hits = top_k_similar(qv, TOP_K)
         context = build_context(hits)
 
+        # Build system & user messages
         system_msg = (
             "You are the Oracle. Use ONLY the provided context when possible. "
             "If the answer is not clearly supported by the context, say you do not know."
         )
         user_msg = f"Context:\n{context}\n\nQuestion:\n{prompt}\n\nAnswer:"
 
+        # Query Groq LLM
         comp = groq_client.chat.completions.create(
             model=GROQ_MODEL,
             messages=[
