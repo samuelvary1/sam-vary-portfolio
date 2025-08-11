@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./AskTheOracle.css";
 
-function getApiBase() {
-  const raw = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
-  return raw.replace(/\/+$/, "");
-}
-const API_BASE = getApiBase();
+const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
 
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
@@ -18,9 +14,7 @@ const AskTheOracle = () => {
   useEffect(() => {
     checkHealth();
     const id = setInterval(() => {
-      if (status === "ready") {
-        fetch(`${API_BASE}/health`).catch(() => {});
-      }
+      if (status === "ready") fetch(`${API_BASE}/health`).catch(() => {});
     }, 60000);
     return () => clearInterval(id);
   }, [status]);
@@ -50,12 +44,14 @@ const AskTheOracle = () => {
 
       if (!res.ok) {
         setStatus("sleeping");
-      } else {
-        const data = await res.json();
-        setAnswer(data.output || "");
-        setCitations(Array.isArray(data.citations) ? data.citations : []);
-        setStatus("ready");
+        setLoading(false);
+        return;
       }
+
+      const data = await res.json();
+      setAnswer(data.response || "");
+      setCitations(Array.isArray(data.citations) ? data.citations : []);
+      setStatus("ready");
     } catch {
       setStatus("sleeping");
     } finally {
@@ -66,27 +62,28 @@ const AskTheOracle = () => {
   async function wakeOracle() {
     setStatus("waking");
     try {
-      // If you do not have this route, comment out this block and just poll /health below
-      // const r = await fetch("/api/oracle-wake", { method: "POST" });
+      const r = await fetch("/api/oracle-wake", { method: "POST" });
       const data = await r.json();
       if (!data.ok) throw new Error(data.error || "Wake failed");
-    } catch {
-      // fall through to polling either way
-    }
 
-    const deadline = Date.now() + 120000;
-    while (Date.now() < deadline) {
-      try {
-        const h = await fetch(`${API_BASE}/health`, { cache: "no-store" });
-        if (h.ok) {
-          setStatus("ready");
-          return true;
-        }
-      } catch {}
-      await new Promise((res) => setTimeout(res, 3000));
+      const base = data.apiBase || API_BASE;
+      const deadline = Date.now() + 120000;
+
+      while (Date.now() < deadline) {
+        try {
+          const h = await fetch(`${base}/health`, { cache: "no-store" });
+          if (h.ok) {
+            setStatus("ready");
+            return true;
+          }
+        } catch {}
+        await new Promise((res) => setTimeout(res, 3000));
+      }
+      throw new Error("Backend did not come up in time");
+    } catch {
+      setStatus("error");
+      return false;
     }
-    setStatus("error");
-    return false;
   }
 
   async function handleWakeAndRetry() {
