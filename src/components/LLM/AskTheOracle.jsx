@@ -47,7 +47,7 @@ const AskTheOracle = () => {
 
   return (
     <div className="oracle-wrapper">
-      <div className="oracle-box">
+      <div className="oracle-box" style={{ textAlign: "center" }}>
         <h2
           style={{
             background: "rgba(255,255,255,0.85)",
@@ -58,6 +58,8 @@ const AskTheOracle = () => {
             fontWeight: 700,
             fontSize: "2rem",
             marginBottom: "1.5rem",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           <span role="img" aria-label="oracle" style={{ marginRight: 8 }}>
@@ -85,8 +87,8 @@ const AskTheOracle = () => {
         )}
 
         {answer && !error && (
-          <div className="oracle-answer">
-            <h3>📜 The Oracle says</h3>
+          <div className="oracle-answer" style={{ textAlign: "left" }}>
+            <h3 style={{ textAlign: "left" }}>📜 The Oracle says</h3>
             <p
               style={{
                 whiteSpace: "pre-wrap",
