@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./AskTheOracle.css";
 
-const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
+const rawBase = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
+const API_BASE = rawBase.replace(/\/+$/, ""); // trim trailing slash
 
 const AskTheOracle = () => {
   const [userInput, setUserInput] = useState("");
@@ -49,7 +50,8 @@ const AskTheOracle = () => {
       }
 
       const data = await res.json();
-      setAnswer(data.response || "");
+      // proxy returns { output }, older version might return { response }
+      setAnswer(data.output || data.response || "");
       setCitations(Array.isArray(data.citations) ? data.citations : []);
       setStatus("ready");
     } catch {
