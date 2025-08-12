@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 try:
-    from rank_bm25 import BM25Okapi  # optional; app falls back to TF-IDF if missing
+    from rank_bm25 import BM25Okapi  # optional; app falls back to TF IDF if missing
 except Exception:
     BM25Okapi = None
 from groq import Groq
@@ -24,15 +24,15 @@ ALLOWED_ORIGINS = os.getenv(
 
 TOP_K = int(os.getenv("TOP_K", "6"))
 
-# Chunking / context
+# Chunking and context
 CHUNK_CHARS = int(os.getenv("CHUNK_CHARS", "1000"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "150"))
-MIN_CHARS = int(os.getenv("MIN_CHARS", "80"))  # short files still get 1 chunk
+MIN_CHARS = int(os.getenv("MIN_CHARS", "80"))  # short files still get one chunk
 CTX_DOCS = int(os.getenv("CTX_DOCS", "4"))
 CTX_TOTAL_CHARS = int(os.getenv("CTX_TOTAL_CHARS", "3800"))
 MAX_ANSWER_TOKENS = int(os.getenv("MAX_ANSWER_TOKENS", "400"))
 
-# Retrieval blend (0..1): 1.0 = pure TF-IDF, 0.0 = pure BM25
+# Retrieval blend 0..1   1.0 is pure TF IDF, 0.0 is pure BM25
 RETRIEVAL_ALPHA = float(os.getenv("RETRIEVAL_ALPHA", "0.6"))
 
 # Optional FAQ pinning
@@ -43,7 +43,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 ADMIN_TOKEN = os.getenv("ORACLE_ADMIN_TOKEN", "")
 
-# Map→Reduce env
+# Map and reduce env
 MAP_CHUNKS = int(os.getenv("MAP_CHUNKS", "12"))
 MAP_SUMMARY_TOKENS = int(os.getenv("MAP_SUMMARY_TOKENS", "140"))
 REDUCE_TOKENS = int(os.getenv("REDUCE_TOKENS", "600"))
@@ -55,7 +55,7 @@ groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 # -----------------
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}}, supports_credentials=True)
-app.config["INDEX_READY"] = False  # for Flask 3.x: we'll ensure index via before_request
+app.config["INDEX_READY"] = False
 
 # -----------------
 # State
@@ -84,21 +84,19 @@ def _read_text(path: pathlib.Path) -> str | None:
 SENT_END = re.compile(r"([.!?])\s+")
 
 def chunk_text(t: str, size: int, overlap: int):
-    """Sentence-aware sliding window; returns (start_idx, chunk_text)."""
+    """Sentence aware sliding window; returns (start_idx, chunk_text)."""
     if not t:
         return []
-    t = " ".join(t.split())  # normalize whitespace
+    t = " ".join(t.split())
     chunks = []
     step = max(1, size - overlap)
     i = 0
     while i < len(t):
         piece = t[i:i + size]
-        # allow a single short chunk for short files
         if len(piece) < MIN_CHARS:
             if i == 0 and len(piece) > 0:
                 chunks.append((i, piece))
             break
-        # try to end on sentence boundary
         ends = list(SENT_END.finditer(piece))
         if ends:
             piece = piece[:ends[-1].end()]
@@ -107,7 +105,7 @@ def chunk_text(t: str, size: int, overlap: int):
     return chunks
 
 def _rebuild_index():
-    """Scan artifacts recursively, chunk files, build TF-IDF (bigrams) and optional BM25."""
+    """Scan artifacts, chunk files, build TF IDF and optional BM25."""
     global docs, files, vectorizer, doc_matrix, bm25
 
     local_docs: list[str] = []
@@ -175,17 +173,38 @@ def _expand_query(q: str) -> str:
             extras.extend(alts)
     return q if not extras else (q + " " + " ".join(extras))
 
-def _retrieve(prompt: str, k: int):
+# NEW: scope mask to restrict retrieval to a file or a folder
+def _scope_mask(scope: list[str] | None) -> np.ndarray:
     """
-    Blend TF-IDF and (if available) BM25; return (idxs, blended_scores).
-    Falls back to pure TF-IDF when BM25 isn't initialized or installed.
+    scope entries can be full relative paths such as 'short-stories/breeding-ground.txt'
+    or directory prefixes such as 'short-stories/'.
+    Returns a boolean array of length len(files) that marks allowed chunks.
+    If scope is empty or None then everything is allowed.
+    """
+    if not scope:
+        return np.ones(len(files), dtype=bool)
+
+    allow = np.zeros(len(files), dtype=bool)
+    scope_norm = [s.strip() for s in scope if s and s.strip()]
+    for i, f in enumerate(files):
+        fpath = f.split("#", 1)[0]
+        for s in scope_norm:
+            if fpath == s or fpath.startswith(s):
+                allow[i] = True
+                break
+    return allow
+
+def _retrieve(prompt: str, k: int, mask: np.ndarray | None = None):
+    """
+    Blend TF IDF and optional BM25. Returns (idxs, blended_scores).
+    Applies a mask so only in scope chunks compete.
     """
     if vectorizer is None or doc_matrix is None or not docs:
         return np.array([], dtype=int), np.array([])
 
     q = _expand_query(prompt)
 
-    # TF-IDF cosine
+    # TF IDF cosine
     tfidf_vec = vectorizer.transform([q])
     tfidf_scores = cosine_similarity(tfidf_vec, doc_matrix).ravel()
     blended = _normalize(tfidf_scores)
@@ -195,11 +214,15 @@ def _retrieve(prompt: str, k: int):
         bm_scores = bm25.get_scores(q.lower().split())
         blended = RETRIEVAL_ALPHA * _normalize(tfidf_scores) + (1 - RETRIEVAL_ALPHA) * _normalize(bm_scores)
 
+    # Apply scope
+    if mask is not None and mask.size == blended.size:
+        blended = np.where(mask, blended, -1.0)
+
     idxs = np.argsort(-blended)[:k]
     return idxs, blended
 
 def select_diverse(idxs, k, max_sim=0.9):
-    """Greedy pick top-k with low pairwise similarity between chosen chunks."""
+    """Greedy pick top k with low pairwise similarity between chosen chunks."""
     if vectorizer is None:
         return np.array(idxs[:k])
     chosen = []
@@ -219,7 +242,7 @@ def _auth_ok(req: request) -> bool:
     return req.headers.get("X-Oracle-Admin") == ADMIN_TOKEN
 
 def _groq_chat(messages, model, max_tokens, temperature=0.2):
-    """Single Groq chat call with simple backoff on rate/TPM errors."""
+    """Single Groq chat call with simple backoff on rate and TPM errors."""
     if not groq_client:
         return ""
     for attempt in range(3):
@@ -237,7 +260,6 @@ def _groq_chat(messages, model, max_tokens, temperature=0.2):
                 time.sleep(1.0 + attempt)
                 continue
             if "decommissioned" in msg:
-                # auto fallback
                 return _groq_chat(messages, "llama-3.1-8b-instant", max_tokens, temperature)
             raise
     return ""
@@ -253,14 +275,14 @@ def generate_answer_with_fallback(messages, primary, fallback="llama-3.1-8b-inst
 def _summarize_chunk_for(question: str, label: str, text: str) -> str:
     """Map step: short, focused summary for one chunk with a citation label."""
     sys = (
-        "You create short, factual, question-focused notes from a single passage. "
+        "You create short, factual, question focused notes from a single passage. "
         "Do not invent facts. Stay grounded in the passage. "
-        "Return 2–4 bullet points, each ending with the provided source label."
+        "Return two to four bullet points, each ending with the provided source label."
     )
     usr = (
         f"Question:\n{question}\n\n"
         f"Passage (source {label}):\n{text}\n\n"
-        f"Write 2–4 bullet points that help answer the question. "
+        f"Write two to four bullet points that help answer the question. "
         f"End each bullet with {label}."
     )
     return _groq_chat(
@@ -271,11 +293,11 @@ def _summarize_chunk_for(question: str, label: str, text: str) -> str:
     )
 
 def _reduce_summaries(question: str, summaries: list[str]) -> str:
-    """Reduce step: synthesize a clear answer from multiple labeled notes."""
+    """Reduce step: synthesize a clear answer from labeled notes only."""
     sys = (
-        "Synthesize a concise, well-structured answer using only the notes. "
+        "Synthesize a concise, well structured answer using only the notes. "
         "Preserve citations exactly as the source labels like [file#chunkN]. "
-        "If the notes don't contain an answer, say you don't know."
+        "If the notes do not contain an answer, say you do not know."
     )
     notes = "\n".join(summaries)
     usr = f"Question:\n{question}\n\nNotes:\n{notes}\n\nWrite the final answer with inline citations."
@@ -287,10 +309,10 @@ def _reduce_summaries(question: str, summaries: list[str]) -> str:
     )
 
 # -----------------
-# Build index now; ensure on first request (Flask 3.x safe)
+# Build index now; ensure on first request
 # -----------------
 try:
-    _rebuild_index()  # build at import time so cold starts have an index
+    _rebuild_index()
     app.config["INDEX_READY"] = True
 except Exception as e:
     print("[index] initial build failed:", e)
@@ -298,7 +320,6 @@ except Exception as e:
 
 @app.before_request
 def _ensure_index_on_request():
-    # Only rebuild once if import-time build failed OR index got cleared
     if not app.config.get("INDEX_READY") or not docs:
         print("[index] ensuring index on request…")
         try:
@@ -344,17 +365,22 @@ def reload_index():
 
 @app.route("/ask", methods=["POST"])
 def ask():
-    # NOTE: TF-IDF fallback means we do not require bm25 here
+    # TF IDF fallback means we do not require BM25 here
     if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"matches": [], "note": "no documents loaded"}), 200
 
     data = request.get_json(force=True, silent=True) or {}
     prompt = (data.get("prompt") or "").strip()
+    scope = data.get("scope") or []  # e.g. ["short-stories/breeding-ground.txt"]
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
 
-    idxs, scores = _retrieve(prompt, TOP_K)
-    matches = [{"score": float(scores[i]), "file": files[i], "text": docs[i]} for i in idxs]
+    mask = _scope_mask(scope)
+    idxs, scores = _retrieve(prompt, TOP_K, mask=mask)
+    matches = [
+        {"score": float(scores[i]), "file": files[i], "text": docs[i]}
+        for i in idxs if scores[i] >= 0
+    ]
     return jsonify({"matches": matches}), 200
 
 @app.route("/answer", methods=["POST"])
@@ -364,17 +390,19 @@ def answer():
 
     data = request.get_json(force=True, silent=True) or {}
     question = (data.get("prompt") or "").strip()
+    scope = data.get("scope") or []
     if not question:
         return jsonify({"error": "No prompt provided"}), 400
 
-    # Retrieve a wider set, then select diverse context
-    idxs, scores = _retrieve(question, max(TOP_K, CTX_DOCS * 2))
+    mask = _scope_mask(scope)
+    idxs, scores = _retrieve(question, max(TOP_K, CTX_DOCS * 2), mask=mask)
 
-    # Optional: pin FAQ for certain questions
+    # Optional FAQ pinning, but respect mask too
     q_low = question.lower()
     should_pin_faq = ("who is sam vary" in q_low) or ("what do you know" in q_low)
     if should_pin_faq:
         faq_idxs = [i for i, f in enumerate(files) if f.split("#")[0].endswith(FAQ_FILE)]
+        faq_idxs = [i for i in faq_idxs if scores[i] >= 0]
         if faq_idxs:
             best_faq = max(faq_idxs, key=lambda i: scores[i] if scores.size else 0.0)
             idxs = np.array([best_faq] + [j for j in idxs if j != best_faq])
@@ -384,6 +412,8 @@ def answer():
     # Build compact context under the cap
     top_ctx, total = [], 0
     for i in idxs_ctx:
+        if scores[i] < 0:
+            continue
         block = f"[{files[i]}]\n{docs[i]}"
         if total + len(block) > CTX_TOTAL_CHARS:
             remain = max(0, CTX_TOTAL_CHARS - total)
@@ -395,7 +425,7 @@ def answer():
     context = "\n\n".join(top_ctx)
 
     # Provide matches for UI
-    top_idxs = idxs[:TOP_K]
+    top_idxs = [i for i in idxs[:TOP_K] if scores[i] >= 0]
     matches = [{"score": float(scores[i]), "file": files[i], "text": docs[i]} for i in top_idxs]
 
     if not groq_client:
@@ -419,19 +449,20 @@ def answer():
 
 @app.route("/deep_answer", methods=["POST"])
 def deep_answer():
-    """Map-Reduce answering for broad questions (multi-call but token-safe)."""
+    """Map reduce answering for broad questions."""
     if vectorizer is None or doc_matrix is None or not docs:
         return jsonify({"answer": "", "matches": [], "note": "no documents loaded"}), 200
 
     data = request.get_json(force=True, silent=True) or {}
     question = (data.get("prompt") or "").strip()
+    scope = data.get("scope") or []
     if not question:
         return jsonify({"error": "No prompt provided"}), 400
     if not groq_client:
         return jsonify({"answer": "", "matches": [], "note": "set GROQ_API_KEY"}), 200
 
-    # Retrieve a wide set, then pick diverse chunks for the map step
-    idxs, scores = _retrieve(question, max(TOP_K * 3, MAP_CHUNKS * 2))
+    mask = _scope_mask(scope)
+    idxs, scores = _retrieve(question, max(TOP_K * 3, MAP_CHUNKS * 2), mask=mask)
     if idxs.size == 0:
         return jsonify({"answer": "", "matches": [], "note": "no relevant chunks found"}), 200
     idxs_map = select_diverse(idxs, MAP_CHUNKS, max_sim=0.88)
@@ -439,6 +470,8 @@ def deep_answer():
     # Map
     summaries = []
     for i in idxs_map:
+        if scores[i] < 0:
+            continue
         label = f"[{files[i]}]"
         text = docs[i]
         summary = _summarize_chunk_for(question, label, text)
@@ -449,7 +482,7 @@ def deep_answer():
     final_answer = _reduce_summaries(question, summaries) if summaries else ""
 
     # Top matches for UI
-    top_idxs = idxs[:TOP_K]
+    top_idxs = [i for i in idxs[:TOP_K] if scores[i] >= 0]
     matches = [{"score": float(scores[i]), "file": files[i], "text": docs[i]} for i in top_idxs]
 
     return jsonify({"answer": final_answer, "matches": matches, "notes_used": len(summaries)}), 200
