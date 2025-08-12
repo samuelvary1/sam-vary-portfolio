@@ -3,22 +3,15 @@ import "./AskTheOracle.css";
 
 const API_BASE = process.env.REACT_APP_ORACLE_API || "http://localhost:5000";
 
-function baseName(path = "") {
-  const noChunk = path.split("#")[0] || path;
-  const parts = noChunk.split("/");
-  return parts[parts.length - 1] || noChunk;
-}
-
-// Strong, flexible cleaner for [file#chunk123] style tags
-function stripCitations(t = "") {
-  return t
-    .replace(/\[[^\[\]]*?#\s*chunk\s*\d+\]/gi, "") // remove [anything#chunkN]
+// Lint-safe regex to remove [file#chunk123] citations
+const CITE_RE = new RegExp("\\[[^\\]]*?#\\s*chunk\\s*\\d+\\]", "gi");
+const stripCitations = (t = "") =>
+  t
+    .replace(CITE_RE, "")
     .replace(/\s{2,}/g, " ")
     .trim();
-}
 
-// Wake the server and let it rebuild the index after idle.
-async function ensureAwake(retries = 4) {
+const ensureAwake = async (retries = 4) => {
   for (let i = 0; i < retries; i++) {
     try {
       const controller = new AbortController();
@@ -33,49 +26,44 @@ async function ensureAwake(retries = 4) {
     await new Promise((res) => setTimeout(res, 500 * (i + 1)));
   }
   return false;
-}
+};
 
-// Parse files from /list into categorized works
+const baseName = (path = "") => {
+  const noChunk = path.split("#")[0] || path;
+  const parts = noChunk.split("/");
+  return parts[parts.length - 1] || noChunk;
+};
+
+// Build a categorized catalog from /list
 function parseWorks(files = []) {
-  const niceCat = (c) => {
-    const map = {
-      novels: "Novels",
-      screenplays: "Screenplays",
-      short_stories: "Short Stories",
-      thesis: "Thesis & Academic",
-      summaries: "Summaries",
-    };
-    return map[c] || "Other";
+  const pretty = {
+    novels: "Novels",
+    screenplays: "Screenplays",
+    short_stories: "Short Stories",
+    thesis: "Thesis & Academic",
+    summaries: "Summaries",
   };
+  const titleCase = (s) => s.replace(/\.(txt|md)$/i, "").replace(/_/g, " ");
 
   const cats = {};
-  const push = (cat, title, path) => {
-    const key = niceCat(cat);
+  const add = (cat, item) => {
+    const key = pretty[cat] || "Other";
     if (!cats[key]) cats[key] = [];
-    // de-dupe by full path
-    if (!cats[key].some((w) => w.path === path)) {
-      cats[key].push({ title, path });
-    }
+    if (!cats[key].some((w) => w.path === item.path)) cats[key].push(item);
   };
 
   files
     .filter((f) => /\.(txt|md)$/i.test(f))
     .filter((f) => !/oracle_faq(\.|$)/i.test(f))
     .forEach((f) => {
-      const parts = f.split("/");
-      const cat = parts.length > 1 ? parts[0] : "Other";
-      const title = baseName(f)
-        .replace(/\.(txt|md)$/i, "")
-        .replace(/_/g, " ");
-      push(cat, title, f);
+      const [cat = "Other"] = f.split("/");
+      add(cat, { title: titleCase(baseName(f)), path: f });
     });
 
-  // sort titles within each category
   Object.keys(cats).forEach((k) =>
     cats[k].sort((a, b) => a.title.localeCompare(b.title)),
   );
 
-  // sort categories in a sensible order
   const order = [
     "Summaries",
     "Novels",
@@ -91,7 +79,6 @@ function parseWorks(files = []) {
   Object.keys(cats).forEach((k) => {
     if (!(k in sorted)) sorted[k] = cats[k];
   });
-
   return sorted;
 }
 
@@ -103,7 +90,7 @@ const AskTheOracle = () => {
   const [waking, setWaking] = useState(false);
   const [sources, setSources] = useState([]);
 
-  // catalog
+  // Sidebar catalog
   const [catalog, setCatalog] = useState({});
   const [catalogNote, setCatalogNote] = useState("");
 
@@ -111,15 +98,14 @@ const AskTheOracle = () => {
   const [mode, setMode] = useState(
     () => window.localStorage?.getItem("oracleMode") || "deep",
   );
-
-  function selectMode(m) {
+  const selectMode = (m) => {
     setMode(m);
     try {
       window.localStorage.setItem("oracleMode", m);
     } catch {}
-  }
+  };
 
-  // Wake on mount and load catalog
+  // Wake on mount + fetch catalog
   useEffect(() => {
     let isMounted = true;
     (async () => {
@@ -127,27 +113,20 @@ const AskTheOracle = () => {
       await ensureAwake();
       if (!isMounted) return;
 
-      // fetch catalog
       try {
         const r = await fetch(`${API_BASE}/list`, { cache: "no-store" });
         const data = await r.json();
         const files = Array.isArray(data.files_in_dir_sample)
           ? data.files_in_dir_sample
           : [];
-        const cats = parseWorks(files);
-        setCatalog(cats);
-        if (data.total_files_in_dir > files.length) {
-          setCatalogNote(
-            `Showing a subset of ${data.total_files_in_dir} files.`,
-          );
-        } else {
-          setCatalogNote("");
-        }
-      } catch {
-        // ignore; sidebar will be empty
-      } finally {
-        if (isMounted) setWaking(false);
-      }
+        setCatalog(parseWorks(files));
+        setCatalogNote(
+          data.total_files_in_dir > files.length
+            ? `Showing a subset of ${data.total_files_in_dir} files.`
+            : "",
+        );
+      } catch {}
+      if (isMounted) setWaking(false);
     })();
     return () => {
       isMounted = false;
@@ -199,185 +178,130 @@ const AskTheOracle = () => {
     }
   }
 
-  function insertPrompt(p) {
+  const insertPrompt = (p) => {
     setUserInput(p);
-    // smooth scroll to the input
     const el = document.querySelector(".oracle-box form input");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
+  };
+
+  const hasAnswer = !!(answer && !error);
 
   return (
-    <div className="oracle-wrapper">
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(220px, 280px) 1fr",
-          gap: "1.25rem",
-          alignItems: "start",
-        }}
-      >
-        {/* Sidebar Catalog */}
-        <aside
-          className="oracle-catalog"
+    <div className="oracle-wrapper" style={{ paddingInline: 16 }}>
+      {/* Centered max-width layout so the TOC sits farther right */}
+      <div style={{ maxWidth: 1220, margin: "0 auto" }}>
+        <div
           style={{
-            background: "rgba(255,255,255,0.85)",
-            borderRadius: 12,
-            padding: "1rem",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-            position: "sticky",
-            top: 12,
-            maxHeight: "calc(100vh - 24px)",
-            overflow: "auto",
+            display: "grid",
+            // TOC on the RIGHT; a bit wider gap to push it visually right
+            gridTemplateColumns: "minmax(640px, 1fr) minmax(280px, 360px)",
+            columnGap: "2rem",
+            alignItems: "start",
           }}
         >
-          <h3 style={{ marginTop: 0, marginBottom: 8 }}>
-            📚 What I can answer about
-          </h3>
-          {catalogNote && (
-            <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 8 }}>
-              {catalogNote}
-            </div>
-          )}
-
-          {Object.keys(catalog).length === 0 ? (
-            <div style={{ fontSize: 14, opacity: 0.8 }}>
-              {waking ? "Waking the Oracle…" : "No catalog to show yet."}
-            </div>
-          ) : (
-            Object.entries(catalog).map(([cat, works]) => (
-              <div key={cat} style={{ marginBottom: 12 }}>
-                <div
-                  style={{ fontWeight: 700, fontSize: 14, margin: "8px 0 6px" }}
-                >
-                  {cat}
-                </div>
-                <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
-                  {works.map((w) => (
-                    <li key={w.path} style={{ marginBottom: 6 }}>
-                      <button
-                        onClick={() => insertPrompt(`Summarize "${w.title}".`)}
-                        style={{
-                          background: "transparent",
-                          border: "none",
-                          padding: 0,
-                          textAlign: "left",
-                          cursor: "pointer",
-                          fontSize: 14,
-                          lineHeight: 1.4,
-                          color: "#1a1a1a",
-                        }}
-                        title="Click to ask for a summary"
-                      >
-                        {w.title}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          )}
-        </aside>
-
-        {/* Main Oracle */}
-        <div className="oracle-box" style={{ textAlign: "center" }}>
-          <h2
-            style={{
-              background: "rgba(255,255,255,0.85)",
-              borderRadius: "10px",
-              padding: "0.75rem 1.5rem",
-              display: "inline-block",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              fontWeight: 700,
-              fontSize: "2rem",
-              marginBottom: "1.25rem",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <span role="img" aria-label="oracle" style={{ marginRight: 8 }}>
-              🧙
-            </span>
-            Speak to the Oracle
-          </h2>
-
-          {/* Mode toggle */}
-          <div style={{ marginBottom: "1rem" }}>
-            <div
+          {/* Main Oracle (left column) */}
+          <div className="oracle-box" style={{ textAlign: "center" }}>
+            <h2
               style={{
-                display: "inline-flex",
-                borderRadius: 999,
-                background: "rgba(255,255,255,0.7)",
-                boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
-                overflow: "hidden",
+                background: "rgba(255,255,255,0.85)",
+                borderRadius: "10px",
+                padding: "0.75rem 1.5rem",
+                display: "inline-block",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                fontWeight: 700,
+                fontSize: "2rem",
+                marginBottom: "1.25rem",
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
             >
-              <button
-                type="button"
-                onClick={() => selectMode("quick")}
-                className="oracle-toggle"
+              <span role="img" aria-label="oracle" style={{ marginRight: 8 }}>
+                🧙
+              </span>
+              Speak to the Oracle
+            </h2>
+
+            {/* Mode toggle */}
+            <div style={{ marginBottom: "1rem" }}>
+              <div
                 style={{
-                  padding: "0.5rem 0.9rem",
-                  border: "none",
-                  cursor: "pointer",
-                  background: mode === "quick" ? "#222" : "transparent",
-                  color: mode === "quick" ? "#fff" : "#333",
-                  fontWeight: 600,
+                  display: "inline-flex",
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.7)",
+                  boxShadow: "0 1px 6px rgba(0,0,0,0.08)",
+                  overflow: "hidden",
                 }}
               >
-                Quick
+                <button
+                  type="button"
+                  onClick={() => selectMode("quick")}
+                  className="oracle-toggle"
+                  style={{
+                    padding: "0.5rem 0.9rem",
+                    border: "none",
+                    cursor: "pointer",
+                    background: mode === "quick" ? "#222" : "transparent",
+                    color: mode === "quick" ? "#fff" : "#333",
+                    fontWeight: 600,
+                  }}
+                >
+                  Quick
+                </button>
+                <button
+                  type="button"
+                  onClick={() => selectMode("deep")}
+                  className="oracle-toggle"
+                  style={{
+                    padding: "0.5rem 0.9rem",
+                    border: "none",
+                    cursor: "pointer",
+                    background: mode === "deep" ? "#222" : "transparent",
+                    color: mode === "deep" ? "#fff" : "#333",
+                    fontWeight: 600,
+                  }}
+                >
+                  Deep
+                </button>
+              </div>
+              <div style={{ fontSize: 12, opacity: 0.8, marginTop: 6 }}>
+                {waking
+                  ? "Waking the Oracle…"
+                  : mode === "quick"
+                    ? "Fast, concise answers."
+                    : "Thorough map→reduce answer for big questions."}
+              </div>
+            </div>
+
+            <form onSubmit={handleAsk}>
+              <input
+                type="text"
+                placeholder="Ask about a thesis, character, scene, or theme"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+              />
+              <button type="submit" disabled={loading || waking}>
+                {loading
+                  ? "Consulting..."
+                  : waking
+                    ? "Waking…"
+                    : mode === "deep"
+                      ? "Ask (Deep)"
+                      : "Ask"}
               </button>
-              <button
-                type="button"
-                onClick={() => selectMode("deep")}
-                className="oracle-toggle"
-                style={{
-                  padding: "0.5rem 0.9rem",
-                  border: "none",
-                  cursor: "pointer",
-                  background: mode === "deep" ? "#222" : "transparent",
-                  color: mode === "deep" ? "#fff" : "#333",
-                  fontWeight: 600,
-                }}
-              >
-                Deep
-              </button>
-            </div>
-            <div style={{ fontSize: 12, opacity: 0.8, marginTop: 6 }}>
-              {waking
-                ? "Waking the Oracle…"
-                : mode === "quick"
-                  ? "Fast, concise answers."
-                  : "Thorough map→reduce answer for big questions."}
-            </div>
-          </div>
+            </form>
 
-          <form onSubmit={handleAsk}>
-            <input
-              type="text"
-              placeholder="Ask about a thesis, character, scene, or theme"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-            />
-            <button type="submit" disabled={loading || waking}>
-              {loading
-                ? "Consulting..."
-                : waking
-                  ? "Waking…"
-                  : mode === "deep"
-                    ? "Ask (Deep)"
-                    : "Ask"}
-            </button>
-          </form>
-
-          {error && (
-            <div className="oracle-error">
-              <p>{error}</p>
-            </div>
-          )}
-
-          {answer && !error && (
-            <div className="oracle-answer" style={{ textAlign: "left" }}>
-              <h3 style={{ textAlign: "left" }}>
+            {/* Stable answer area: reserves space so header/toggle/input don't move */}
+            <div
+              className="oracle-answer"
+              style={{
+                textAlign: "left",
+                transition: "opacity 160ms ease",
+                marginTop: "1rem",
+                minHeight: 260, // reserve space; tweak to taste
+                opacity: hasAnswer ? 1 : 0.02,
+              }}
+            >
+              <h3 style={{ textAlign: "left", marginTop: 0 }}>
                 📜 The Oracle says {mode === "deep" ? "(Deep)" : ""}
               </h3>
               <p
@@ -386,12 +310,13 @@ const AskTheOracle = () => {
                   fontFamily: "Segoe UI, Verdana, Arial, sans-serif",
                   fontSize: "1.15rem",
                   lineHeight: 1.7,
+                  marginTop: 8,
                 }}
               >
-                {answer}
+                {hasAnswer ? answer : "Ask a question to see an answer here."}
               </p>
 
-              {mode === "deep" && sources.length > 0 && (
+              {mode === "deep" && sources.length > 0 && hasAnswer && (
                 <div style={{ marginTop: 12, opacity: 0.85 }}>
                   <small>
                     <strong>Sources:</strong>{" "}
@@ -405,7 +330,77 @@ const AskTheOracle = () => {
                 </div>
               )}
             </div>
-          )}
+          </div>
+
+          {/* Sidebar TOC (right column) */}
+          <aside
+            className="oracle-catalog"
+            style={{
+              background: "rgba(255,255,255,0.85)",
+              borderRadius: 12,
+              padding: "1rem",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              position: "sticky",
+              top: 180, // ⬅️ start lower than header/controls
+              justifySelf: "end", // ⬅️ push farther to the right in its column
+              maxHeight: "calc(100vh - 200px)",
+              overflow: "auto",
+              width: "100%",
+            }}
+          >
+            <h3 style={{ marginTop: 0, marginBottom: 8 }}>
+              📚 What I can answer about
+            </h3>
+            {catalogNote && (
+              <div style={{ fontSize: 12, opacity: 0.75, marginBottom: 8 }}>
+                {catalogNote}
+              </div>
+            )}
+
+            {Object.keys(catalog).length === 0 ? (
+              <div style={{ fontSize: 14, opacity: 0.8 }}>
+                {waking ? "Waking the Oracle…" : "No catalog to show yet."}
+              </div>
+            ) : (
+              Object.entries(catalog).map(([cat, works]) => (
+                <div key={cat} style={{ marginBottom: 12 }}>
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 14,
+                      margin: "8px 0 6px",
+                    }}
+                  >
+                    {cat}
+                  </div>
+                  <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
+                    {works.map((w) => (
+                      <li key={w.path} style={{ marginBottom: 6 }}>
+                        <button
+                          onClick={() =>
+                            insertPrompt(`Summarize "${w.title}".`)
+                          }
+                          style={{
+                            background: "transparent",
+                            border: "none",
+                            padding: 0,
+                            textAlign: "left",
+                            cursor: "pointer",
+                            fontSize: 14,
+                            lineHeight: 1.4,
+                            color: "#1a1a1a",
+                          }}
+                          title="Click to ask for a summary"
+                        >
+                          {w.title}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            )}
+          </aside>
         </div>
       </div>
     </div>
