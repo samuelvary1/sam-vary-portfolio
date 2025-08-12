@@ -187,18 +187,10 @@ const AskTheOracle = () => {
   const hasAnswer = !!(answer && !error);
 
   return (
-    <div className="oracle-wrapper" style={{ paddingInline: 16 }}>
+    <div className="oracle-wrapper">
       {/* Centered max-width layout so the TOC sits farther right */}
-      <div style={{ maxWidth: 1220, margin: "0 auto" }}>
-        <div
-          style={{
-            display: "grid",
-            // TOC on the RIGHT; a bit wider gap to push it visually right
-            gridTemplateColumns: "minmax(640px, 1fr) minmax(280px, 360px)",
-            columnGap: "2rem",
-            alignItems: "start",
-          }}
-        >
+      <div className="oracle-main-layout">
+        <div className="oracle-grid">
           {/* Main Oracle (left column) */}
           <div className="oracle-box" style={{ textAlign: "center" }}>
             <h2
@@ -272,7 +264,7 @@ const AskTheOracle = () => {
               </div>
             </div>
 
-            <form onSubmit={handleAsk}>
+            <form className="oracle-form" onSubmit={handleAsk}>
               <input
                 type="text"
                 placeholder="Ask about a thesis, character, scene, or theme"
@@ -333,21 +325,7 @@ const AskTheOracle = () => {
           </div>
 
           {/* Sidebar TOC (right column) */}
-          <aside
-            className="oracle-catalog"
-            style={{
-              background: "rgba(255,255,255,0.85)",
-              borderRadius: 12,
-              padding: "1rem",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-              position: "sticky",
-              top: 180, // ⬅️ start lower than header/controls
-              justifySelf: "end", // ⬅️ push farther to the right in its column
-              maxHeight: "calc(100vh - 200px)",
-              overflow: "auto",
-              width: "100%",
-            }}
-          >
+          <aside className="oracle-catalog">
             <h3 style={{ marginTop: 0, marginBottom: 8 }}>
               📚 What I can answer about
             </h3>
