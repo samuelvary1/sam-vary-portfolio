@@ -1,10 +1,10 @@
 import React from "react";
 import "./CryptoProjects.css";
-import "./CryptoProjects.css";
 
 const CryptoProjects = () => {
-  const sawyerImageUrl = "/assets/sawyer-beach.png"; // Update with your actual image path
-  const twanImageUrl = "/assets/twan-art.png"; // Update with your actual image path for Twan
+  const sawyerImageUrl = "/assets/sawyer-beach.png";
+  const twanImageUrl = "/assets/twan-art.png";
+  const sawboneImageUrl = "/assets/sawbone-art.png";
 
   return (
     <div
@@ -20,7 +20,6 @@ const CryptoProjects = () => {
         height: "100vh",
       }}
     >
-      {/* Only Token Cards Section */}
       <div
         style={{
           display: "flex",
@@ -58,37 +57,16 @@ const CryptoProjects = () => {
             className="crypto-card-link"
             style={{ height: 420, boxSizing: "border-box" }}
           >
-            <div
-              style={{
-                width: "100%",
-                aspectRatio: "1 / 1",
-                overflow: "hidden",
-                borderRadius: "8px",
-                marginBottom: "1rem",
-                background: "#eee",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src={sawyerImageUrl}
-                alt="Sawyer Token"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+            <div style={cardImageWrapper}>
+              <img src={sawyerImageUrl} alt="Sawyer Token" style={cardImage} />
             </div>
             <h3>Sawyer Token</h3>
-            <div
-              style={{
-                fontSize: "0.98rem",
-                color: "#666",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <div style={chainLabel}>
               Built on <b>Polygon</b>
             </div>
             <div style={buttonStyle}>Visit SawyerToken.com</div>
           </a>
+
           {/* Twan Token Card */}
           <a
             href="https://twantoken.com"
@@ -97,41 +75,61 @@ const CryptoProjects = () => {
             className="crypto-card-link"
             style={{ height: 420, boxSizing: "border-box" }}
           >
-            <div
-              style={{
-                width: "100%",
-                aspectRatio: "1 / 1",
-                overflow: "hidden",
-                borderRadius: "8px",
-                marginBottom: "1rem",
-                background: "#eee",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src={twanImageUrl}
-                alt="Twan Token"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+            <div style={cardImageWrapper}>
+              <img src={twanImageUrl} alt="Twan Token" style={cardImage} />
             </div>
             <h3>Twan Token</h3>
-            <div
-              style={{
-                fontSize: "0.98rem",
-                color: "#666",
-                marginBottom: "0.5rem",
-              }}
-            >
+            <div style={chainLabel}>
               Built on <b>Ethereum</b>
             </div>
             <div style={buttonStyle}>Visit TwanToken.com</div>
+          </a>
+
+          {/* Sawbone Coin Card */}
+          <a
+            href="https://sawbonecoin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="crypto-card-link"
+            style={{ height: 420, boxSizing: "border-box" }}
+          >
+            <div style={cardImageWrapper}>
+              <img src={sawboneImageUrl} alt="Sawbone Coin" style={cardImage} />
+            </div>
+            <h3>Sawbone Coin</h3>
+            <div style={chainLabel}>
+              Built on <b>Solana</b>
+            </div>
+            <div style={buttonStyle}>Visit SawboneCoin.com</div>
           </a>
         </div>
       </div>
     </div>
   );
+};
+
+const cardImageWrapper = {
+  width: "100%",
+  aspectRatio: "1 / 1",
+  overflow: "hidden",
+  borderRadius: "8px",
+  marginBottom: "1rem",
+  background: "#eee",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const cardImage = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+};
+
+const chainLabel = {
+  fontSize: "0.98rem",
+  color: "#666",
+  marginBottom: "0.5rem",
 };
 
 const buttonStyle = {
