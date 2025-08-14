@@ -1,4 +1,5 @@
 import React from "react";
+import CryptoDashboard from "./CryptoDashboard"; // adjust path as needed
 import "./CryptoProjects.css";
 
 const CryptoProjects = () => {
@@ -17,7 +18,7 @@ const CryptoProjects = () => {
         padding: 0,
         margin: 0,
         width: "100vw",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <div
@@ -25,7 +26,6 @@ const CryptoProjects = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          minHeight: "100vh",
           paddingTop: "80px",
         }}
       >
@@ -41,12 +41,15 @@ const CryptoProjects = () => {
         >
           Homemade Cryptocurrencies
         </h1>
+
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             gap: "2rem",
+            flexWrap: "wrap",
+            maxWidth: "1200px",
           }}
         >
           {/* Sawyer Token Card */}
@@ -102,6 +105,11 @@ const CryptoProjects = () => {
             </div>
             <div style={buttonStyle}>Visit SawboneCoin.com</div>
           </a>
+        </div>
+
+        {/* 🔽 Dashboard Below */}
+        <div style={{ width: "100%", marginTop: "4rem", maxWidth: "1200px" }}>
+          <CryptoDashboard />
         </div>
       </div>
     </div>
