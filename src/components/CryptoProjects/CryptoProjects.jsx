@@ -1,5 +1,5 @@
 import React from "react";
-import CryptoDashboard from "./CryptoDashboard"; // adjust path as needed
+// import CryptoDashboard from "./CryptoDashboard"; // Hidden for now
 import "./CryptoProjects.css";
 
 const CryptoProjects = () => {
@@ -108,9 +108,9 @@ const CryptoProjects = () => {
         </div>
 
         {/* 🔽 Dashboard Below */}
-        <div style={{ width: "100%", marginTop: "4rem", maxWidth: "1200px" }}>
+        {/* <div style={{ width: "100%", marginTop: "4rem", maxWidth: "1200px" }}>
           <CryptoDashboard />
-        </div>
+        </div> */}
       </div>
     </div>
   );
