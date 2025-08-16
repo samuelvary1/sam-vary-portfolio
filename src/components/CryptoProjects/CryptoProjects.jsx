@@ -1,11 +1,12 @@
 import React from "react";
-// import CryptoDashboard from "./CryptoDashboard"; // Hidden for now
 import "./CryptoProjects.css";
 
 const CryptoProjects = () => {
   const sawyerImageUrl = "/assets/sawyer-beach.png";
   const twanImageUrl = "/assets/twan-art.png";
   const sawboneImageUrl = "/assets/sawbone-art.png";
+
+  const twitterIconUrl = "/assets/x_icon.png"; // add this file to your assets folder
 
   return (
     <div
@@ -54,14 +55,7 @@ const CryptoProjects = () => {
           }}
         >
           {/* Sawyer Token Card */}
-          <div
-            className="crypto-card-link"
-            style={{
-              height: "auto",
-              boxSizing: "border-box",
-              marginBottom: "2rem",
-            }}
-          >
+          <div className="crypto-card-link" style={cardStyle}>
             <div style={cardImageWrapper}>
               <img src={sawyerImageUrl} alt="Sawyer Token" style={cardImage} />
             </div>
@@ -69,16 +63,12 @@ const CryptoProjects = () => {
             <div style={chainLabel}>
               Built on <b>Polygon</b>
             </div>
-            <div style={{ marginTop: "1.5rem", marginBottom: "0.5rem" }}>
+            <div style={buttonGroup}>
               <a
                 href="https://sawyertoken.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  display: "block",
-                  marginBottom: "0.75rem",
-                }}
+                style={buttonStyle}
               >
                 Visit SawyerToken.com
               </a>
@@ -86,26 +76,27 @@ const CryptoProjects = () => {
                 href="https://polygonscan.com/token/0xca6059bb703e95b10688c56a09f5a76375f9cf47"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#6b7280",
-                  display: "block",
-                }}
+                style={{ ...buttonStyle, backgroundColor: "#6b7280" }}
               >
                 View Contract
+              </a>
+              <a
+                href="https://x.com/sawyer_token"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={iconButton}
+              >
+                <img
+                  src={twitterIconUrl}
+                  alt="Twitter Icon"
+                  style={iconImage}
+                />
               </a>
             </div>
           </div>
 
           {/* Twan Token Card */}
-          <div
-            className="crypto-card-link"
-            style={{
-              height: "auto",
-              boxSizing: "border-box",
-              marginBottom: "2rem",
-            }}
-          >
+          <div className="crypto-card-link" style={cardStyle}>
             <div style={cardImageWrapper}>
               <img src={twanImageUrl} alt="Twan Token" style={cardImage} />
             </div>
@@ -113,16 +104,12 @@ const CryptoProjects = () => {
             <div style={chainLabel}>
               Built on <b>Ethereum</b>
             </div>
-            <div style={{ marginTop: "1.5rem", marginBottom: "0.5rem" }}>
+            <div style={buttonGroup}>
               <a
                 href="https://twantoken.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  display: "block",
-                  marginBottom: "0.75rem",
-                }}
+                style={buttonStyle}
               >
                 Visit TwanToken.com
               </a>
@@ -130,26 +117,27 @@ const CryptoProjects = () => {
                 href="https://etherscan.io/token/0xbD63095C802ACcAa86e3eBe5cf7c45F7d79899B0"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#6b7280",
-                  display: "block",
-                }}
+                style={{ ...buttonStyle, backgroundColor: "#6b7280" }}
               >
                 View Contract
+              </a>
+              <a
+                href="https://x.com/twan_token"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={iconButton}
+              >
+                <img
+                  src={twitterIconUrl}
+                  alt="Twitter Icon"
+                  style={iconImage}
+                />
               </a>
             </div>
           </div>
 
           {/* Sawbone Coin Card */}
-          <div
-            className="crypto-card-link"
-            style={{
-              height: "auto",
-              boxSizing: "border-box",
-              marginBottom: "2rem",
-            }}
-          >
+          <div className="crypto-card-link" style={cardStyle}>
             <div style={cardImageWrapper}>
               <img src={sawboneImageUrl} alt="Sawbone Coin" style={cardImage} />
             </div>
@@ -157,16 +145,12 @@ const CryptoProjects = () => {
             <div style={chainLabel}>
               Built on <b>Solana</b>
             </div>
-            <div style={{ marginTop: "1.5rem", marginBottom: "0.5rem" }}>
+            <div style={buttonGroup}>
               <a
                 href="https://sawbonecoin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  display: "block",
-                  marginBottom: "0.75rem",
-                }}
+                style={buttonStyle}
               >
                 Visit SawboneCoin.com
               </a>
@@ -174,25 +158,35 @@ const CryptoProjects = () => {
                 href="https://solscan.io/token/HvhkPGGjByxnXzR8eWLqTn8LEY9DS8J3y8TF9ENopump"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#6b7280",
-                  display: "block",
-                }}
+                style={{ ...buttonStyle, backgroundColor: "#6b7280" }}
               >
                 View Contract
+              </a>
+              <a
+                href="https://x.com/sawbone_coin"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={iconButton}
+              >
+                <img
+                  src={twitterIconUrl}
+                  alt="Twitter Icon"
+                  style={iconImage}
+                />
               </a>
             </div>
           </div>
         </div>
-
-        {/* 🔽 Dashboard Below */}
-        {/* <div style={{ width: "100%", marginTop: "4rem", maxWidth: "1200px" }}>
-          <CryptoDashboard />
-        </div> */}
       </div>
     </div>
   );
+};
+
+// Styles
+const cardStyle = {
+  height: "auto",
+  boxSizing: "border-box",
+  marginBottom: "2rem",
 };
 
 const cardImageWrapper = {
@@ -219,14 +213,36 @@ const chainLabel = {
   marginBottom: "0.5rem",
 };
 
+const buttonGroup = {
+  marginTop: "1.5rem",
+  marginBottom: "0.5rem",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch",
+  gap: "0.75rem",
+};
+
 const buttonStyle = {
-  display: "inline-block",
+  display: "block",
   padding: "0.75rem 1.25rem",
   backgroundColor: "#3a86ff",
   color: "#fff",
   textDecoration: "none",
   borderRadius: "6px",
-  marginTop: "1rem",
+  textAlign: "center",
+};
+
+const iconButton = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "6px",
+  padding: "0.6rem",
+};
+
+const iconImage = {
+  width: "20px",
+  height: "20px",
 };
 
 export default CryptoProjects;
