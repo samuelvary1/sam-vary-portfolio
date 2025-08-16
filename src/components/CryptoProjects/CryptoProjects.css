@@ -10,3 +10,38 @@
   text-align: center;
   display: block;
 }
+
+/* Responsive grid for the cards */
+.cards-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 16px;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  align-items: start;
+  justify-items: center;
+}
+
+/* Make each card full width within its grid cell */
+.crypto-card {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* Two columns on medium screens */
+@media (max-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+
+/* One column on narrow screens */
+@media (max-width: 640px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .crypto-card {
+    max-width: 520px; /* a little wider single column if you like */
+  }
+}

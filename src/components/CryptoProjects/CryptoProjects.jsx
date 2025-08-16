@@ -6,7 +6,7 @@ const CryptoProjects = () => {
   const twanImageUrl = "/assets/twan-art.png";
   const sawboneImageUrl = "/assets/sawbone-art.png";
 
-  const twitterIconUrl = "/assets/x_icon.png"; // add this file to your assets folder
+  const twitterIconUrl = "/assets/x_icon.png";
 
   return (
     <div
@@ -44,18 +44,10 @@ const CryptoProjects = () => {
           Homemade Cryptocurrencies
         </h1>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "2rem",
-            flexWrap: "wrap",
-            maxWidth: "1200px",
-          }}
-        >
+        {/* Responsive grid wrapper */}
+        <div className="cards-grid">
           {/* Sawyer Token Card */}
-          <div className="crypto-card-link" style={cardStyle}>
+          <div className="crypto-card-link crypto-card">
             <div style={cardImageWrapper}>
               <img src={sawyerImageUrl} alt="Sawyer Token" style={cardImage} />
             </div>
@@ -85,18 +77,15 @@ const CryptoProjects = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={iconButton}
+                aria-label="Sawyer Token on X"
               >
-                <img
-                  src={twitterIconUrl}
-                  alt="Twitter Icon"
-                  style={iconImage}
-                />
+                <img src={twitterIconUrl} alt="" style={iconImage} />
               </a>
             </div>
           </div>
 
           {/* Twan Token Card */}
-          <div className="crypto-card-link" style={cardStyle}>
+          <div className="crypto-card-link crypto-card">
             <div style={cardImageWrapper}>
               <img src={twanImageUrl} alt="Twan Token" style={cardImage} />
             </div>
@@ -126,18 +115,15 @@ const CryptoProjects = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={iconButton}
+                aria-label="Twan Token on X"
               >
-                <img
-                  src={twitterIconUrl}
-                  alt="Twitter Icon"
-                  style={iconImage}
-                />
+                <img src={twitterIconUrl} alt="" style={iconImage} />
               </a>
             </div>
           </div>
 
           {/* Sawbone Coin Card */}
-          <div className="crypto-card-link" style={cardStyle}>
+          <div className="crypto-card-link crypto-card">
             <div style={cardImageWrapper}>
               <img src={sawboneImageUrl} alt="Sawbone Coin" style={cardImage} />
             </div>
@@ -167,28 +153,20 @@ const CryptoProjects = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={iconButton}
+                aria-label="Sawbone Coin on X"
               >
-                <img
-                  src={twitterIconUrl}
-                  alt="Twitter Icon"
-                  style={iconImage}
-                />
+                <img src={twitterIconUrl} alt="" style={iconImage} />
               </a>
             </div>
           </div>
         </div>
+        {/* end grid */}
       </div>
     </div>
   );
 };
 
-// Styles
-const cardStyle = {
-  height: "auto",
-  boxSizing: "border-box",
-  marginBottom: "2rem",
-};
-
+// inline styles carried over
 const cardImageWrapper = {
   width: "100%",
   aspectRatio: "1 / 1",
