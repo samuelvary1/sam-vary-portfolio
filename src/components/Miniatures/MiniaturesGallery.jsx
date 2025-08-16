@@ -62,8 +62,6 @@ const photos = [
   "IMG_5330.jpeg",
   "IMG_5338.jpeg",
   "IMG_5342.jpeg",
-  "IMG_5355.jpeg",
-  "IMG_5356.jpeg",
   "IMG_5412.jpeg",
   "IMG_5421.jpeg",
   "IMG_5422.jpeg",
