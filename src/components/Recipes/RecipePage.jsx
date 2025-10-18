@@ -56,7 +56,15 @@ const RecipePage = () => {
             <h2>Ingredients</h2>
             <ul className="ingredients-list">
               {recipe.ingredients.map((item, index) => (
-                <li key={index}>{item}</li>
+                <li key={index}>
+                  {typeof item === "string"
+                    ? item
+                    : typeof item === "object" && item !== null
+                      ? Object.entries(item)
+                          .map(([key, value]) => `${key}: ${value}`)
+                          .join(", ")
+                      : String(item)}
+                </li>
               ))}
             </ul>
           </>
