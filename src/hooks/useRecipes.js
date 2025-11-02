@@ -7,6 +7,7 @@ const recipeSlugs = [
   "sourdough-pancakes",
   "pickled-red-onions",
   "fish-tacos",
+  "pumpkin-cheesecake",
   // Add more slugs here
 ];
 
