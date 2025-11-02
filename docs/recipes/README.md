@@ -2,16 +2,6 @@
 
 This guide explains how to add new recipes to the **sam-vary-portfolio** website.
 
----
-
-## 1️⃣ Create the YAML File
-
-Each recipe is defined as a `.yml` file using the standard format:
-
-# 🥘 Adding a New Recipe
-
-This guide explains how to add new recipes to the **sam-vary-portfolio** website.
-
 ## 1️⃣ Create the YAML File
 
 Each recipe is defined as a `.yml` file using the standard format:
