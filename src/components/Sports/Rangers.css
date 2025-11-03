@@ -1,0 +1,311 @@
+/* Rangers.css */
+.rangers-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0038a8 0%, #ce1126 50%, #ffffff 100%);
+  padding: 2rem;
+  font-family: "Arial", sans-serif;
+}
+
+.rangers-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.rangers-team-header {
+  background: linear-gradient(45deg, #0038a8, #ce1126);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.rangers-team-header::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.1) 10px,
+    rgba(255, 255, 255, 0.1) 20px
+  );
+  animation: slide 20s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.rangers-team-header-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  border: 4px solid white;
+  background: white;
+  padding: 10px;
+  position: relative;
+  z-index: 2;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.rangers-team-page-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.rangers-team-info {
+  padding: 3rem 2rem;
+}
+
+.rangers-section {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.rangers-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.rangers-about-section {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-left: 5px solid #0038a8;
+}
+
+.rangers-stats-section {
+  background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+  border-left: 5px solid #ce1126;
+}
+
+.rangers-fan-section {
+  background: linear-gradient(135deg, #f0f8ff, #e6f3ff);
+  border-left: 5px solid #0038a8;
+}
+
+.rangers-section h2 {
+  color: #0038a8;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rangers-section h2::before {
+  content: "🏒";
+  font-size: 1.5rem;
+}
+
+.rangers-section h3 {
+  color: #ce1126;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rangers-section h3::before {
+  content: "🏆";
+  font-size: 1.2rem;
+}
+
+.rangers-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.rangers-stats-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.rangers-stats-list li {
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.rangers-stats-list li:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.rangers-stats-list li::before {
+  content: "🥅";
+  font-size: 1.5rem;
+  min-width: 30px;
+}
+
+.rangers-stats-list strong {
+  color: #0038a8;
+  font-weight: bold;
+}
+
+.rangers-back-button {
+  position: fixed;
+  top: 100px;
+  left: 2rem;
+  background: linear-gradient(45deg, #0038a8, #ce1126);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.rangers-back-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+.rangers-back-button::before {
+  content: "←";
+  font-size: 1.2rem;
+}
+
+/* Special Rangers styling for Stanley Cup emphasis */
+.stanley-cup-highlight {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  border: 3px solid #ffd700;
+  position: relative;
+  overflow: hidden;
+}
+
+.stanley-cup-highlight::after {
+  content: "🏆";
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
+/* Ice rink effect */
+.rangers-team-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    #ce1126 0px,
+    #ce1126 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  z-index: 3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rangers-container {
+    padding: 1rem;
+  }
+
+  .rangers-team-header {
+    padding: 2rem 1rem;
+  }
+
+  .rangers-team-page-title {
+    font-size: 2.5rem;
+  }
+
+  .rangers-team-header-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .rangers-team-info {
+    padding: 2rem 1rem;
+  }
+
+  .rangers-section {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .rangers-stats-list {
+    grid-template-columns: 1fr;
+  }
+
+  .rangers-back-button {
+    top: 80px;
+    left: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rangers-team-page-title {
+    font-size: 2rem;
+  }
+
+  .rangers-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .rangers-section h3 {
+    font-size: 1.5rem;
+  }
+}

@@ -30,6 +30,7 @@ const Navbar = () => {
           <NavItem to="/recipes">Recipes</NavItem>
           <NavItem to="/experience">Experience</NavItem>
           <NavItem to="/about">About Me</NavItem>
+          <NavItem to="/sports">Sports</NavItem>
         </NavLinks>
       </NavContainer>
     </Nav>

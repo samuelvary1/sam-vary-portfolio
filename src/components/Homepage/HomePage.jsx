@@ -104,6 +104,13 @@ const HomePage = () => {
           </div>
           <span className="label">Crypto Projects</span>
         </div>
+
+        <div className="map-icon sports" onClick={() => navigate("/sports")}>
+          <div className="icon-bg">
+            <img src="/icons/sports.png" alt="Sports" />
+          </div>
+          <span className="label">Sports</span>
+        </div>
       </div>
     </div>
   );
