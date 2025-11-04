@@ -238,6 +238,325 @@
   opacity: 0.3;
 }
 
+/* Schedule Section Styles */
+.rangers-schedule-section {
+  background: linear-gradient(135deg, #f0f4ff, #e8f0ff);
+  border-left: 5px solid #0038a8;
+}
+
+.schedule-container {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.schedule-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.schedule-tab {
+  background: white;
+  border: 2px solid #0038a8;
+  color: #0038a8;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+.schedule-tab:hover {
+  background: #0038a8;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.schedule-tab.active {
+  background: #0038a8;
+  color: white;
+  box-shadow: 0 5px 15px rgba(0, 56, 168, 0.3);
+}
+
+.games-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.game-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.game-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.game-card.win {
+  border-left-color: #28a745;
+}
+
+.game-card.loss {
+  border-left-color: #dc3545;
+}
+
+.game-card.overtime-loss {
+  border-left-color: #ffc107;
+}
+
+.game-card.upcoming {
+  border-left-color: #0038a8;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.game-date {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.game-time {
+  font-size: 0.9rem;
+  color: #0038a8;
+  font-weight: bold;
+}
+
+.game-matchup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: white;
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.vs-indicator {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #666;
+  padding: 0 1rem;
+}
+
+.game-score {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0038a8;
+}
+
+.game-result {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.result-win {
+  color: #28a745;
+}
+
+.result-loss {
+  color: #dc3545;
+}
+
+.result-ot-loss {
+  color: #ffc107;
+}
+
+.game-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.game-venue {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.game-broadcast {
+  font-size: 0.9rem;
+  color: #0038a8;
+  font-weight: 500;
+}
+
+/* Goal Scorer Styles */
+.goal-scorer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+  border: 2px solid #28a745;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.scorer-photo-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0038a8, #ce1126);
+  border: 3px solid #28a745;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scorer-photo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: brightness(1.2);
+  transition: transform 0.2s ease;
+}
+
+.scorer-photo:hover {
+  transform: scale(1.1);
+}
+
+.scorer-info {
+  flex: 1;
+}
+
+.scorer-name {
+  font-weight: bold;
+  color: #28a745;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.scorer-time {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.home-indicator {
+  background: #0038a8;
+  color: white;
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.away-indicator {
+  background: #ce1126;
+  color: white;
+  padding: 0.2rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.record-display {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(0, 56, 168, 0.1);
+  border-radius: 10px;
+}
+
+.current-record {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0038a8;
+  margin-bottom: 0.5rem;
+}
+
+.record-breakdown {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Loading states */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #0038a8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.api-error {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
 /* Ice rink effect */
 .rangers-team-header::after {
   content: "";
