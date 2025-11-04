@@ -1,0 +1,7 @@
+🎮 Placeholder Image
+
+This is a temporary placeholder for adventure game thumbnails.
+Replace with actual game artwork when available.
+
+Recommended dimensions: 400x300px
+Supported formats: JPG, PNG, WebP

@@ -1,0 +1,387 @@
+{
+  "walkthroughs": [
+    {
+      "id": "kings-quest-1",
+      "title": "King's Quest I: Quest for the Crown",
+      "subtitle": "The Original Fantasy Adventure",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1984,
+      "difficulty": "Intermediate",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Guide Sir Graham through his quest to become king of Daventry. Complete solutions for all three treasures and the magic mirror.",
+      "chapters": [
+        "Starting Area",
+        "Early Item Collection",
+        "Witch's House Sequence",
+        "Village Area",
+        "Bridge and Gnome",
+        "Beanstalk and Giant's Castle",
+        "Underground Adventure",
+        "Final Sequence"
+      ],
+      "estimatedTime": "4-6 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Both AGI and SCI versions covered",
+        "All treasure locations",
+        "Parser command guide",
+        "Death prevention tips"
+      ]
+    },
+    {
+      "id": "kings-quest-2",
+      "title": "King's Quest II: Romancing the Throne",
+      "subtitle": "Graham's Quest for Love",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1985,
+      "difficulty": "Intermediate",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Help King Graham rescue Princess Valanice from the tower. Navigate through fairy tale lands and solve enchanted puzzles.",
+      "chapters": [
+        "The Quest Begins",
+        "Neptune's Kingdom",
+        "Little Red Riding Hood",
+        "Hagatha's Cave",
+        "The Enchanted Tower"
+      ],
+      "estimatedTime": "5-7 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Fairy tale puzzle solutions",
+        "Swimming sequences guide",
+        "All item locations",
+        "Optimal scoring path"
+      ]
+    },
+    {
+      "id": "kings-quest-3",
+      "title": "King's Quest III: To Heir Is Human",
+      "subtitle": "Gwydion's Escape from Manannan",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1986,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Master the art of magic as Gwydion escapes from the evil wizard Manannan. Includes complete spell guide and timing strategies.",
+      "chapters": [
+        "Life with Manannan",
+        "Learning Magic Spells",
+        "The Great Escape",
+        "Journey to Daventry",
+        "Final Confrontation"
+      ],
+      "estimatedTime": "8-10 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Complete spell recipe guide",
+        "Manannan timing charts",
+        "All ingredient locations",
+        "Multiple solution paths"
+      ]
+    },
+    {
+      "id": "kings-quest-4",
+      "title": "King's Quest IV: The Perils of Rosella",
+      "subtitle": "Princess on a Mission",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1988,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Guide Princess Rosella through Tamir to save her dying father. Master the day/night cycle and solve time-sensitive puzzles.",
+      "chapters": [
+        "Tamir Overview",
+        "Daytime Adventures",
+        "Nighttime Mysteries",
+        "The Crypt and Crypts",
+        "Saving King Graham"
+      ],
+      "estimatedTime": "10-12 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Day/night cycle guide",
+        "All Tamir locations mapped",
+        "Zombie and ghost encounters",
+        "Timed sequence solutions"
+      ]
+    },
+    {
+      "id": "kings-quest-5",
+      "title": "King's Quest V: Absence Makes the Heart Go Yonder",
+      "subtitle": "Graham's Family Rescue",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1990,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "The first VGA King's Quest! Help Graham rescue his family from the evil wizard Mordack with beautiful graphics and full voice acting.",
+      "chapters": [
+        "Serenia Exploration",
+        "The Town of Serenia",
+        "Forest and Desert",
+        "Mordack's Island",
+        "The Final Rescue"
+      ],
+      "estimatedTime": "12-15 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "VGA graphics showcase",
+        "Voice acting highlights",
+        "All puzzle solutions",
+        "Cedric the owl guide"
+      ]
+    },
+    {
+      "id": "kings-quest-6",
+      "title": "King's Quest VI: Heir Today, Gone Tomorrow",
+      "subtitle": "Alexander's Greatest Adventure",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1992,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "The pinnacle of the King's Quest series. Navigate Alexander's quest through the Land of the Green Isles with multiple solution paths.",
+      "chapters": [
+        "Isle of the Crown",
+        "Isle of Wonder",
+        "Isle of the Sacred Mountain",
+        "Isle of the Beast",
+        "Isle of the Dead",
+        "Final Confrontation"
+      ],
+      "estimatedTime": "15-20 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Multiple puzzle solutions",
+        "Short and long path guides",
+        "All death scene prevention",
+        "Perfect point scoring"
+      ]
+    },
+    {
+      "id": "kings-quest-7",
+      "title": "King's Quest VII: The Princeless Bride",
+      "subtitle": "Rosella and Valanice's Adventure",
+      "genre": "Fantasy Adventure",
+      "developer": "Sierra On-Line",
+      "year": 1994,
+      "difficulty": "Intermediate",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Disney-style animation meets King's Quest! Play as both Rosella and Valanice in this unique chapter-based adventure.",
+      "chapters": [
+        "Chapter 1: A Troll's Heart",
+        "Chapter 2: A Troll's Tail",
+        "Chapter 3: The Sky is Falling",
+        "Chapter 4: Troll's Fair Day",
+        "Chapter 5: Ooga Booga",
+        "Chapter 6: The Witch's Brew"
+      ],
+      "estimatedTime": "8-12 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Dual character gameplay",
+        "Chapter-by-chapter solutions",
+        "Animation showcase",
+        "No-death gameplay guide"
+      ]
+    },
+    {
+      "id": "kings-quest-8",
+      "title": "King's Quest VIII: Mask of Eternity",
+      "subtitle": "Connor's 3D Adventure",
+      "genre": "Action Adventure",
+      "developer": "Sierra Studios",
+      "year": 1998,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "The controversial 3D entry in the King's Quest saga. Guide Connor through action-RPG gameplay to restore the Mask of Eternity.",
+      "chapters": [
+        "Daventry Restored",
+        "Dimension of Death",
+        "Swamp and Barren Region",
+        "Frozen Reaches",
+        "Realm of the Sun",
+        "Final Confrontation"
+      ],
+      "estimatedTime": "20-25 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "3D gameplay mechanics",
+        "Combat system guide",
+        "All weapon and armor locations",
+        "Boss battle strategies"
+      ]
+    },
+    {
+      "id": "kings-quest-2015",
+      "title": "King's Quest (2015)",
+      "subtitle": "A Knight to Remember",
+      "genre": "Modern Adventure",
+      "developer": "The Odd Gentlemen",
+      "year": 2015,
+      "difficulty": "Beginner",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "The modern reimagining of King's Quest with beautiful art and storytelling. Guide young Graham through his adventures to become a knight.",
+      "chapters": [
+        "Chapter 1: A Knight to Remember",
+        "Chapter 2: Rubble Without a Cause",
+        "Chapter 3: Once Upon a Climb",
+        "Chapter 4: Snow Place Like Home",
+        "Chapter 5: The Good Knight"
+      ],
+      "estimatedTime": "15-20 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Multiple choice consequences",
+        "Modern puzzle design",
+        "Voice acting showcase",
+        "Achievement guide"
+      ]
+    },
+    {
+      "id": "monkey-island-1",
+      "title": "The Secret of Monkey Island",
+      "subtitle": "The Pirate Adventure Classic",
+      "genre": "Point & Click Adventure",
+      "developer": "LucasArts",
+      "year": 1990,
+      "difficulty": "Beginner",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "The adventure that started it all! Guide Guybrush Threepwood through his quest to become a mighty pirate in this timeless classic.",
+      "chapters": [
+        "Part I: The Three Trials",
+        "Part II: The Journey",
+        "Part III: Under Monkey Island",
+        "Part IV: Guybrush Kicks Butt",
+        "Insult Sword Fighting Guide"
+      ],
+      "estimatedTime": "8-12 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "No-death gameplay",
+        "Insult sword fighting guide",
+        "All puzzle solutions",
+        "LucasArts humor showcase"
+      ]
+    },
+    {
+      "id": "monkey-island-2",
+      "title": "Monkey Island 2: LeChuck's Revenge",
+      "subtitle": "The Pirate Saga Continues",
+      "genre": "Point & Click Adventure",
+      "developer": "LucasArts",
+      "year": 1991,
+      "difficulty": "Intermediate",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Guybrush's second adventure takes him across multiple islands in search of the legendary treasure Big Whoop. Features the most complex puzzles in the series.",
+      "chapters": [
+        "Part I: The Largo Embargo",
+        "Part II: Four Map Pieces",
+        "Part III: LeChuck's Fortress",
+        "Part IV: Dinky Island",
+        "The Spitting Contest"
+      ],
+      "estimatedTime": "12-16 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Multi-island exploration",
+        "Complex inventory puzzles",
+        "Spitting contest mastery",
+        "Multiple solution paths"
+      ]
+    },
+    {
+      "id": "curse-of-monkey-island",
+      "title": "The Curse of Monkey Island",
+      "subtitle": "Hand-Drawn Pirate Paradise",
+      "genre": "Point & Click Adventure",
+      "developer": "LucasArts",
+      "year": 1997,
+      "difficulty": "Intermediate",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Gorgeous hand-drawn animation brings the Monkey Island world to life. Help Guybrush save Elaine from a cursed ring in this visual masterpiece.",
+      "chapters": [
+        "Chapter 1: The Demise of the Zombie Pirate LeChuck",
+        "Chapter 2: The Curse Gets Worse",
+        "Chapter 3: Three Sheets to the Wind",
+        "Chapter 4: The Bartender, the Thieves, his Aunt and her Lover",
+        "Chapter 5: Kiss of the Spider Monkey"
+      ],
+      "estimatedTime": "10-14 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Hand-drawn animation showcase",
+        "Banjo duel guide",
+        "All curse solutions",
+        "Voice acting highlights"
+      ]
+    },
+    {
+      "id": "return-to-monkey-island",
+      "title": "Return to Monkey Island",
+      "subtitle": "The Creator's Return",
+      "genre": "Modern Adventure",
+      "developer": "Terrible Toybox",
+      "year": 2022,
+      "difficulty": "Beginner",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Ron Gilbert returns to complete his Monkey Island vision. Features modern design with classic adventure game heart and multiple difficulty modes.",
+      "chapters": [
+        "Prologue: An Unexpected Return",
+        "Part I: A Familiar Place",
+        "Part II: The Sea Monkey",
+        "Part III: Impossible Machines",
+        "Part IV: Terror Island",
+        "Part V: The Secret Revealed"
+      ],
+      "estimatedTime": "8-12 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "Casual and Hard mode differences",
+        "Modern puzzle design",
+        "Nostalgic callbacks guide",
+        "Creator's intended ending"
+      ]
+    },
+    {
+      "id": "grim-fandango",
+      "title": "Grim Fandango",
+      "subtitle": "Film Noir Meets Day of the Dead",
+      "genre": "Film Noir Adventure",
+      "developer": "LucasArts",
+      "year": 1998,
+      "difficulty": "Advanced",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Tim Schafer's masterpiece combining film noir with Mexican folklore. Guide Manny Calavera through the Land of the Dead in this artistic triumph.",
+      "chapters": [
+        "Year One: The DOD",
+        "Year Two: Rubacava",
+        "Year Three: The Petrified Forest",
+        "Year Four: Edge of the World",
+        "Puzzle Solutions Guide"
+      ],
+      "estimatedTime": "12-18 hours",
+      "lastUpdated": "2024-11-04",
+      "features": [
+        "3D adventure innovation",
+        "Film noir atmosphere guide",
+        "All collectible souls",
+        "Artistic vision showcase"
+      ]
+    }
+  ],
+  "metadata": {
+    "totalWalkthroughs": 14,
+    "lastUpdated": "2024-11-04",
+    "genres": [
+      "Fantasy Adventure",
+      "Point & Click Adventure",
+      "Action Adventure",
+      "Modern Adventure",
+      "Film Noir Adventure"
+    ],
+    "difficultyLevels": ["Beginner", "Intermediate", "Advanced"]
+  }
+}

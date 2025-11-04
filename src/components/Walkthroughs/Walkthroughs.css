@@ -1,0 +1,440 @@
+/* Walkthroughs Component Styles */
+.walkthroughs-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e6ed;
+  position: relative;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.walkthroughs-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(236, 179, 101, 0.9);
+  color: #1a1a2e;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.walkthroughs-back-button:hover {
+  background: #ecb365;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.walkthroughs-content {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.walkthroughs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4rem 0 3rem 0;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  flex: 1;
+}
+
+.walkthroughs-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ecb365, #f4e4bc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.walkthroughs-subtitle {
+  font-size: 1.2rem;
+  color: #c0c0c0;
+  margin: 0;
+}
+
+.header-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adventure-icon {
+  font-size: 4rem;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Controls */
+.walkthroughs-controls {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.search-section {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid rgba(236, 179, 101, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e6ed;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #ecb365;
+  box-shadow: 0 0 0 3px rgba(236, 179, 101, 0.2);
+}
+
+.search-input::placeholder {
+  color: #a0a0a0;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-section label {
+  color: #c0c0c0;
+  font-weight: 500;
+}
+
+.genre-select {
+  padding: 0.8rem;
+  border: 2px solid rgba(236, 179, 101, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e6ed;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.genre-select:focus {
+  outline: none;
+  border-color: #ecb365;
+}
+
+/* Grid */
+.walkthroughs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.walkthrough-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.walkthrough-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(236, 179, 101, 0.5);
+}
+
+.walkthrough-thumbnail {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #2a2a3e 0%, #1a1a2e 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  border-bottom: 3px solid #ecb365;
+}
+
+.walkthrough-card:hover .thumbnail-placeholder {
+  transform: scale(1.02);
+}
+
+.game-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.game-year {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #ecb365;
+  background: rgba(236, 179, 101, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+}
+
+.walkthrough-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.walkthrough-card:hover .walkthrough-thumbnail img {
+  transform: scale(1.05);
+}
+
+.difficulty-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(236, 179, 101, 0.9);
+  color: #1a1a2e;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.walkthrough-info {
+  padding: 1.5rem;
+}
+
+.walkthrough-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.year,
+.genre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #c0c0c0;
+}
+
+.walkthrough-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #ecb365;
+}
+
+.walkthrough-subtitle {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.walkthrough-description {
+  color: #d0d0d0;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.walkthrough-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.chapters-info,
+.time-info {
+  font-size: 0.9rem;
+  color: #c0c0c0;
+}
+
+.walkthrough-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-walkthrough-btn {
+  background: linear-gradient(135deg, #ecb365, #f4e4bc);
+  color: #1a1a2e;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.view-walkthrough-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #f4e4bc, #ecb365);
+}
+
+.last-updated {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+}
+
+/* Footer */
+.walkthroughs-footer {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  text-align: center;
+}
+
+.footer-content h3 {
+  color: #ecb365;
+  margin-bottom: 1rem;
+}
+
+.footer-content p {
+  color: #c0c0c0;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 1rem auto;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #c0c0c0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(236, 179, 101, 0.3);
+  border-top: 4px solid #ecb365;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* No Results */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: #a0a0a0;
+}
+
+.no-results p {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .walkthroughs-content {
+    padding: 1rem;
+  }
+
+  .walkthroughs-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .walkthroughs-title {
+    font-size: 2.2rem;
+  }
+
+  .walkthroughs-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .walkthroughs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .walkthrough-actions {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .view-walkthrough-btn {
+    text-align: center;
+  }
+
+  .walkthroughs-back-button {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+}
+
+@media (max-width: 480px) {
+  .walkthrough-details {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .walkthroughs-title {
+    font-size: 1.8rem;
+  }
+
+  .adventure-icon {
+    font-size: 2.5rem;
+  }
+}

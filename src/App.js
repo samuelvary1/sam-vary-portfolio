@@ -25,6 +25,8 @@ import CryptoProjects from "./components/CryptoProjects/CryptoProjects";
 import Sports from "./components/Sports/Sports";
 import Mets from "./components/Sports/Mets";
 import Rangers from "./components/Sports/Rangers";
+import Walkthroughs from "./components/Walkthroughs/Walkthroughs";
+import WalkthroughPage from "./components/Walkthroughs/WalkthroughPage";
 
 // Create a wrapper to use hooks like useLocation inside Router
 const AppWrapper = () => {
@@ -55,6 +57,8 @@ const AppWrapper = () => {
         <Route path="/sports" element={<Sports />} />
         <Route path="/sports/mets" element={<Mets />} />
         <Route path="/sports/rangers" element={<Rangers />} />
+        <Route path="/walkthroughs" element={<Walkthroughs />} />
+        <Route path="/walkthroughs/:id" element={<WalkthroughPage />} />
       </Routes>
     </>
   );
