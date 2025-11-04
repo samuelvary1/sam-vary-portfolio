@@ -1,62 +1,133 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { rangersData } from "./rangersData";
 import "./Rangers.css";
 
 const Rangers = () => {
-  const [teamData, setTeamData] = useState({
-    record: { wins: 0, losses: 0, ot: 0, points: 0 },
-    standings: { division: "", conference: "" },
+  const [schedule, setSchedule] = useState({
     recentGames: [],
     upcomingGames: [],
+    record: { wins: 0, losses: 0, ot: 0 },
     loading: true,
     error: null,
   });
 
   useEffect(() => {
-    setTeamData({
-      ...rangersData,
-      loading: false,
-      error: null,
-    });
+    fetchRangersSchedule();
   }, []);
 
-  const formatGameResult = (game) => {
-    return {
-      result: game.result,
-      resultClass:
-        game.result === "W"
-          ? "win"
-          : game.result === "OTL"
-            ? "overtime-loss"
-            : "loss",
-      rangerScore: game.rangerScore,
-      opponentScore: game.opponentScore,
-      opponent: game.opponent,
-      isHome: game.isHome,
-      venue: game.venue,
-      goalScorer: game.goalScorer,
-      date: new Date(game.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    };
+  const fetchRangersSchedule = async () => {
+    try {
+      setSchedule((prev) => ({ ...prev, loading: true }));
+
+      // Real Rangers data from NHL API
+      const response = await fetch(
+        "https://api-web.nhle.com/v1/club-schedule-season/NYR/20242025",
+      );
+      const data = await response.json();
+
+      if (data && data.games) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Recent completed games
+        const recentGames = data.games
+          .filter((game) => {
+            const gameDate = new Date(game.gameDate);
+            return gameDate < today && game.gameState === "OFF";
+          })
+          .slice(-5)
+          .reverse();
+
+        // Upcoming games
+        const upcomingGames = data.games
+          .filter((game) => {
+            const gameDate = new Date(game.gameDate);
+            return gameDate >= today && game.gameState !== "OFF";
+          })
+          .slice(0, 5);
+
+        // Calculate record from completed games
+        let wins = 0,
+          losses = 0,
+          ot = 0;
+        data.games.forEach((game) => {
+          if (game.gameState === "OFF") {
+            const isRangersHome = game.homeTeam.abbrev === "NYR";
+            const rangersScore = isRangersHome
+              ? game.homeTeam.score
+              : game.awayTeam.score;
+            const opponentScore = isRangersHome
+              ? game.awayTeam.score
+              : game.homeTeam.score;
+
+            if (rangersScore > opponentScore) {
+              wins++;
+            } else if (
+              game.periodDescriptor.number > 3 ||
+              game.gameOutcome?.lastPeriodType
+            ) {
+              ot++;
+            } else {
+              losses++;
+            }
+          }
+        });
+
+        setSchedule({
+          recentGames,
+          upcomingGames,
+          record: { wins, losses, ot },
+          loading: false,
+          error: null,
+        });
+      } else {
+        throw new Error("No schedule data available");
+      }
+    } catch (error) {
+      console.error("Error fetching Rangers schedule:", error);
+      // Fallback to simple current data
+      setSchedule({
+        recentGames: [
+          {
+            gameDate: "2024-11-01",
+            homeTeam: { abbrev: "NYR", score: 3 },
+            awayTeam: { abbrev: "SEA", score: 2 },
+            gameState: "OFF",
+            venue: { default: "Madison Square Garden" },
+          },
+        ],
+        upcomingGames: [
+          {
+            gameDate: "2024-11-04",
+            startTimeUTC: "2024-11-04T23:00:00Z",
+            homeTeam: { abbrev: "NYR" },
+            awayTeam: { abbrev: "CAR" },
+            venue: { default: "Madison Square Garden" },
+          },
+        ],
+        record: { wins: 9, losses: 2, ot: 1 },
+        loading: false,
+        error: "Using sample data - API unavailable",
+      });
+    }
   };
 
-  const formatUpcomingGame = (game) => {
-    return {
-      opponent: game.opponent,
-      isHome: game.isHome,
-      venue: game.venue,
-      broadcast: game.broadcast || "MSG Network",
-      date: new Date(game.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      time: game.time,
-    };
+  const formatGameDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const formatGameTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
   };
 
   return (
@@ -129,190 +200,103 @@ const Rangers = () => {
           </div>
 
           <div className="rangers-section rangers-schedule-section">
-            <h2>2025-26 Season Schedule ⚡</h2>
+            <h2>2024-25 Season Schedule ⚡</h2>
 
-            {teamData.error && (
-              <div
-                style={{
-                  background: "#fff3cd",
-                  border: "1px solid #ffeaa7",
-                  color: "#856404",
-                  padding: "1rem",
-                  borderRadius: "5px",
-                  marginBottom: "1rem",
-                }}
-              >
-                {teamData.error}
-              </div>
+            {schedule.error && (
+              <div className="error-message">⚠️ {schedule.error}</div>
             )}
 
             <div className="record-display">
-              {teamData.loading ? (
+              {schedule.loading ? (
                 <div className="current-record">Loading...</div>
               ) : (
-                <>
-                  <div className="current-record">
-                    {teamData.record.wins}-{teamData.record.losses}-
-                    {teamData.record.ot} ({teamData.record.points} PTS)
-                  </div>
-                  <div className="record-breakdown">
-                    {teamData.standings.division} •{" "}
-                    {teamData.standings.conference}
-                  </div>
-                </>
+                <div className="current-record">
+                  {schedule.record.wins}W - {schedule.record.losses}L -{" "}
+                  {schedule.record.ot}OT
+                </div>
               )}
             </div>
 
             <div className="schedule-container">
-              <div className="games-list">
-                {/* Recent Games */}
-                <h3 style={{ color: "#0038a8", marginBottom: "1rem" }}>
-                  Recent Games
-                </h3>
+              {/* Recent Games */}
+              <div className="games-section">
+                <h3>Recent Games</h3>
+                {schedule.loading ? (
+                  <div className="loading">Loading games...</div>
+                ) : (
+                  schedule.recentGames.map((game, index) => {
+                    const isRangersHome = game.homeTeam.abbrev === "NYR";
+                    const rangersScore = isRangersHome
+                      ? game.homeTeam.score
+                      : game.awayTeam.score;
+                    const opponentScore = isRangersHome
+                      ? game.awayTeam.score
+                      : game.homeTeam.score;
+                    const opponent = isRangersHome
+                      ? game.awayTeam.abbrev
+                      : game.homeTeam.abbrev;
+                    const won = rangersScore > opponentScore;
 
-                {teamData.loading ? (
-                  <div style={{ textAlign: "center", padding: "2rem" }}>
-                    Loading recent games...
-                  </div>
-                ) : teamData.recentGames.length > 0 ? (
-                  teamData.recentGames.map((game, index) => {
-                    const gameInfo = formatGameResult(game);
                     return (
                       <div
                         key={index}
-                        className={`game-card ${gameInfo.resultClass}`}
+                        className={`simple-game-card ${won ? "win" : "loss"}`}
                       >
-                        <div className="game-header">
-                          <div className="game-date">{gameInfo.date}</div>
-                          <div
-                            className={`game-result result-${gameInfo.resultClass}`}
-                          >
-                            {gameInfo.result} 🏒
-                          </div>
+                        <div className="game-date">
+                          {formatGameDate(game.gameDate)}
                         </div>
                         <div className="game-matchup">
-                          <div className="team-info">
-                            <div className="team-name">NY Rangers</div>
-                            <div
-                              className={
-                                gameInfo.isHome
-                                  ? "home-indicator"
-                                  : "away-indicator"
-                              }
-                            >
-                              {gameInfo.isHome ? "HOME" : "AWAY"}
-                            </div>
-                          </div>
-                          <div className="vs-indicator">
-                            {gameInfo.isHome ? "VS" : "@"}
-                          </div>
-                          <div className="team-info">
-                            <div className="team-name">{gameInfo.opponent}</div>
-                          </div>
+                          <span className="team">NYR</span>
+                          <span className="vs">
+                            {isRangersHome ? "vs" : "@"}
+                          </span>
+                          <span className="team">{opponent}</span>
                         </div>
                         <div className="game-score">
-                          {gameInfo.rangerScore} - {gameInfo.opponentScore}
+                          {rangersScore} - {opponentScore}
                         </div>
-                        {gameInfo.goalScorer && gameInfo.result === "W" && (
-                          <div className="goal-scorer">
-                            <div className="scorer-photo-container">
-                              <img
-                                src="/assets/rangers-logo.png"
-                                alt={gameInfo.goalScorer.name}
-                                className="scorer-photo"
-                                loading="lazy"
-                              />
-                            </div>
-                            <div className="scorer-info">
-                              <div className="scorer-name">
-                                {gameInfo.goalScorer.name}
-                              </div>
-                              <div className="scorer-time">
-                                GWG: {gameInfo.goalScorer.time}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                        <div className="game-details">
-                          <div className="game-venue">{gameInfo.venue}</div>
-                          <div className="game-broadcast">MSG Network</div>
-                        </div>
+                        <div className="result">{won ? "W" : "L"}</div>
                       </div>
                     );
                   })
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "2rem",
-                      color: "#666",
-                    }}
-                  >
-                    No recent games available
-                  </div>
                 )}
+              </div>
 
-                {/* Upcoming Games */}
-                <h3
-                  style={{
-                    color: "#ce1126",
-                    marginTop: "2rem",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  Upcoming Games
-                </h3>
+              {/* Upcoming Games */}
+              <div className="games-section">
+                <h3>Upcoming Games</h3>
+                {schedule.loading ? (
+                  <div className="loading">Loading games...</div>
+                ) : (
+                  schedule.upcomingGames.map((game, index) => {
+                    const isRangersHome = game.homeTeam.abbrev === "NYR";
+                    const opponent = isRangersHome
+                      ? game.awayTeam.abbrev
+                      : game.homeTeam.abbrev;
 
-                {teamData.loading ? (
-                  <div style={{ textAlign: "center", padding: "2rem" }}>
-                    Loading upcoming games...
-                  </div>
-                ) : teamData.upcomingGames.length > 0 ? (
-                  teamData.upcomingGames.map((game, index) => {
-                    const gameInfo = formatUpcomingGame(game);
                     return (
-                      <div key={index} className="game-card upcoming">
-                        <div className="game-header">
-                          <div className="game-date">{gameInfo.date}</div>
-                          <div className="game-time">{gameInfo.time}</div>
+                      <div key={index} className="simple-game-card upcoming">
+                        <div className="game-date">
+                          {formatGameDate(game.gameDate)}
+                        </div>
+                        <div className="game-time">
+                          {game.startTimeUTC
+                            ? formatGameTime(game.startTimeUTC)
+                            : "7:00 PM"}
                         </div>
                         <div className="game-matchup">
-                          <div className="team-info">
-                            <div className="team-name">NY Rangers</div>
-                            <div
-                              className={
-                                gameInfo.isHome
-                                  ? "home-indicator"
-                                  : "away-indicator"
-                              }
-                            >
-                              {gameInfo.isHome ? "HOME" : "AWAY"}
-                            </div>
-                          </div>
-                          <div className="vs-indicator">
-                            {gameInfo.isHome ? "VS" : "@"}
-                          </div>
-                          <div className="team-info">
-                            <div className="team-name">{gameInfo.opponent}</div>
-                          </div>
+                          <span className="team">NYR</span>
+                          <span className="vs">
+                            {isRangersHome ? "vs" : "@"}
+                          </span>
+                          <span className="team">{opponent}</span>
                         </div>
-                        <div className="game-details">
-                          <div className="game-venue">{gameInfo.venue}</div>
-                          <div className="game-broadcast">MSG Network</div>
+                        <div className="venue">
+                          {game.venue?.default || "TBD"}
                         </div>
                       </div>
                     );
                   })
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "2rem",
-                      color: "#666",
-                    }}
-                  >
-                    No upcoming games scheduled
-                  </div>
                 )}
               </div>
             </div>

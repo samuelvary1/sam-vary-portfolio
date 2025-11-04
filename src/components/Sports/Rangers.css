@@ -615,6 +615,122 @@
   }
 }
 
+/* Simple Game Cards */
+.games-section {
+  margin: 2rem 0;
+}
+
+.games-section h3 {
+  color: #0038a8;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.simple-game-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.simple-game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.simple-game-card.win {
+  border-color: #28a745;
+  background: linear-gradient(135deg, #f8fff8, #e8f5e8);
+}
+
+.simple-game-card.loss {
+  border-color: #dc3545;
+  background: linear-gradient(135deg, #fff8f8, #f8e8e8);
+}
+
+.simple-game-card.upcoming {
+  border-color: #0038a8;
+  background: linear-gradient(135deg, #f8f9ff, #e8ebff);
+}
+
+.game-date {
+  font-weight: bold;
+  min-width: 80px;
+  color: #333;
+}
+
+.game-matchup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+}
+
+.team {
+  color: #0038a8;
+}
+
+.vs {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.game-score {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.result {
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.simple-game-card.win .result {
+  background: #28a745;
+  color: white;
+}
+
+.simple-game-card.loss .result {
+  background: #dc3545;
+  color: white;
+}
+
+.game-time {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.venue {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+  max-width: 150px;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error-message {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 480px) {
   .rangers-team-page-title {
     font-size: 2rem;
@@ -626,5 +742,30 @@
 
   .rangers-section h3 {
     font-size: 1.5rem;
+  }
+
+  .simple-game-card {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .game-matchup {
+    order: 1;
+  }
+
+  .game-date {
+    order: 2;
+    min-width: auto;
+  }
+
+  .game-score,
+  .game-time {
+    order: 3;
+  }
+
+  .result,
+  .venue {
+    order: 4;
   }
 }
