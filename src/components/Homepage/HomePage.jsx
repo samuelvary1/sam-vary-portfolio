@@ -98,7 +98,17 @@ const HomePage = () => {
           <span className="label">Adventure Game</span>
         </div>
 
-        <div className="map-icon sawyer" onClick={() => navigate("/crypto")}>
+        <div
+          className="map-icon walkthroughs"
+          onClick={() => navigate("/walkthroughs")}
+        >
+          <div className="icon-bg">
+            <img src="/icons/walkthroughs.png" alt="Walkthroughs" />
+          </div>
+          <span className="label">Walkthroughs</span>
+        </div>
+
+        <div className="map-icon sawyer" onClick={() => navigate("/crypto ")}>
           <div className="icon-bg">
             <img src="/icons/sawyer-logo.png" alt="Sawyer Token Project" />
           </div>

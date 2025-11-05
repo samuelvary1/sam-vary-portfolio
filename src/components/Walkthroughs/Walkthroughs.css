@@ -5,11 +5,12 @@
   color: #e0e6ed;
   position: relative;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding-top: 100px; /* Account for fixed navbar */
 }
 
 .walkthroughs-back-button {
   position: absolute;
-  top: 20px;
+  top: 120px; /* Position below navbar */
   left: 20px;
   background: rgba(236, 179, 101, 0.9);
   color: #1a1a2e;

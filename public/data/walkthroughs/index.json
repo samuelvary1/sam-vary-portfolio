@@ -66,11 +66,10 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Master the art of magic as Gwydion escapes from the evil wizard Manannan. Includes complete spell guide and timing strategies.",
       "chapters": [
-        "Life with Manannan",
-        "Learning Magic Spells",
-        "The Great Escape",
-        "Journey to Daventry",
-        "Final Confrontation"
+        "LLEWDOR - The Wizard's Domain",
+        "SHIP - The Sea Journey",
+        "WAY TO DAVENTRY - The Final Journey",
+        "Critical Tips and Time Management"
       ],
       "estimatedTime": "8-10 hours",
       "lastUpdated": "2024-11-04",
@@ -92,11 +91,11 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Guide Princess Rosella through Tamir to save her dying father. Master the day/night cycle and solve time-sensitive puzzles.",
       "chapters": [
-        "Tamir Overview",
-        "Daytime Adventures",
-        "Nighttime Mysteries",
-        "The Crypt and Crypts",
-        "Saving King Graham"
+        "Part 1: The Magic Fruit",
+        "Part 2: Lolotte's Assignments",
+        "Part 3: The Final Confrontation",
+        "Part 4: Bright New Day - Resolution",
+        "Essential Tips and Strategy"
       ],
       "estimatedTime": "10-12 hours",
       "lastUpdated": "2024-11-04",
@@ -118,11 +117,13 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "The first VGA King's Quest! Help Graham rescue his family from the evil wizard Mordack with beautiful graphics and full voice acting.",
       "chapters": [
-        "Serenia Exploration",
-        "The Town of Serenia",
-        "Forest and Desert",
-        "Mordack's Island",
-        "The Final Rescue"
+        "Part 1: SERENIA - The Beginning",
+        "Part 2: DESERT - The Harsh Journey",
+        "Part 3: SERENIA RETURN - Magic and Mysteries",
+        "Part 4: MOUNTAINS - Frozen Perils",
+        "Part 5: OCEAN - Maritime Adventures",
+        "Part 6: MORDACK'S ISLAND - The Final Confrontation",
+        "Essential Strategy Guide"
       ],
       "estimatedTime": "12-15 hours",
       "lastUpdated": "2024-11-04",
@@ -145,11 +146,12 @@
       "description": "The pinnacle of the King's Quest series. Navigate Alexander's quest through the Land of the Green Isles with multiple solution paths.",
       "chapters": [
         "Isle of the Crown",
-        "Isle of Wonder",
         "Isle of the Sacred Mountain",
+        "Isle of Wonder",
         "Isle of the Beast",
-        "Isle of the Dead",
-        "Final Confrontation"
+        "Catacombs",
+        "Realm of the Dead",
+        "Different Endings"
       ],
       "estimatedTime": "15-20 hours",
       "lastUpdated": "2024-11-04",

@@ -23,6 +23,7 @@ const Navbar = () => {
 
           {/* Projects */}
           <NavItem to="/adventure">Adventure Game</NavItem>
+          <NavItem to="/walkthroughs">Walkthroughs</NavItem>
           <NavItem to="/llm">AI Project</NavItem>
           <NavItem to="/crypto">Crypto Projects</NavItem>
 
