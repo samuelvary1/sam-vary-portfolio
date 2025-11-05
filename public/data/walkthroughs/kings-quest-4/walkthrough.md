@@ -6,6 +6,14 @@ _This adventure follows Princess Rosella as she journeys to save the fairy Genes
 
 ---
 
+## Attribution
+
+This walkthrough is based on materials from **SierraChest.com**, a comprehensive resource for Sierra adventure games. We gratefully acknowledge their preservation of classic adventure game guides and walkthroughs.
+
+**Source**: [SierraChest.com](https://sierrachest.com)
+
+---
+
 ## Part 1: The Magic Fruit
 
 ### Starting Area and Golden Ball (2 points)

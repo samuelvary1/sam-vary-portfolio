@@ -2,6 +2,16 @@
 
 **Maximum total points:** 158
 
+---
+
+## Attribution
+
+This walkthrough is based on materials from **SierraChest.com**, a comprehensive resource for Sierra adventure games. We gratefully acknowledge their preservation of classic adventure game guides and walkthroughs.
+
+**Source**: [SierraChest.com](https://sierrachest.com)
+
+---
+
 ## Starting Area
 
 ### Outside Castle

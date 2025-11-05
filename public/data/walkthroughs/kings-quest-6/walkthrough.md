@@ -2,6 +2,16 @@
 
 **Maximum total points:** 231
 
+---
+
+## Attribution
+
+This walkthrough is based on materials from **SierraChest.com**, a comprehensive resource for Sierra adventure games. We gratefully acknowledge their preservation of classic adventure game guides and walkthroughs.
+
+**Source**: [SierraChest.com](https://sierrachest.com)
+
+---
+
 ## Isle of the Crown
 
 ### Beach (3 points)

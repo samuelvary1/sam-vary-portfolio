@@ -173,12 +173,12 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Disney-style animation meets King's Quest! Play as both Rosella and Valanice in this unique chapter-based adventure.",
       "chapters": [
-        "Chapter 1: A Troll's Heart",
-        "Chapter 2: A Troll's Tail",
-        "Chapter 3: The Sky is Falling",
-        "Chapter 4: Troll's Fair Day",
-        "Chapter 5: Ooga Booga",
-        "Chapter 6: The Witch's Brew"
+        "Chapter 1: Where In Blazes Am I?",
+        "Chapter 2: A Troll Is As A Troll Does",
+        "Chapter 3: The Sky Is Falling!",
+        "Chapter 4: Will The Real Troll King Please Stand Up?",
+        "Chapter 5: Nightmare In Etheria",
+        "Chapter 6: Ready, Set … Boom!!"
       ],
       "estimatedTime": "8-12 hours",
       "lastUpdated": "2024-11-04",
@@ -200,12 +200,15 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "The controversial 3D entry in the King's Quest saga. Guide Connor through action-RPG gameplay to restore the Mask of Eternity.",
       "chapters": [
-        "Daventry Restored",
+        "General Information",
+        "Kingdom of Daventry",
         "Dimension of Death",
-        "Swamp and Barren Region",
+        "Swamp",
+        "Realm of the Gnomes",
+        "Barren Region",
         "Frozen Reaches",
-        "Realm of the Sun",
-        "Final Confrontation"
+        "Lost Paradise",
+        "Realm of the Sun"
       ],
       "estimatedTime": "20-25 hours",
       "lastUpdated": "2024-11-04",

@@ -6,6 +6,14 @@ _This walkthrough contains only the essential steps to achieve all 185 points. I
 
 ---
 
+## Attribution
+
+This walkthrough is based on materials from **SierraChest.com**, a comprehensive resource for Sierra adventure games. We gratefully acknowledge their preservation of classic adventure game guides and walkthroughs.
+
+**Source**: [SierraChest.com](https://sierrachest.com)
+
+---
+
 ## The First Door
 
 ### Grandma's House and Little Red Riding Hood (7 points)

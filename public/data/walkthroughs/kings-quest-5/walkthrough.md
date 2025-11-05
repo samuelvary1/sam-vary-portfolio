@@ -6,6 +6,14 @@ _This adventure follows King Graham as he searches for his missing family and ca
 
 ---
 
+## Attribution
+
+This walkthrough is based on materials from **SierraChest.com**, a comprehensive resource for Sierra adventure games. We gratefully acknowledge their preservation of classic adventure game guides and walkthroughs.
+
+**Source**: [SierraChest.com](https://sierrachest.com)
+
+---
+
 ## Part 1: SERENIA - The Beginning
 
 ### Initial Exploration and Setup
