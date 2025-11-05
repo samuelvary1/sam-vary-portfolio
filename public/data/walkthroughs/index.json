@@ -40,11 +40,11 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Help King Graham rescue Princess Valanice from the tower. Navigate through fairy tale lands and solve enchanted puzzles.",
       "chapters": [
-        "The Quest Begins",
-        "Neptune's Kingdom",
-        "Little Red Riding Hood",
-        "Hagatha's Cave",
-        "The Enchanted Tower"
+        "The First Door",
+        "The Second Door",
+        "The Third Door",
+        "The Ending",
+        "Important Tips and Strategy Notes"
       ],
       "estimatedTime": "5-7 hours",
       "lastUpdated": "2024-11-04",
@@ -308,11 +308,14 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Gorgeous hand-drawn animation brings the Monkey Island world to life. Help Guybrush save Elaine from a cursed ring in this visual masterpiece.",
       "chapters": [
-        "Chapter 1: The Demise of the Zombie Pirate LeChuck",
-        "Chapter 2: The Curse Gets Worse",
-        "Chapter 3: Three Sheets to the Wind",
-        "Chapter 4: The Bartender, the Thieves, his Aunt and her Lover",
-        "Chapter 5: Kiss of the Spider Monkey"
+        "Introduction",
+        "Part I: The Demise of the Zombie Pirate LeChuck",
+        "Part II: The Curse Gets Worse",
+        "Part III: Three Sheets to the Wind",
+        "Part IV: The Bartender, the Thieves, his Aunt, and her Lover",
+        "Part V: Kiss of the Spider Monkey",
+        "Part VI: Guybrush Kicks Butt Once Again",
+        "Insult Sword Fighting Reference"
       ],
       "estimatedTime": "10-14 hours",
       "lastUpdated": "2024-11-04",
@@ -334,12 +337,13 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Ron Gilbert returns to complete his Monkey Island vision. Features modern design with classic adventure game heart and multiple difficulty modes.",
       "chapters": [
-        "Prologue: An Unexpected Return",
-        "Part I: A Familiar Place",
-        "Part II: The Sea Monkey",
-        "Part III: Impossible Machines",
-        "Part IV: Terror Island",
-        "Part V: The Secret Revealed"
+        "Introduction",
+        "Prologue: An Unexpected Story Begins",
+        "Part I: A Friendly Place",
+        "Part II: A Dangerous Journey",
+        "Part III: Return to Monkey Island",
+        "Part IV: Things Get Complicated",
+        "Part V: Beneath the Monkey Head"
       ],
       "estimatedTime": "8-12 hours",
       "lastUpdated": "2024-11-04",

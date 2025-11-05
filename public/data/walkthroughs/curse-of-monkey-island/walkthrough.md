@@ -2,32 +2,6 @@
 
 The third installment in the beloved Monkey Island series brings gorgeous hand-drawn animation, full voice acting, and classic adventure gameplay. This walkthrough covers both regular and Mega Monkey difficulty modes.
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Part I: The Demise of the Zombie Pirate LeChuck](#part-i-the-demise-of-the-zombie-pirate-lechuck)
-- [Part II: The Curse Gets Worse](#part-ii-the-curse-gets-worse)
-  - [Old Friend and Buccaneer Hair Stylists](#old-friend-and-buccaneer-hair-stylists)
-  - [From Danger to Danger](#from-danger-to-danger)
-  - [Recruiting a Crew](#recruiting-a-crew)
-  - [A Map and a Boat](#a-map-and-a-boat)
-- [Part III: Three Sheets to the Wind](#part-iii-three-sheets-to-the-wind)
-  - [Sea Battle](#sea-battle)
-- [Part IV: The Bartender, the Thieves, his Aunt, and her Lover](#part-iv-the-bartender-the-thieves-his-aunt-and-her-lover)
-  - [Bloody Island](#bloody-island)
-  - [Dangerous Drinking Habits](#dangerous-drinking-habits)
-  - [Volcano Eruption](#volcano-eruption)
-  - [To Skull Island](#to-skull-island)
-- [Part V: Kiss of the Spider Monkey](#part-v-kiss-of-the-spider-monkey)
-  - [Carnival of the Damned](#carnival-of-the-damned)
-- [Part VI: Guybrush Kicks Butt Once Again](#part-vi-guybrush-kicks-butt-once-again)
-  - [Rollercoaster](#rollercoaster)
-- [Insult Sword Fighting Reference](#insult-sword-fighting-reference)
-  - [Against Pirates](#against-pirates)
-  - [Against Captain Rottingham](#against-captain-rottingham)
-
----
-
 ## Introduction
 
 The Curse of Monkey Island represents the visual and audio pinnacle of the classic Monkey Island series. Featuring Disney-quality hand-drawn animation, full voice acting (including Dominic Armato as Guybrush), and memorable music, this game combines modern presentation with classic LucasArts adventure game design.
@@ -523,44 +497,40 @@ After Elaine's unfortunate transformation into a gold statue:
 
 ### Against Pirates
 
-| Insult                                                       | Comeback                                                       |
-| ------------------------------------------------------------ | -------------------------------------------------------------- |
-| Every enemy I've met I've annihilated!                       | With your breath, I'm sure they all suffocated.                |
-| You're as repulsive as a monkey in a negligee.               | I look THAT much like your fiancée?                            |
-| Would you like to be buried or cremated?                     | With you around, I'd prefer to be fumigated.                   |
-| Heaven preserve me! You look like something that's died!     | The only way you'll be preserved is in formaldehyde.           |
-| I'll skewer you, like a sow at a buffet.                     | When I'm done with YOU, you'll be a boneless fillet!           |
-| Killing you would be justifiable homicide.                   | Then killing you must be justifiable fungicide.                |
-| En garde! Touché!                                            | Oh, that is so cliché!                                         |
-| Throughout the Caribbean my great deeds are celebrated!      | Too bad they're all fabricated.                                |
-| When your father first saw you, he must have been mortified. | At least mine can be identified.                               |
-| You can't match my witty repartee.                           | I could, if you would use some breath spray.                   |
-| I can't rest until you've been exterminated!                 | Then perhaps you should switch to decaffeinated.               |
-| You're the ugliest monster ever created.                     | If you don't count all the ones you've dated.                  |
-| I'll leave you devastated, mutilated and perforated.         | Your odor alone makes me aggravated, agitated, and infuriated! |
-| Coming face to face with me must leave you petrified.        | Is that your face? I thought it was your backside!             |
-| I'll hound you night and day!                                | Then be a good dog. Sit! Stay!                                 |
+- Every enemy I've met I've annihilated! → With your breath, I'm sure they all suffocated.
+- You're as repulsive as a monkey in a negligee. → I look THAT much like your fiancée?
+- Would you like to be buried or cremated? → With you around, I'd prefer to be fumigated.
+- Heaven preserve me! You look like something that's died! → The only way you'll be preserved is in formaldehyde.
+- I'll skewer you, like a sow at a buffet. → When I'm done with YOU, you'll be a boneless fillet!
+- Killing you would be justifiable homicide. → Then killing you must be justifiable fungicide.
+- En garde! Touché! → Oh, that is so cliché!
+- Throughout the Caribbean my great deeds are celebrated! → Too bad they're all fabricated.
+- When your father first saw you, he must have been mortified. → At least mine can be identified.
+- You can't match my witty repartee. → I could, if you would use some breath spray.
+- I can't rest until you've been exterminated! → Then perhaps you should switch to decaffeinated.
+- You're the ugliest monster ever created. → If you don't count all the ones you've dated.
+- I'll leave you devastated, mutilated and perforated. → Your odor alone makes me aggravated, agitated, and infuriated!
+- Coming face to face with me must leave you petrified. → Is that your face? I thought it was your backside!
+- I'll hound you night and day! → Then be a good dog. Sit! Stay!
 
 ### Against Captain Rottingham
 
-| Insult                                                        | Comeback                                                       |
-| ------------------------------------------------------------- | -------------------------------------------------------------- |
-| Your stench would make an outhouse cleaner irritated!         | Then perhaps you should switch to decaffeinated.               |
-| When I'm done, your body will be rotted and putrefied!        | Then killing you must be justifiable fungicide.                |
-| Your lips look as they belong on the catch of the day!        | When I'm done with YOU, you'll be a boneless fillet!           |
-| You're a disgrace to your species, you're so undignified!     | At least mine can be identified.                               |
-| Your looks would make pigs nauseated.                         | If you don't count all the ones you've dated.                  |
-| My attacks have left entire islands depopulated!              | With your breath, I'm sure they all suffocated.                |
-| You have the sex appeal of a Shar-Pei.                        | I look THAT much like your fiancée?                            |
-| My skills with a sword are highly venerated.                  | Too bad they're all fabricated.                                |
-| You'll find I'm dogged and relentless to my prey!             | Then be a good dog. Sit! Stay!                                 |
-| I can't tell which of my traits has you the most intimidated. | Your odor alone makes me aggravated, agitated, and infuriated! |
-| I give you a choice. You can be gutted, or decapitated!       | With you around, I'd prefer to be fumigated.                   |
-| Nothing can stop me from blowing you away!                    | I could, if you would use some breath spray.                   |
-| I have never lost a mêlée!                                    | You would have, but you were always running away.              |
-| Never before have I faced someone so sissified.               | Is that your face? I thought it was your backside!             |
-| Nothing on this earth can save your sorry hide!               | The only way you'll be preserved is in formaldehyde.           |
-| Your mother wears a toupee!                                   | Oh, that is so cliché!                                         |
+- Your stench would make an outhouse cleaner irritated! → Then perhaps you should switch to decaffeinated.
+- When I'm done, your body will be rotted and putrefied! → Then killing you must be justifiable fungicide.
+- Your lips look as they belong on the catch of the day! → When I'm done with YOU, you'll be a boneless fillet!
+- You're a disgrace to your species, you're so undignified! → At least mine can be identified.
+- Your looks would make pigs nauseated. → If you don't count all the ones you've dated.
+- My attacks have left entire islands depopulated! → With your breath, I'm sure they all suffocated.
+- You have the sex appeal of a Shar-Pei. → I look THAT much like your fiancée?
+- My skills with a sword are highly venerated. → Too bad they're all fabricated.
+- You'll find I'm dogged and relentless to my prey! → Then be a good dog. Sit! Stay!
+- I can't tell which of my traits has you the most intimidated. → Your odor alone makes me aggravated, agitated, and infuriated!
+- I give you a choice. You can be gutted, or decapitated! → With you around, I'd prefer to be fumigated.
+- Nothing can stop me from blowing you away! → I could, if you would use some breath spray.
+- I have never lost a mêlée! → You would have, but you were always running away.
+- Never before have I faced someone so sissified. → Is that your face? I thought it was your backside!
+- Nothing on this earth can save your sorry hide! → The only way you'll be preserved is in formaldehyde.
+- Your mother wears a toupee! → Oh, that is so cliché!
 
 ---
 
