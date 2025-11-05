@@ -8,37 +8,37 @@ This walkthrough is based on content originally from **grimfandango.network** an
 
 ## Table of Contents
 
-1. [Year 1: El Marrow](#year-1-el-marrow)
-   - [Manny's Office](#mannys-office)
-   - [Salvador Limones](#salvador-limones)
-2. [The Petrified Forest](#the-petrified-forest)
-   - [El Marrow from the Petrified Forest](#el-marrow-from-the-petrified-forest)
-3. [Year 2: Rubacava](#year-2-rubacava)
-   - [Arrival](#arrival)
-   - [The Business Year](#the-business-year)
-   - [High Roller's Lounge](#high-rollers-lounge)
-   - [Lola's Last Stop, the Lighthouse](#lolas-last-stop-the-lighthouse)
-   - [Sea Bees Standing Up for Their Rights](#sea-bees-standing-up-for-their-rights)
-4. [Year 3: In Dock](#year-3-in-dock)
-   - [Manny's Ship, the SS Lola](#mannys-ship-the-ss-lola)
-   - [Shipwrecked](#shipwrecked)
-   - [The Pearl](#the-pearl)
-5. [Year 4: The Edge of the World](#year-4-the-edge-of-the-world)
-   - [Underwater Complex](#underwater-complex)
-   - [Edge of the World](#edge-of-the-world)
-6. [The Entrance to the Ninth Underworld](#the-entrance-to-the-ninth-underworld)
-   - [Temple Leading to the Ninth Underworld](#temple-leading-to-the-ninth-underworld)
-7. [Return to Rubacava](#return-to-rubacava)
-8. [Nuevo Marrow](#nuevo-marrow)
-   - [New Lost Soul's Alliance](#new-lost-souls-alliance)
-   - [Number Nine Station](#number-nine-station)
-9. [The End](#the-end)
+- [Year 1: El Marrow](#year-1-el-marrow)
+  - [Manny's Office](#mannys-office)
+  - [Salvador Limones](#salvador-limones)
+- [The Petrified Forest](#the-petrified-forest)
+  - [El Marrow from the Petrified Forest](#el-marrow-from-the-petrified-forest)
+- [Year 2: Rubacava](#year-2-rubacava)
+  - [Arrival](#arrival)
+  - [The Business Year](#the-business-year)
+  - [High Roller's Lounge](#high-rollers-lounge)
+  - [Lola's Last Stop, the Lighthouse](#lolas-last-stop-the-lighthouse)
+  - [Sea Bees Standing Up for Their Rights](#sea-bees-standing-up-for-their-rights)
+- [Year 3: In Dock](#year-3-in-dock)
+  - [Manny's Ship, the SS Lola](#mannys-ship-the-ss-lola)
+  - [Shipwrecked](#shipwrecked)
+  - [The Pearl](#the-pearl)
+- [Year 4: The Edge of the World](#year-4-the-edge-of-the-world)
+  - [Underwater Complex](#underwater-complex)
+  - [Edge of the World](#edge-of-the-world)
+- [The Entrance to the Ninth Underworld](#the-entrance-to-the-ninth-underworld)
+  - [Temple Leading to the Ninth Underworld](#temple-leading-to-the-ninth-underworld)
+- [Return to Rubacava](#return-to-rubacava)
+- [Nuevo Marrow](#nuevo-marrow)
+  - [New Lost Soul's Alliance](#new-lost-souls-alliance)
+  - [Number Nine Station](#number-nine-station)
+- [The End](#the-end)
 
 ---
 
-## Year 1: El Marrow {#year-1-el-marrow}
+## Year 1: El Marrow
 
-### Manny's Office {#mannys-office}
+### Manny's Office
 
 Getting through Grim Fandango requires patience and careful observation. This walkthrough will guide you through each step of Manny's epic adventure.
 
@@ -56,7 +56,7 @@ Walk into the garage to be taken to the Land of the Living. Use your scythe with
 
 Go to the room containing the server, and pick up the fire extinguisher from the wall. Set the bolt on the door, and leave. When the maintenance guy has left, go back in and open the door. Use your punched card with the red message tube to get your first good client.
 
-### Salvador Limones {#salvador-limones}
+### Salvador Limones
 
 After being slightly confused, leave your office and walk towards Eva. You find yourself locked in the hut in the garage. Knock on the door, and tell the person that you want to get out and expose the DoD.
 
@@ -72,9 +72,9 @@ Go to the shack in the garage, and use the Fill-O-Dent with the gum-shield. Use 
 
 ---
 
-## The Petrified Forest {#the-petrified-forest}
+## The Petrified Forest
 
-### El Marrow from the Petrified Forest {#el-marrow-from-the-petrified-forest}
+### El Marrow from the Petrified Forest
 
 Walk to the front of the screen to find Glottis sobbing his heart out. Literally. Follow it, and pick up a bone from the pile. Use the bone in the web, and then use your scythe on the bone. Go back to Glottis, and put his heart back in.
 
@@ -90,13 +90,13 @@ Walk down the tunnel and pick up the spooky key. Return to Glottis – you can n
 
 ---
 
-## Year 2: Rubacava {#year-2-rubacava}
+## Year 2: Rubacava
 
-### Arrival {#arrival}
+### Arrival
 
 Walk up the stairs and to the right – you'll fall in the sea. The harbour-master will rescue you. Walk into the building, and talk to Celso. Get the picture of his wife, and show it to the harbour-master. He'll give you a log book – show this to Celso. Congratulations, you now have a job!
 
-### The Business Year {#the-business-year}
+### The Business Year
 
 You begin the year as a successful businessman. Walk to the ground floor, and go outside. Watch the cut-scene with Meche, and then talk to the harbour-master about getting on the SS Limbo until you can say no more.
 
@@ -112,7 +112,7 @@ Walk to the Blue Casket club, and firstly give your memos from Salvador to the r
 
 Go back to the casino, and ask your coat-check girl if you have any messages from Lola. An empty envelope? Strange…
 
-### High Roller's Lounge {#high-rollers-lounge}
+### High Roller's Lounge
 
 Go to the high rollers club. Talk to Nick, using lots of flattery. Threaten to tell about Olivia and him, until he goes to talk to Maximino. Pick up his cigarette case, and take it back to the security check-point. Give it to Carla, saying it was left under her desk by someone. She'll detonate it, giving you the key.
 
@@ -124,7 +124,7 @@ Drive the fork-lift into the lift, and go up. Climb aboard the fork-lift whilst 
 
 Walk down the passage and get the suitcase. But what is Charlie doing? At least you got your union card.
 
-### Lola's Last Stop, the Lighthouse {#lolas-last-stop-the-lighthouse}
+### Lola's Last Stop, the Lighthouse
 
 Go to the lighthouse, and use Nick's key in the lighthouse. Spare a minute's silent thought for Lola, then go and think about that clue.
 
@@ -138,7 +138,7 @@ Go to the morgue, and use the ID plate with one of the "dead" bodies. Give the m
 
 Go to the cat track, and use the ticket printer to print a ticket for "Tuesday, Week 2, Race 6". Give this ticket to the person at the photo-finish booth (ensure you're not using the wrong booth – there are two) to get the photo.
 
-### Sea Bees Standing Up for Their Rights {#sea-bees-standing-up-for-their-rights}
+### Sea Bees Standing Up for Their Rights
 
 Go to the docks where the Sea Bees are. Give the revolutionary book to them, and watch Terry get arrested (poor guy). Go to the high rollers club, and tell Nick you need a lawyer. Show him the photo to help convince him. That felt good.
 
@@ -148,9 +148,9 @@ You're ready to set sail.
 
 ---
 
-## Year 3: In Dock {#year-3-in-dock}
+## Year 3: In Dock
 
-### Manny's Ship, the SS Lola {#mannys-ship-the-ss-lola}
+### Manny's Ship, the SS Lola
 
 How does Manny manage to be so successful? Listen to the shocking news, and walk in shock amongst those poor, young souls (there's great voice acting from Tony Plana here). Glottis saves you – what a hero. You now need to do the following to break free from your moorings:
 
@@ -163,21 +163,21 @@ How does Manny manage to be so successful? Listen to the shocking news, and walk
 7. Bring in the other anchor – this sets up the "dotted line"
 8. Put the ship in full reverse, and break away!
 
-### Shipwrecked {#shipwrecked}
+### Shipwrecked
 
 Contemplate your future until the little wandering character walks up to you. Speak to him, and agree to go with him.
 
 Next time he walks past, talk to him to attract his attention. When you stop speaking to him, he will stand at the edge of the pool of light for a while. Pick him up, and whilst you're holding him, walk towards Glottis. You will have a lantern!
 
-### The Pearl {#the-pearl}
+### The Pearl
 
 Walk around the ridge until you come to the tentacles of the plant. Walk past them, and the little character will follow. He'll be trapped, and the octopus will be distracted by him. You'll then be taken to the edge of the world.
 
 ---
 
-## Year 4: The Edge of the World {#year-4-the-edge-of-the-world}
+## Year 4: The Edge of the World
 
-### Underwater Complex {#underwater-complex}
+### Underwater Complex
 
 Walk into the underwater complex, and go into the office. You'll encounter Meche, and then Domino will walk in. He isn't too pleased to see you. Or Glottis.
 
@@ -197,7 +197,7 @@ The chain will have been carried down the conveyer belt. Switch its direction to
 
 Tell Glottis to use the broken crushers as a coral-plough for the ship.
 
-### Edge of the World {#edge-of-the-world}
+### Edge of the World
 
 Go to Meche, and give her the gun. She turns you in to Domino, and she's thrown in the safe. To open the safe, you need to use the Bust-All on the lock to reveal the tumblers. You must then do the following:
 
@@ -223,9 +223,9 @@ Now THAT was a bit of luck.
 
 ---
 
-## The Entrance to the Ninth Underworld {#the-entrance-to-the-ninth-underworld}
+## The Entrance to the Ninth Underworld
 
-### Temple Leading to the Ninth Underworld {#temple-leading-to-the-ninth-underworld}
+### Temple Leading to the Ninth Underworld
 
 Nobody told us that selling double-N tickets was a crime. Glottis seems to have gone a bit mad, so follow him – maybe he is right at the bottom of all the stairs. Open the coffin to find the grumpy character from Year 1. You got here just as slowly as he did, but at least your trip was interesting, eh? Pick up the mug from the package.
 
@@ -237,7 +237,7 @@ Glottis seems cured, but if he wasn't such a wimp you would be in El Marrow. Unf
 
 ---
 
-## Return to Rubacava {#return-to-rubacava}
+## Return to Rubacava
 
 Open the door where the Bone Wagon is kept.
 
@@ -253,9 +253,9 @@ Give the ship in the bottle to Glottis, who will quite like the taste. He'll com
 
 ---
 
-## Nuevo Marrow {#nuevo-marrow}
+## Nuevo Marrow
 
-### New Lost Soul's Alliance {#new-lost-souls-alliance}
+### New Lost Soul's Alliance
 
 The LSA seems to have expanded whilst you were away, and the city has changed a bit, too. In the LSA HQ (which has a bit more technology now), pick up the arm from the "dead" soldier, and pick up his photo from the bin. Show the photo to the carrier pigeon, and give it the threatening message from Hector. Hector's gun specialist will do a runner.
 
@@ -275,7 +275,7 @@ Go into the guarded lift – the guard won't let you in unless you really know H
 
 You try to shoot Hector, but his highly trained bodyguard takes the blast instead. Hector tries to jump the roof, but doesn't make it – however, his real double-N tickets do. Go onto the roof, and look at the gargoyle supporting the "roof decoration". Use the bone grinder to sprinkle bone fragments into the crack, then use the sproutella with the bone fragments. The decoration makes a perfect bridge.
 
-### Number Nine Station {#number-nine-station}
+### Number Nine Station
 
 It looks like Meche and you are heading for a dream ending, when things go slightly wrong. It was bizarre that Manny let Olivia come.
 
@@ -291,7 +291,7 @@ Walk to the water tanks at the bottom of the hill, and use the gun with it. Walk
 
 ---
 
-## The End {#the-end}
+## The End
 
 Congratulations on completing Grim Fandango! This epic adventure through the Land of the Dead showcases some of the finest adventure gaming ever created. The journey from Manny's humble beginnings as a travel agent to his final confrontation with Hector LeMans is truly unforgettable.
 
