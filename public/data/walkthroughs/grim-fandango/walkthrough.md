@@ -6,36 +6,6 @@ This walkthrough is based on content originally from **grimfandango.network** an
 
 ---
 
-## Table of Contents
-
-- [Year 1: El Marrow](#year-1-el-marrow)
-  - [Manny's Office](#mannys-office)
-  - [Salvador Limones](#salvador-limones)
-- [The Petrified Forest](#the-petrified-forest)
-  - [El Marrow from the Petrified Forest](#el-marrow-from-the-petrified-forest)
-- [Year 2: Rubacava](#year-2-rubacava)
-  - [Arrival](#arrival)
-  - [The Business Year](#the-business-year)
-  - [High Roller's Lounge](#high-rollers-lounge)
-  - [Lola's Last Stop, the Lighthouse](#lolas-last-stop-the-lighthouse)
-  - [Sea Bees Standing Up for Their Rights](#sea-bees-standing-up-for-their-rights)
-- [Year 3: In Dock](#year-3-in-dock)
-  - [Manny's Ship, the SS Lola](#mannys-ship-the-ss-lola)
-  - [Shipwrecked](#shipwrecked)
-  - [The Pearl](#the-pearl)
-- [Year 4: The Edge of the World](#year-4-the-edge-of-the-world)
-  - [Underwater Complex](#underwater-complex)
-  - [Edge of the World](#edge-of-the-world)
-- [The Entrance to the Ninth Underworld](#the-entrance-to-the-ninth-underworld)
-  - [Temple Leading to the Ninth Underworld](#temple-leading-to-the-ninth-underworld)
-- [Return to Rubacava](#return-to-rubacava)
-- [Nuevo Marrow](#nuevo-marrow)
-  - [New Lost Soul's Alliance](#new-lost-souls-alliance)
-  - [Number Nine Station](#number-nine-station)
-- [The End](#the-end)
-
----
-
 ## Year 1: El Marrow
 
 ### Manny's Office

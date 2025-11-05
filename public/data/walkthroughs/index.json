@@ -361,11 +361,15 @@
       "thumbnail": "/assets/walkthroughs/placeholder.png",
       "description": "Tim Schafer's masterpiece combining film noir with Mexican folklore. Guide Manny Calavera through the Land of the Dead in this artistic triumph.",
       "chapters": [
-        "Year One: The DOD",
-        "Year Two: Rubacava",
-        "Year Three: The Petrified Forest",
-        "Year Four: Edge of the World",
-        "Puzzle Solutions Guide"
+        "Year 1: El Marrow",
+        "The Petrified Forest",
+        "Year 2: Rubacava",
+        "Year 3: In Dock",
+        "Year 4: The Edge of the World",
+        "The Entrance to the Ninth Underworld",
+        "Return to Rubacava",
+        "Nuevo Marrow",
+        "The End"
       ],
       "estimatedTime": "12-18 hours",
       "lastUpdated": "2024-11-04",
