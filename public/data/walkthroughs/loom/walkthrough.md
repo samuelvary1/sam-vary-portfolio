@@ -2,11 +2,27 @@
 
 ## Guide Information
 
-**Author:** Tom Hayes  
-**E-mail:** thayesguides(at)gmail(dot)com  
-**System:** PC  
-**Updated:** 19th June, 2008  
-**Version:** 1.1
+**Author:** Tom Hayes
+
+## Table of Contents
+
+1. [Introduction](#1-introduction)
+2. [Walkthrough](#2-walkthrough)
+   - [Village](#village)
+   - [Beach](#beach)
+   - [City](#city)
+   - [Tower](#tower)
+   - [Forest](#forest)
+   - [Dragons Cave](#dragons-cave)
+   - [Blacksmiths Castle](#blacksmiths-castle)
+   - [Mandibles Castle](#mandibles-castle)
+3. [Draft List](#3-draft-list)
+4. [Copyright Information](#4-copyright-information)
+
+## Version History
+
+- **1.1:** 19th June, 2008 (Format update)
+- **1.0:** 10th November, 2003 (First version)
 
 ---
 
@@ -48,17 +64,17 @@ Walk up the path at the left side of the city to return to the forest. Walk left
 
 Look at the lamb and the Shepherd will appear. Look at the lamb again to get the **Heal** draft. Exit the barn. Look at the sheep and cast the Dye draft to dye them green, which will hide them from the dragon. When the dragon swoops down, she will pick Bobbin up instead to take him back to the cave.
 
-### Dragon's Cave
+### Dragons Cave
 
 Cast the reverse Straw to Gold draft on the gold, then cast the reverse Wake spell to make the dragon fall asleep. The dragon starts to breathe fire on the straw as she sleeps, which reveals a hidden tunnel at the back of the cave. Walk through the tunnel and cast the Light spell on the darkness. Go through the first tunnel on the left, then follow the path to the tunnel at the right side of the area to enter a room with steps leading down. Go down these steps to return to the maze, and continue up the small path to the fork.
 
 Enter the left tunnel and continue to walk left along the path to drop down to a room with the pool. Look at the pool to get the **Reflect** draft. Cast the Empty draft on the pool, then look at the sphere two times to get the **Human to Swan** spell. Walk around the right side of the pillar to exit the area. Walk through the first tunnel on the right to arrive on the top path. Go right along the path to exit the cave. Cast the reverse Twist draft on the steps, and walk down the long set of steps to the thorny area at the bottom. Cast the Wake draft on the boy to wake him up and use the Reflect draft on him when he falls asleep.
 
-### Blacksmith's Castle
+### Blacksmiths Castle
 
 Walk right toward the castle and go through the front door. Walk around to the left side of the wall to arrive on the path in the background, then continue right to find Mr. Stroke, who locks Bobbin in a room. Use the straw, and after the cutscene Bobbin will find that his distaff has been returned to him by Mother Hetchel. Get the distaff and cast the Open draft on the door, then walk through to the room on the other side. Go down the steps and look at Mandible. When he asks how the sword is doing, Edgewise will raise it. Quickly look at the sword and cast the reverse Sharpen to dull the blade. After the cutscene, we next find Bobbin in a cage in Mandible's castle.
 
-### Mandible's Castle
+### Mandibles Castle
 
 Cast the Open draft on the door of the cage and Bobbin will jump out, only to have his distaff stolen by Mandible. Look at the sphere to defeat Cob. Exit the room and talk to Mandible, then get the distaff from the floor. Return to the castle to find that the green monster from the bottom-left cage has escaped. Walk back out the door, and the monster will push Bobbin out through the hole created by Mandible. Look at the hole and cast the Heal draft on it.
 

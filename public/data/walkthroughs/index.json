@@ -246,6 +246,35 @@
       ]
     },
     {
+      "id": "loom",
+      "title": "Loom",
+      "subtitle": "The Art of Musical Magic",
+      "genre": "Fantasy Adventure",
+      "developer": "LucasArts",
+      "year": 1990,
+      "difficulty": "Beginner",
+      "thumbnail": "/assets/walkthroughs/placeholder.png",
+      "description": "Experience Bobbin Threadbare's unique adventure using only musical drafts to solve puzzles. A innovative LucasArts classic with atmospheric storytelling.",
+      "chapters": [
+        "Village",
+        "Beach",
+        "City",
+        "Tower",
+        "Forest",
+        "Dragons Cave",
+        "Blacksmiths Castle",
+        "Mandibles Castle"
+      ],
+      "estimatedTime": "4-6 hours",
+      "lastUpdated": "2024-11-06",
+      "features": [
+        "Musical note-based interface",
+        "No inventory items needed",
+        "Atmospheric locations",
+        "Complete draft reference guide"
+      ]
+    },
+    {
       "id": "monkey-island-1",
       "title": "The Secret of Monkey Island",
       "subtitle": "The Pirate Adventure Classic",
@@ -386,8 +415,8 @@
     }
   ],
   "metadata": {
-    "totalWalkthroughs": 14,
-    "lastUpdated": "2024-11-04",
+    "totalWalkthroughs": 15,
+    "lastUpdated": "2024-11-06",
     "genres": [
       "Fantasy Adventure",
       "Point & Click Adventure",

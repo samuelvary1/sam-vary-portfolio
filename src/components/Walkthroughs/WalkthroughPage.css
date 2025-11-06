@@ -192,6 +192,7 @@
   color: #ecb365;
   font-size: 1.5rem;
   margin: 1.5rem 0 0.8rem 0;
+  scroll-margin-top: 180px; /* Account for navbar + walkthrough nav */
 }
 
 .markdown-content h4 {

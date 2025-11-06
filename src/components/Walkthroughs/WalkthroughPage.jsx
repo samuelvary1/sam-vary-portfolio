@@ -181,17 +181,56 @@ Remember: The real treasure was the friends we made along the way... and also th
 
     // Get the chapter name and convert it to the expected ID format
     const chapterName = walkthrough.chapters[chapterIndex];
-    const elementId = `section-${chapterName.toLowerCase().replace(/\s+/g, "-")}`;
+
+    // Convert chapter name to match markdown anchor format
+    // Remove special characters and convert to lowercase with hyphens
+    const elementId = chapterName
+      .toLowerCase()
+      .replace(/['']/g, "") // Remove apostrophes
+      .replace(/[^a-z0-9\s]/g, "") // Remove other special characters
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .trim();
 
     const element = document.getElementById(elementId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Calculate the scroll position accounting for fixed headers
+      const navbarHeight = 80; // Approximate navbar height
+      const walkthroughNavHeight = 100; // Approximate walkthrough nav height
+      const totalOffset = navbarHeight + walkthroughNavHeight;
+
+      const elementPosition =
+        element.getBoundingClientRect().top + window.pageYOffset;
+      const offsetPosition = elementPosition - totalOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
     } else {
       // Fallback: try to find by heading text content
-      const headings = document.querySelectorAll("h2");
+      const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
       for (let heading of headings) {
-        if (heading.textContent.includes(chapterName)) {
-          heading.scrollIntoView({ behavior: "smooth", block: "start" });
+        const headingText = heading.textContent.toLowerCase().trim();
+        const chapterText = chapterName.toLowerCase().trim();
+
+        // Check if heading contains the chapter name or vice versa
+        if (
+          headingText.includes(chapterText) ||
+          chapterText.includes(headingText)
+        ) {
+          // Use the same manual offset calculation for fallback
+          const navbarHeight = 80;
+          const walkthroughNavHeight = 100;
+          const totalOffset = navbarHeight + walkthroughNavHeight;
+
+          const elementPosition =
+            heading.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - totalOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
           break;
         }
       }
@@ -281,20 +320,39 @@ Remember: The real treasure was the friends we made along the way... and also th
             <ReactMarkdown
               components={{
                 // Custom components for better styling
-                h1: ({ children }) => (
-                  <h1
-                    id={`chapter-${children.toString().toLowerCase().replace(/\s+/g, "-")}`}
-                  >
-                    {children}
-                  </h1>
-                ),
+                h1: ({ children }) => {
+                  const id = children
+                    .toString()
+                    .toLowerCase()
+                    .replace(/['']/g, "") // Remove apostrophes
+                    .replace(/[^a-z0-9\s]/g, "") // Remove other special characters
+                    .replace(/\s+/g, "-") // Replace spaces with hyphens
+                    .trim();
+                  return <h1 id={id}>{children}</h1>;
+                },
                 h2: ({ children }) => {
-                  const id = `section-${children.toString().toLowerCase().replace(/\s+/g, "-")}`;
+                  const id = children
+                    .toString()
+                    .toLowerCase()
+                    .replace(/['']/g, "") // Remove apostrophes
+                    .replace(/[^a-z0-9\s]/g, "") // Remove other special characters
+                    .replace(/\s+/g, "-") // Replace spaces with hyphens
+                    .trim();
                   return (
                     <h2 id={id} data-chapter={children.toString()}>
                       {children}
                     </h2>
                   );
+                },
+                h3: ({ children }) => {
+                  const id = children
+                    .toString()
+                    .toLowerCase()
+                    .replace(/['']/g, "") // Remove apostrophes
+                    .replace(/[^a-z0-9\s]/g, "") // Remove other special characters
+                    .replace(/\s+/g, "-") // Replace spaces with hyphens
+                    .trim();
+                  return <h3 id={id}>{children}</h3>;
                 },
                 img: ({ src, alt, title }) => (
                   <div className="image-container">
