@@ -8,6 +8,7 @@ const recipeSlugs = [
   "pickled-red-onions",
   "fish-tacos",
   "pumpkin-cheesecake",
+  "oatmeal-cookies",
   // Add more slugs here
 ];
 
@@ -20,17 +21,25 @@ export default function useRecipes() {
       try {
         const loaded = await Promise.all(
           recipeSlugs.map(async (slug) => {
-            const res = await fetch(`/data/recipes/${slug}.yml`);
-            if (!res.ok) throw new Error(`Failed to fetch ${slug}.yml`);
-            const text = await res.text();
-            const parsed = yaml.load(text);
-            return parsed;
+            try {
+              const res = await fetch(`/data/recipes/${slug}.yml`);
+              if (!res.ok) throw new Error(`Failed to fetch ${slug}.yml`);
+              const text = await res.text();
+              const parsed = yaml.load(text);
+              return parsed;
+            } catch (err) {
+              console.error(`Error loading recipe ${slug}:`, err);
+              return null; // Return null for failed recipes
+            }
           }),
         );
 
-        setRecipes(loaded);
+        // Filter out null values (failed recipes)
+        const validRecipes = loaded.filter((recipe) => recipe !== null);
+        setRecipes(validRecipes);
       } catch (err) {
         console.error("Error loading recipes:", err);
+        setRecipes([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
