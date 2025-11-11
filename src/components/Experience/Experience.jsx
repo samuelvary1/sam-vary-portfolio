@@ -16,7 +16,7 @@ const experiences = [
   {
     title: "Senior Solutions / Front-End Engineer",
     company: "TripleLift",
-    date: "Mar 2017 – Present",
+    date: "Mar 2017 – June 2024",
     bullets: [
       "Grew a team of support engineers from two people to over 20 specialists.",
       "Built internal applications using React, JavaScript, and TypeScript.",
