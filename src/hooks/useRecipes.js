@@ -9,6 +9,7 @@ const recipeSlugs = [
   "fish-tacos",
   "pumpkin-cheesecake",
   "oatmeal-cookies",
+  "shepherds-pie-carrot-mushroom",
   // Add more slugs here
 ];
 
