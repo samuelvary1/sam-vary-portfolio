@@ -356,6 +356,13 @@ export default function GoalsProgress() {
     }
   };
 
+  // Calculate overall streak percentage for progress bar
+  const calculateStreakProgress = (goal) => {
+    const data = progress[goal.id] || {};
+    const currentStreak = data.current || 0;
+    return Math.min((currentStreak / goal.targetValue) * 100, 100);
+  };
+
   // Update progress
   const updateProgress = (goalId, value) => {
     setProgress((prev) => ({
@@ -798,6 +805,10 @@ export default function GoalsProgress() {
           {!userGoalsConfig.some((g) => g.category)
             ? userGoalsConfig.map((goal) => {
                 const percentage = calculatePercentage(goal);
+                const isStreakGoal = goal.type === "streak";
+                const progressBarPercentage = isStreakGoal
+                  ? calculateStreakProgress(goal)
+                  : percentage;
 
                 return (
                   <div key={goal.id} className="goal-item">
@@ -808,6 +819,7 @@ export default function GoalsProgress() {
                         <p className="goal-target">{goal.target}</p>
                       </div>
                       <span className="goal-percentage">
+                        {isStreakGoal && "Current week: "}
                         {Math.round(percentage)}%
                       </span>
                     </div>
@@ -819,11 +831,11 @@ export default function GoalsProgress() {
                     <div className="progress-bar-container">
                       <div
                         className="progress-bar-fill"
-                        style={{ width: `${percentage}%` }}
+                        style={{ width: `${progressBarPercentage}%` }}
                       >
-                        {percentage > 5 && (
+                        {progressBarPercentage > 5 && (
                           <span className="progress-text">
-                            {Math.round(percentage)}%
+                            {Math.round(progressBarPercentage)}%
                           </span>
                         )}
                       </div>
@@ -851,6 +863,10 @@ export default function GoalsProgress() {
                     <div className="category-goals">
                       {categoryGoals.map((goal) => {
                         const percentage = calculatePercentage(goal);
+                        const isStreakGoal = goal.type === "streak";
+                        const progressBarPercentage = isStreakGoal
+                          ? calculateStreakProgress(goal)
+                          : percentage;
 
                         return (
                           <div key={goal.id} className="goal-item">
@@ -861,6 +877,7 @@ export default function GoalsProgress() {
                                 <p className="goal-target">{goal.target}</p>
                               </div>
                               <span className="goal-percentage">
+                                {isStreakGoal && "Current week: "}
                                 {Math.round(percentage)}%
                               </span>
                             </div>
@@ -872,11 +889,11 @@ export default function GoalsProgress() {
                             <div className="progress-bar-container">
                               <div
                                 className="progress-bar-fill"
-                                style={{ width: `${percentage}%` }}
+                                style={{ width: `${progressBarPercentage}%` }}
                               >
-                                {percentage > 5 && (
+                                {progressBarPercentage > 5 && (
                                   <span className="progress-text">
-                                    {Math.round(percentage)}%
+                                    {Math.round(progressBarPercentage)}%
                                   </span>
                                 )}
                               </div>
