@@ -12,15 +12,24 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase only if it hasn't been initialized yet
-const app =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
+// Check if Firebase config is available
+const isFirebaseConfigured = firebaseConfig.projectId && firebaseConfig.apiKey;
 
-// Initialize Analytics (only in browser)
-let analytics;
-if (typeof window !== "undefined") {
-  analytics = getAnalytics(app);
+// Initialize Firebase only if it hasn't been initialized yet and config is available
+let app, db, analytics;
+
+if (isFirebaseConfigured) {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  db = getFirestore(app);
+
+  // Initialize Analytics (only in browser)
+  if (typeof window !== "undefined") {
+    analytics = getAnalytics(app);
+  }
+} else {
+  console.warn(
+    "Firebase configuration is missing. Admin features will be disabled.",
+  );
 }
 
 export { db, analytics };
