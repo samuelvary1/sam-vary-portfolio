@@ -37,7 +37,7 @@ const Navbar = () => {
             Film
           </NavItem>
           <NavItem to="/artwork" onClick={closeMenu}>
-            Visual Art
+            Drawings
           </NavItem>
           <NavItem to="/writing" onClick={closeMenu}>
             Writing
@@ -48,19 +48,14 @@ const Navbar = () => {
           <NavItem to="/miniatures" onClick={closeMenu}>
             Miniatures
           </NavItem>
-
-          {/* Projects */}
-          <NavItem to="/adventure" onClick={closeMenu}>
-            Adventure Game
-          </NavItem>
           <NavItem to="/walkthroughs" onClick={closeMenu}>
             Walkthroughs
           </NavItem>
           <NavItem to="/llm" onClick={closeMenu}>
-            AI Project
+            Oracle
           </NavItem>
           <NavItem to="/crypto" onClick={closeMenu}>
-            Crypto Projects
+            Crypto
           </NavItem>
 
           {/* Personal / CV */}
@@ -71,7 +66,7 @@ const Navbar = () => {
             Experience
           </NavItem>
           <NavItem to="/about" onClick={closeMenu}>
-            About Me
+            About
           </NavItem>
           <NavItem to="/sports" onClick={closeMenu}>
             Sports
