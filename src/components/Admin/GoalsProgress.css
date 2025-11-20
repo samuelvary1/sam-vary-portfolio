@@ -869,3 +869,226 @@
   display: flex;
   justify-content: flex-end;
 }
+
+/* Quit Countdown Input */
+.quit-countdown-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.countdown-display {
+  background: rgba(30, 41, 59, 0.4);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  text-align: center;
+}
+
+.countdown-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #60a5fa;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.daily-puff-counter {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.puff-counter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.puff-counter-header h4 {
+  color: #e5e7eb;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.daily-limit-badge {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+.puff-counter-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.puff-button {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e5e7eb;
+}
+
+.puff-button:hover:not(:disabled) {
+  transform: scale(1.1);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.puff-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.puff-button.increment {
+  background: rgba(5, 150, 105, 0.25);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+.puff-button.increment:hover:not(:disabled) {
+  background: rgba(5, 150, 105, 0.35);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
+.puff-button.decrement {
+  background: rgba(220, 38, 38, 0.25);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.puff-button.decrement:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.35);
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.puff-display {
+  text-align: center;
+  min-width: 120px;
+}
+
+.puff-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #e5e7eb;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.puff-label {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.within-limit-message {
+  background: rgba(5, 150, 105, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  color: #6ee7b7;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.milestones-countdown-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.milestone-countdown-button {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.milestone-countdown-button.completed {
+  background: rgba(5, 150, 105, 0.25);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
+.milestone-countdown-button.current {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+}
+
+.milestone-countdown-button.missed {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  opacity: 0.7;
+}
+
+.milestone-countdown-button.future {
+  opacity: 0.6;
+}
+
+.milestone-countdown-button.quit-day {
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.milestone-countdown-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.milestone-date {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.milestone-countdown-button.current .milestone-date,
+.milestone-countdown-button.completed .milestone-date {
+  color: #e5e7eb;
+}
+
+.milestone-description {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.milestone-countdown-button.quit-day .milestone-description {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fcd34d;
+}

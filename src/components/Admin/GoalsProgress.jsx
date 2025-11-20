@@ -19,18 +19,21 @@ const GOALS_CONFIG = [
   },
   {
     id: "quit-weed",
-    name: "Phase out vaping / quit completely",
-    type: "tapering",
-    target: "Quit by target date",
-    phases: [
-      { week: 1, dailyLimit: 15, description: "Week 1: 15 puffs/day max" },
-      { week: 2, dailyLimit: 12, description: "Week 2: 12 puffs/day max" },
-      { week: 3, dailyLimit: 9, description: "Week 3: 9 puffs/day max" },
-      { week: 4, dailyLimit: 6, description: "Week 4: 6 puffs/day max" },
-      { week: 5, dailyLimit: 3, description: "Week 5: 3 puffs/day max" },
-      { week: 6, dailyLimit: 0, description: "Week 6: QUIT DAY 🎯" },
+    name: "Quit vaping by December 3rd",
+    type: "quit-countdown",
+    target: "Quit by Dec 3, 2025",
+    quitDate: "2025-12-03",
+    startDate: "2025-11-21",
+    milestones: [
+      { date: "2025-11-21", description: "Start tracking (15 puffs/day max)" },
+      { date: "2025-11-23", description: "Reduce to 12 puffs/day" },
+      { date: "2025-11-25", description: "Reduce to 10 puffs/day" },
+      { date: "2025-11-27", description: "Reduce to 8 puffs/day" },
+      { date: "2025-11-29", description: "Reduce to 6 puffs/day" },
+      { date: "2025-12-01", description: "Reduce to 3 puffs/day" },
+      { date: "2025-12-03", description: "🎯 QUIT DAY - Zero puffs!" },
     ],
-    description: "Gradual reduction plan with target quit date",
+    description: "Countdown to quit date with reduction milestones",
     category: "Health & Wellness",
   },
 
@@ -303,6 +306,11 @@ export default function GoalsProgress() {
                 startDate: null,
                 dailyCount: 0,
               };
+            } else if (goal.type === "quit-countdown") {
+              initialProgress[goal.id] = {
+                completedMilestones: [],
+                dailyPuffCount: 0,
+              };
             } else if (goal.type === "weekly-tracker") {
               initialProgress[goal.id] = { weeks: [], currentWeekCount: 0 };
             } else if (goal.type === "streak") {
@@ -360,6 +368,10 @@ export default function GoalsProgress() {
       case "tapering":
         const currentPhase = data.currentPhase || 0;
         return (currentPhase / goal.phases.length) * 100;
+
+      case "quit-countdown":
+        const completedMilestones = data.completedMilestones || [];
+        return (completedMilestones.length / goal.milestones.length) * 100;
 
       case "weekly-tracker":
         const weeks = data.weeks || [];
@@ -906,6 +918,185 @@ export default function GoalsProgress() {
                 </div>
               </>
             )}
+          </div>
+        );
+
+      case "quit-countdown":
+        const completedMilestones = data.completedMilestones || [];
+        const dailyPuffCount = data.dailyPuffCount || 0;
+        const today = new Date();
+        const quitDate = new Date(goal.quitDate);
+        const daysUntilQuit = Math.ceil(
+          (quitDate - today) / (24 * 60 * 60 * 1000),
+        );
+
+        // Calculate days since start
+        const start = new Date(goal.startDate);
+        const daysSinceStart = Math.floor(
+          (today - start) / (24 * 60 * 60 * 1000),
+        );
+
+        // Find current milestone based on today's date
+        const currentMilestone = goal.milestones
+          .slice()
+          .reverse()
+          .find((m) => {
+            const mDate = new Date(m.date);
+            mDate.setHours(0, 0, 0, 0);
+            const todayStart = new Date(today);
+            todayStart.setHours(0, 0, 0, 0);
+            return mDate <= todayStart;
+          });
+
+        // If no current milestone yet, use the first one
+        const activeMilestone = currentMilestone || goal.milestones[0];
+
+        // Extract daily limit from milestone description
+        const getCurrentDailyLimit = () => {
+          if (!activeMilestone) return 15; // default to first limit
+          if (activeMilestone.date === goal.quitDate) return 0;
+          const match = activeMilestone.description.match(/(\d+) puffs/);
+          return match ? parseInt(match[1]) : 15;
+        };
+
+        const currentDailyLimit = getCurrentDailyLimit();
+
+        // Toggle milestone completion
+        const toggleMilestone = (milestoneDate) => {
+          const newCompleted = completedMilestones.includes(milestoneDate)
+            ? completedMilestones.filter((d) => d !== milestoneDate)
+            : [...completedMilestones, milestoneDate];
+          updateProgress(goal.id, {
+            ...data,
+            completedMilestones: newCompleted,
+          });
+        };
+
+        return (
+          <div className="quit-countdown-input">
+            {/* Countdown Display */}
+            <div className="countdown-display">
+              <div className="countdown-number">
+                {daysUntilQuit > 0 ? daysUntilQuit : 0}
+              </div>
+              <div className="countdown-label">
+                {daysUntilQuit > 0
+                  ? `day${daysUntilQuit !== 1 ? "s" : ""} until quit day`
+                  : daysUntilQuit === 0
+                    ? "🎯 TODAY IS QUIT DAY!"
+                    : "✅ Quit day passed!"}
+              </div>
+            </div>
+
+            {/* Daily Puff Counter */}
+            {daysUntilQuit >= 0 && (
+              <div className="daily-puff-counter">
+                <div className="puff-counter-header">
+                  <h4>Today's Puff Count</h4>
+                  {currentDailyLimit > 0 && (
+                    <span className="daily-limit-badge">
+                      Limit: {currentDailyLimit} puffs
+                    </span>
+                  )}
+                </div>
+                <div className="puff-counter-controls">
+                  <button
+                    className="puff-button decrement"
+                    onClick={() =>
+                      updateProgress(goal.id, {
+                        ...data,
+                        dailyPuffCount: Math.max(0, dailyPuffCount - 1),
+                      })
+                    }
+                    disabled={dailyPuffCount === 0}
+                  >
+                    −
+                  </button>
+                  <div className="puff-display">
+                    <div className="puff-number">{dailyPuffCount}</div>
+                    <div className="puff-label">puffs today</div>
+                  </div>
+                  <button
+                    className="puff-button increment"
+                    onClick={() =>
+                      updateProgress(goal.id, {
+                        ...data,
+                        dailyPuffCount: dailyPuffCount + 1,
+                      })
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+                {currentDailyLimit > 0 &&
+                  dailyPuffCount > currentDailyLimit && (
+                    <div className="over-limit-warning">
+                      ⚠️ You're over today's limit by{" "}
+                      {dailyPuffCount - currentDailyLimit} puff
+                      {dailyPuffCount - currentDailyLimit !== 1 ? "s" : ""}
+                    </div>
+                  )}
+                {currentDailyLimit > 0 &&
+                  dailyPuffCount <= currentDailyLimit &&
+                  dailyPuffCount > 0 && (
+                    <div className="within-limit-message">
+                      ✓ Within limit ({currentDailyLimit - dailyPuffCount}{" "}
+                      remaining)
+                    </div>
+                  )}
+              </div>
+            )}
+
+            {/* Milestones Grid */}
+            <div className="milestones-countdown-grid">
+              {goal.milestones.map((milestone, index) => {
+                const milestoneDate = new Date(milestone.date);
+                const isCompleted = completedMilestones.includes(
+                  milestone.date,
+                );
+                const isPast = milestoneDate < today;
+                const isToday =
+                  milestoneDate.toDateString() === today.toDateString();
+                const isFuture = milestoneDate > today;
+                const isQuitDay = milestone.date === goal.quitDate;
+
+                return (
+                  <button
+                    key={index}
+                    className={`milestone-countdown-button ${
+                      isCompleted
+                        ? "completed"
+                        : isToday
+                          ? "current"
+                          : isPast
+                            ? "missed"
+                            : "future"
+                    } ${isQuitDay ? "quit-day" : ""}`}
+                    onClick={() => toggleMilestone(milestone.date)}
+                  >
+                    <div className="milestone-date">
+                      {new Date(milestone.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </div>
+                    <div className="milestone-description">
+                      {isCompleted && "✓ "}
+                      {milestone.description}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Progress Summary */}
+            <div className="target-info">
+              {completedMilestones.length} of {goal.milestones.length}{" "}
+              milestones completed
+              {daysSinceStart >= 0 && (
+                <span> • Day {daysSinceStart + 1} of your journey</span>
+              )}
+            </div>
           </div>
         );
 
