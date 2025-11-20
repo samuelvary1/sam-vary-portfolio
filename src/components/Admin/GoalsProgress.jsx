@@ -336,9 +336,14 @@ export default function GoalsProgress() {
       case "days":
       case "currency":
       case "weekly-count":
-      case "streak":
         const value = data.current || 0;
         return Math.min((value / goal.targetValue) * 100, 100);
+
+      case "streak":
+        // For streak goals, show percentage based on current week progress
+        const weekProgress = data.weekProgress || 0;
+        const weeklyTarget = goal.weeklyTarget || 1;
+        return Math.min((weekProgress / weeklyTarget) * 100, 100);
 
       case "weekly-tracker":
         const weeks = data.weeks || [];
