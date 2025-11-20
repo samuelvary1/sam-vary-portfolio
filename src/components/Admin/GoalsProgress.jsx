@@ -5,49 +5,68 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import "./GoalsProgress.css";
 
 const GOALS_CONFIG = [
+  // Health & Wellness
   {
     id: "weight",
     name: "Lose weight / get in shape",
-    type: "weight", // special input for weight
+    type: "weight",
     target: "Reach 185 lbs (from 220)",
     startValue: 220,
     targetValue: 185,
     unit: "lbs",
     description: "Track weight loss progress",
+    category: "Health & Wellness",
   },
   {
     id: "quit-weed",
     name: "Quit weed",
-    type: "days", // count days sober
+    type: "days",
     target: "365 days sober",
     targetValue: 365,
     unit: "days",
     description: "Days without smoking",
+    category: "Health & Wellness",
   },
+
+  // Career & Projects
   {
     id: "promotion",
     name: "Get a promotion",
-    type: "checkbox", // binary goal
+    type: "checkbox",
     target: "Achieve promotion",
     description: "Binary: Yes or No",
+    category: "Career & Projects",
   },
   {
     id: "launch-app",
     name: "Launch an app or a game",
-    type: "milestones", // track milestones
+    type: "milestones",
     target: "Launch and publish",
     milestones: ["Concept", "Prototype", "Development", "Testing", "Launch"],
     description: "Progress through development phases",
+    category: "Career & Projects",
   },
   {
     id: "youtube",
     name: "Grow YouTube channel",
-    type: "count", // count subscribers
+    type: "count",
     target: "1,000 subscribers",
     targetValue: 1000,
     unit: "subscribers",
     description: "Current subscriber count",
+    category: "Career & Projects",
   },
+  {
+    id: "website",
+    name: "Build out personal site",
+    type: "milestones",
+    target: "Complete site features",
+    milestones: ["Blog", "Portfolio", "Projects", "Analytics", "Polish"],
+    description: "Website feature completion",
+    category: "Career & Projects",
+  },
+
+  // Creative & Learning
   {
     id: "writing",
     name: "Write a new short story / get published",
@@ -55,22 +74,7 @@ const GOALS_CONFIG = [
     target: "Get story published",
     milestones: ["Outline", "First Draft", "Revision", "Submit", "Accepted"],
     description: "Writing and publication progress",
-  },
-  {
-    id: "baby",
-    name: "Have a baby",
-    type: "checkbox",
-    target: "Welcome a baby",
-    description: "Binary: Yes or No",
-  },
-  {
-    id: "debt",
-    name: "Pay off debt / grow investments",
-    type: "currency", // track dollar amounts
-    target: "$0 debt / $50k invested",
-    targetValue: 50000,
-    unit: "$",
-    description: "Investment value or debt remaining",
+    category: "Creative & Learning",
   },
   {
     id: "books",
@@ -80,6 +84,7 @@ const GOALS_CONFIG = [
     targetValue: 24,
     unit: "books",
     description: "Books completed",
+    category: "Creative & Learning",
   },
   {
     id: "movies",
@@ -89,6 +94,7 @@ const GOALS_CONFIG = [
     targetValue: 50,
     unit: "watched",
     description: "Movies and shows completed",
+    category: "Creative & Learning",
   },
   {
     id: "art",
@@ -98,32 +104,7 @@ const GOALS_CONFIG = [
     targetValue: 12,
     unit: "projects",
     description: "Completed creative projects",
-  },
-  {
-    id: "travel",
-    name: "Travel more / go on dates etc.",
-    type: "count",
-    target: "12 dates/trips",
-    targetValue: 12,
-    unit: "events",
-    description: "Dates or trips completed",
-  },
-  {
-    id: "sports",
-    name: "Fishing / Golf / Biking / Hockey",
-    type: "count",
-    target: "24 outings (2 per month)",
-    targetValue: 24,
-    unit: "outings",
-    description: "Sports activities completed",
-  },
-  {
-    id: "website",
-    name: "Build out personal site",
-    type: "milestones",
-    target: "Complete site features",
-    milestones: ["Blog", "Portfolio", "Projects", "Analytics", "Polish"],
-    description: "Website feature completion",
+    category: "Creative & Learning",
   },
   {
     id: "games",
@@ -133,14 +114,56 @@ const GOALS_CONFIG = [
     targetValue: 12,
     unit: "games",
     description: "Meaningful games completed",
+    category: "Creative & Learning",
+  },
+
+  // Lifestyle & Personal
+  {
+    id: "baby",
+    name: "Have a baby",
+    type: "checkbox",
+    target: "Welcome a baby",
+    description: "Binary: Yes or No",
+    category: "Lifestyle & Personal",
+  },
+  {
+    id: "debt",
+    name: "Pay off debt / grow investments",
+    type: "currency",
+    target: "$0 debt / $50k invested",
+    targetValue: 50000,
+    unit: "$",
+    description: "Investment value or debt remaining",
+    category: "Lifestyle & Personal",
+  },
+  {
+    id: "travel",
+    name: "Travel more / go on dates etc.",
+    type: "count",
+    target: "12 dates/trips",
+    targetValue: 12,
+    unit: "events",
+    description: "Dates or trips completed",
+    category: "Lifestyle & Personal",
+  },
+  {
+    id: "sports",
+    name: "Fishing / Golf / Biking / Hockey",
+    type: "count",
+    target: "24 outings (2 per month)",
+    targetValue: 24,
+    unit: "outings",
+    description: "Sports activities completed",
+    category: "Lifestyle & Personal",
   },
   {
     id: "declutter",
     name: "Declutter the house / garage etc.",
-    type: "percentage", // traditional percentage slider
+    type: "percentage",
     target: "100% organized",
     targetValue: 100,
     description: "Overall organization progress",
+    category: "Lifestyle & Personal",
   },
 ];
 
@@ -198,6 +221,7 @@ export default function GoalsProgress() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [activeCategory, setActiveCategory] = useState(null);
 
   // Parse allowed users from environment variable
   const getAllowedUsers = () => {
@@ -228,11 +252,17 @@ export default function GoalsProgress() {
       setCurrentUser(username);
 
       // Set goals config based on user
+      let userConfig;
       if (username === "antoin") {
-        setUserGoalsConfig(FRIEND_GOALS_CONFIG);
+        userConfig = FRIEND_GOALS_CONFIG;
       } else {
-        setUserGoalsConfig(GOALS_CONFIG);
+        userConfig = GOALS_CONFIG;
       }
+      setUserGoalsConfig(userConfig);
+
+      // Set initial active category based on first category in config
+      const firstCategory = userConfig.find((g) => g.category)?.category;
+      setActiveCategory(firstCategory || null);
     } else {
       console.log("❌ Authorization failed - redirecting to home");
       navigate("/");
@@ -733,43 +763,126 @@ export default function GoalsProgress() {
           </div>
         )}
 
+        {/* Category Navigation */}
+        {userGoalsConfig.some((g) => g.category) && (
+          <div className="category-nav">
+            {[
+              "Health & Wellness",
+              "Career & Projects",
+              "Creative & Learning",
+              "Lifestyle & Personal",
+            ]
+              .filter((category) =>
+                userGoalsConfig.some((g) => g.category === category),
+              )
+              .map((category) => (
+                <button
+                  key={category}
+                  className={`category-nav-button ${activeCategory === category ? "active" : ""}`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+          </div>
+        )}
+
         {/* Goals List */}
         <div className="goals-list">
-          {userGoalsConfig.map((goal, index) => {
-            const percentage = calculatePercentage(goal);
+          {/* If no categories, render all goals directly */}
+          {!userGoalsConfig.some((g) => g.category)
+            ? userGoalsConfig.map((goal) => {
+                const percentage = calculatePercentage(goal);
 
-            return (
-              <div key={goal.id} className="goal-item">
-                {/* Goal Header */}
-                <div className="goal-header">
-                  <div className="goal-title-section">
-                    <h3>{goal.name}</h3>
-                    <p className="goal-target">{goal.target}</p>
-                  </div>
-                  <span className="goal-percentage">
-                    {Math.round(percentage)}%
-                  </span>
-                </div>
-
-                {/* Goal Input (varies by type) */}
-                {renderGoalInput(goal)}
-
-                {/* Progress Bar */}
-                <div className="progress-bar-container">
-                  <div
-                    className="progress-bar-fill"
-                    style={{ width: `${percentage}%` }}
-                  >
-                    {percentage > 5 && (
-                      <span className="progress-text">
+                return (
+                  <div key={goal.id} className="goal-item">
+                    {/* Goal Header */}
+                    <div className="goal-header">
+                      <div className="goal-title-section">
+                        <h3>{goal.name}</h3>
+                        <p className="goal-target">{goal.target}</p>
+                      </div>
+                      <span className="goal-percentage">
                         {Math.round(percentage)}%
                       </span>
-                    )}
+                    </div>
+
+                    {/* Goal Input (varies by type) */}
+                    {renderGoalInput(goal)}
+
+                    {/* Progress Bar */}
+                    <div className="progress-bar-container">
+                      <div
+                        className="progress-bar-fill"
+                        style={{ width: `${percentage}%` }}
+                      >
+                        {percentage > 5 && (
+                          <span className="progress-text">
+                            {Math.round(percentage)}%
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })
+            : /* Group goals by category */
+              [
+                "Health & Wellness",
+                "Career & Projects",
+                "Creative & Learning",
+                "Lifestyle & Personal",
+              ].map((category) => {
+                const categoryGoals = userGoalsConfig.filter(
+                  (goal) => goal.category === category,
+                );
+
+                if (categoryGoals.length === 0 || activeCategory !== category)
+                  return null;
+
+                return (
+                  <div key={category} className="goals-category">
+                    <h2 className="category-title">{category}</h2>
+                    <div className="category-goals">
+                      {categoryGoals.map((goal) => {
+                        const percentage = calculatePercentage(goal);
+
+                        return (
+                          <div key={goal.id} className="goal-item">
+                            {/* Goal Header */}
+                            <div className="goal-header">
+                              <div className="goal-title-section">
+                                <h3>{goal.name}</h3>
+                                <p className="goal-target">{goal.target}</p>
+                              </div>
+                              <span className="goal-percentage">
+                                {Math.round(percentage)}%
+                              </span>
+                            </div>
+
+                            {/* Goal Input (varies by type) */}
+                            {renderGoalInput(goal)}
+
+                            {/* Progress Bar */}
+                            <div className="progress-bar-container">
+                              <div
+                                className="progress-bar-fill"
+                                style={{ width: `${percentage}%` }}
+                              >
+                                {percentage > 5 && (
+                                  <span className="progress-text">
+                                    {Math.round(percentage)}%
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
         </div>
 
         {/* Save Button */}
