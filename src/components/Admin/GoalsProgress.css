@@ -695,3 +695,177 @@
   font-weight: 400;
   letter-spacing: 0;
 }
+
+/* Tapering Input */
+.tapering-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.date-picker-section {
+  background: rgba(30, 41, 59, 0.4);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.date-field {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  color: #e5e7eb;
+  font-size: 0.875rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.date-field:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.phase-info-section {
+  background: rgba(30, 41, 59, 0.4);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.phase-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.phase-header h4 {
+  color: #e5e7eb;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.daily-counter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.number-field.small {
+  width: 80px;
+}
+
+.over-limit-warning {
+  color: #fca5a5;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.quit-day-celebration {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.phases-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0.5rem;
+}
+
+.phase-button {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.phase-button.completed {
+  background: rgba(5, 150, 105, 0.25);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.phase-button.current {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+}
+
+.phase-button.future {
+  opacity: 0.6;
+}
+
+.phase-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.phase-number {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.phase-button.current .phase-number,
+.phase-button.completed .phase-number {
+  color: #e5e7eb;
+}
+
+.phase-limit {
+  color: #e5e7eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.auto-advance-suggestion {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.auto-advance-suggestion p {
+  color: #93c5fd;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.advance-button {
+  background: rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  color: #93c5fd;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.advance-button:hover {
+  background: rgba(59, 130, 246, 0.4);
+  border-color: rgba(59, 130, 246, 0.7);
+  color: #bfdbfe;
+}
+
+.tapering-footer {
+  display: flex;
+  justify-content: flex-end;
+}

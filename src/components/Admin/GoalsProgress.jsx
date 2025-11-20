@@ -19,12 +19,18 @@ const GOALS_CONFIG = [
   },
   {
     id: "quit-weed",
-    name: "Quit weed",
-    type: "days",
-    target: "365 days sober",
-    targetValue: 365,
-    unit: "days",
-    description: "Days without smoking",
+    name: "Phase out vaping / quit completely",
+    type: "tapering",
+    target: "Quit by target date",
+    phases: [
+      { week: 1, dailyLimit: 15, description: "Week 1: 15 puffs/day max" },
+      { week: 2, dailyLimit: 12, description: "Week 2: 12 puffs/day max" },
+      { week: 3, dailyLimit: 9, description: "Week 3: 9 puffs/day max" },
+      { week: 4, dailyLimit: 6, description: "Week 4: 6 puffs/day max" },
+      { week: 5, dailyLimit: 3, description: "Week 5: 3 puffs/day max" },
+      { week: 6, dailyLimit: 0, description: "Week 6: QUIT DAY 🎯" },
+    ],
+    description: "Gradual reduction plan with target quit date",
     category: "Health & Wellness",
   },
 
@@ -291,6 +297,12 @@ export default function GoalsProgress() {
               initialProgress[goal.id] = { completed: false };
             } else if (goal.type === "milestones") {
               initialProgress[goal.id] = { currentMilestone: 0 };
+            } else if (goal.type === "tapering") {
+              initialProgress[goal.id] = {
+                currentPhase: 0,
+                startDate: null,
+                dailyCount: 0,
+              };
             } else if (goal.type === "weekly-tracker") {
               initialProgress[goal.id] = { weeks: [], currentWeekCount: 0 };
             } else if (goal.type === "streak") {
@@ -344,6 +356,10 @@ export default function GoalsProgress() {
         const weekProgress = data.weekProgress || 0;
         const weeklyTarget = goal.weeklyTarget || 1;
         return Math.min((weekProgress / weeklyTarget) * 100, 100);
+
+      case "tapering":
+        const currentPhase = data.currentPhase || 0;
+        return (currentPhase / goal.phases.length) * 100;
 
       case "weekly-tracker":
         const weeks = data.weeks || [];
@@ -732,6 +748,164 @@ export default function GoalsProgress() {
               {weeks.filter((w) => w.completed).length} weeks completed •
               Current streak: {getCurrentStreak(weeks)}
             </div>
+          </div>
+        );
+
+      case "tapering":
+        const currentPhase = data.currentPhase || 0;
+        const startDate = data.startDate ? new Date(data.startDate) : null;
+        const dailyCount = data.dailyCount || 0;
+        const currentPhaseData = goal.phases[currentPhase];
+        const isQuitWeek = currentPhaseData?.dailyLimit === 0;
+
+        // Calculate which week we should be in based on start date
+        let autoPhase = 0;
+        if (startDate) {
+          const weeksSinceStart = Math.floor(
+            (new Date() - startDate) / (7 * 24 * 60 * 60 * 1000),
+          );
+          autoPhase = Math.min(weeksSinceStart, goal.phases.length - 1);
+        }
+
+        return (
+          <div className="tapering-input">
+            {/* Start Date Picker */}
+            {!startDate && (
+              <div className="date-picker-section">
+                <label className="input-label">
+                  Set Start Date (Week 1 begins):
+                  <input
+                    type="date"
+                    onChange={(e) => {
+                      const newStartDate = e.target.value;
+                      updateProgress(goal.id, {
+                        ...data,
+                        startDate: newStartDate,
+                        currentPhase: 0,
+                      });
+                    }}
+                    className="date-field"
+                  />
+                </label>
+              </div>
+            )}
+
+            {startDate && (
+              <>
+                {/* Current Phase Display */}
+                <div className="phase-info-section">
+                  <div className="phase-header">
+                    <h4>{currentPhaseData?.description || "Complete!"}</h4>
+                    {!isQuitWeek && (
+                      <div className="daily-counter">
+                        <label className="input-label">
+                          Today's count:
+                          <input
+                            type="number"
+                            value={dailyCount}
+                            onChange={(e) =>
+                              updateProgress(goal.id, {
+                                ...data,
+                                dailyCount: parseInt(e.target.value),
+                              })
+                            }
+                            className="number-field small"
+                            min="0"
+                            max={currentPhaseData?.dailyLimit}
+                          />
+                          <span className="unit">
+                            / {currentPhaseData?.dailyLimit} max
+                          </span>
+                        </label>
+                        {dailyCount > currentPhaseData?.dailyLimit && (
+                          <span className="over-limit-warning">
+                            ⚠️ Over limit!
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {isQuitWeek && (
+                      <div className="quit-day-celebration">
+                        🎯 QUIT DAY! Stay strong! 💪
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Phase Timeline */}
+                <div className="phases-timeline">
+                  {goal.phases.map((phase, index) => {
+                    const isCurrentPhase = index === currentPhase;
+                    const isPastPhase = index < currentPhase;
+
+                    return (
+                      <button
+                        key={index}
+                        className={`phase-button ${
+                          isPastPhase
+                            ? "completed"
+                            : isCurrentPhase
+                              ? "current"
+                              : "future"
+                        }`}
+                        onClick={() =>
+                          updateProgress(goal.id, {
+                            ...data,
+                            currentPhase: index,
+                            dailyCount: 0,
+                          })
+                        }
+                      >
+                        <div className="phase-number">Week {phase.week}</div>
+                        <div className="phase-limit">
+                          {phase.dailyLimit === 0
+                            ? "QUIT"
+                            : `${phase.dailyLimit}/day`}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Auto-advance suggestion */}
+                {autoPhase > currentPhase && (
+                  <div className="auto-advance-suggestion">
+                    <p>
+                      💡 Based on your start date, you should be on Week{" "}
+                      {autoPhase + 1}
+                    </p>
+                    <button
+                      className="advance-button"
+                      onClick={() =>
+                        updateProgress(goal.id, {
+                          ...data,
+                          currentPhase: autoPhase,
+                          dailyCount: 0,
+                        })
+                      }
+                    >
+                      Advance to Week {autoPhase + 1}
+                    </button>
+                  </div>
+                )}
+
+                {/* Reset button */}
+                <div className="tapering-footer">
+                  <button
+                    className="reset-milestone-button"
+                    onClick={() =>
+                      updateProgress(goal.id, {
+                        currentPhase: 0,
+                        startDate: null,
+                        dailyCount: 0,
+                      })
+                    }
+                  >
+                    ↺ Reset Plan
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         );
 
