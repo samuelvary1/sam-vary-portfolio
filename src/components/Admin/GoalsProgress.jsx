@@ -1057,7 +1057,6 @@ export default function GoalsProgress() {
                 const isPast = milestoneDate < today;
                 const isToday =
                   milestoneDate.toDateString() === today.toDateString();
-                const isFuture = milestoneDate > today;
                 const isQuitDay = milestone.date === goal.quitDate;
 
                 return (
