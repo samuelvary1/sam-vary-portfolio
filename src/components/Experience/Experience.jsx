@@ -49,20 +49,25 @@ const experiences = [
 const Experience = () => (
   <section id="experience" className="section">
     <div className="experience-container">
-      <h2 className="experience-header">Experience</h2>
-      {experiences.map((job, idx) => (
-        <div className="job-card" key={idx}>
-          <div className="job-title">
-            {job.title} <span className="job-company">| {job.company}</span>
+      <h2 className="experience-header">Professional Experience</h2>
+      <div className="timeline">
+        {experiences.map((job, idx) => (
+          <div className="job-card" key={idx}>
+            <div className="job-header">
+              <div className="job-title-section">
+                <h3 className="job-title">{job.title}</h3>
+                <div className="job-company">{job.company}</div>
+              </div>
+              <div className="job-date">{job.date}</div>
+            </div>
+            <ul className="job-bullets">
+              {job.bullets.map((point, i) => (
+                <li key={i}>{point}</li>
+              ))}
+            </ul>
           </div>
-          <div className="job-date">{job.date}</div>
-          <ul className="job-bullets">
-            {job.bullets.map((point, i) => (
-              <li key={i}>{point}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </section>
 );

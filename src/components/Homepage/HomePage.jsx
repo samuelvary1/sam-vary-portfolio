@@ -90,12 +90,12 @@ const HomePage = () => {
 
         <div
           className="map-icon adventure"
-          onClick={() => navigate("/adventure")}
+          onClick={() => navigate("/wargame")}
         >
           <div className="icon-bg">
             <img src="/icons/adventurer.png" alt="Adventure Game" />
           </div>
-          <span className="label">Adventure Game</span>
+          <span className="label">Game</span>
         </div>
 
         <div

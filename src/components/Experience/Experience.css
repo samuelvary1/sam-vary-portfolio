@@ -1,55 +1,195 @@
+.section {
+  scroll-margin-top: 80px;
+  padding-top: 60px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
 .experience-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: "Georgia", serif;
-  color: #2b1d0e;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
 .experience-header {
-  font-size: 28px;
-  border-bottom: 2px solid #c69c6d;
-  padding-bottom: 10px;
-  margin-bottom: 30px;
+  font-size: 42px;
+  font-weight: 700;
+  color: #1a1a2e;
   text-align: center;
+  margin-bottom: 50px;
+  font-family: "Georgia", serif;
+  position: relative;
+}
+
+.experience-header::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
 }
 
 .job-card {
+  position: relative;
   margin-bottom: 40px;
-  background-color: #f9f5ef;
-  padding: 20px;
-  border-left: 6px solid #c69c6d;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  padding: 28px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.job-card::before {
+  content: "";
+  position: absolute;
+  left: -52px;
+  top: 22px;
+  width: 16px;
+  height: 16px;
+  background: #667eea;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-left-color: #667eea;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.job-title-section {
+  flex: 1;
+  min-width: 250px;
 }
 
 .job-title {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+  font-family: "Georgia", serif;
+  line-height: 1.3;
 }
 
 .job-company {
-  font-style: italic;
-  color: #6b4c2c;
+  font-size: 17px;
+  font-weight: 600;
+  color: #667eea;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .job-date {
   font-size: 14px;
-  color: #666;
-  margin: 4px 0 10px;
+  font-weight: 500;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .job-bullets {
   padding-left: 20px;
-  list-style-type: disc;
+  margin: 0;
+  list-style: none;
 }
 
 .job-bullets li {
-  margin-bottom: 6px;
-  line-height: 1.6;
+  position: relative;
+  margin-bottom: 10px;
+  line-height: 1.7;
+  color: #334155;
+  font-size: 15px;
+  padding-left: 12px;
 }
 
-.section {
-  scroll-margin-top: 80px; /* adjust to match your navbar height */
-  padding-top: 40px;
+.job-bullets li::before {
+  content: "▹";
+  position: absolute;
+  left: -8px;
+  color: #667eea;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.job-bullets li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 30px;
+  }
+
+  .timeline::before {
+    left: 0;
+  }
+
+  .job-card::before {
+    left: -42px;
+    width: 12px;
+    height: 12px;
+    border-width: 3px;
+  }
+
+  .experience-header {
+    font-size: 32px;
+  }
+
+  .job-card {
+    padding: 20px 24px;
+  }
+
+  .job-title {
+    font-size: 19px;
+  }
+
+  .job-company {
+    font-size: 15px;
+  }
+
+  .job-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .job-date {
+    align-self: flex-start;
+  }
 }

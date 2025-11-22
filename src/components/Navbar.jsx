@@ -32,7 +32,15 @@ const Navbar = () => {
         </LogoAndToggle>
 
         <NavLinks $isOpen={isMenuOpen}>
-          {/* Creative work */}
+          {/* About & Professional */}
+          <NavItem to="/about" onClick={closeMenu}>
+            About
+          </NavItem>
+          <NavItem to="/experience" onClick={closeMenu}>
+            Experience
+          </NavItem>
+
+          {/* Creative Portfolio */}
           <NavItem to="/film" onClick={closeMenu}>
             Film
           </NavItem>
@@ -48,9 +56,16 @@ const Navbar = () => {
           <NavItem to="/miniatures" onClick={closeMenu}>
             Miniatures
           </NavItem>
+
+          {/* Gaming & Guides */}
           <NavItem to="/walkthroughs" onClick={closeMenu}>
             Walkthroughs
           </NavItem>
+          <NavItem to="/wargame" onClick={closeMenu}>
+            Game
+          </NavItem>
+
+          {/* Tech Projects */}
           <NavItem to="/llm" onClick={closeMenu}>
             Oracle
           </NavItem>
@@ -58,15 +73,9 @@ const Navbar = () => {
             Crypto
           </NavItem>
 
-          {/* Personal / CV */}
+          {/* Personal */}
           <NavItem to="/recipes" onClick={closeMenu}>
             Recipes
-          </NavItem>
-          <NavItem to="/experience" onClick={closeMenu}>
-            Experience
-          </NavItem>
-          <NavItem to="/about" onClick={closeMenu}>
-            About
           </NavItem>
           <NavItem to="/sports" onClick={closeMenu}>
             Sports
