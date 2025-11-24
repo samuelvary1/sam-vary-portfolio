@@ -11,7 +11,7 @@ const recipeSlugs = [
   "oatmeal-cookies",
   "shepherds-pie-carrot-mushroom",
   "lasagna",
-  "chicken-over-rice",
+  "halal-cart-chicken",
   // Add more slugs here
 ];
 
