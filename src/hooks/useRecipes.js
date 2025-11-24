@@ -10,6 +10,8 @@ const recipeSlugs = [
   "pumpkin-cheesecake",
   "oatmeal-cookies",
   "shepherds-pie-carrot-mushroom",
+  "lasagna",
+  "chicken-over-rice",
   // Add more slugs here
 ];
 

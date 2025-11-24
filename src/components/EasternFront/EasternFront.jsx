@@ -526,13 +526,15 @@ const EasternFront = () => {
 
   const renderZone = (zoneName) => {
     const zone = zones[zoneName];
-    const divCount = zone.divisions.filter(
-      (d) => divisions.find((div) => div.id === d.id)?.strength > 0,
-    ).length;
-    const totalStrength = zone.divisions.reduce((sum, d) => {
-      const div = divisions.find((div) => div.id === d.id);
-      return sum + (div?.strength || 0);
-    }, 0);
+    const activeDivisions = zone.divisions
+      .map((d) => divisions.find((div) => div.id === d.id))
+      .filter((div) => div && div.strength > 0);
+
+    const divCount = activeDivisions.length;
+    const totalStrength = activeDivisions.reduce(
+      (sum, div) => sum + div.strength,
+      0,
+    );
 
     return (
       <div
@@ -544,6 +546,19 @@ const EasternFront = () => {
         {divCount > 0 && (
           <div className="zone-strength">
             D{divCount} S{totalStrength}
+          </div>
+        )}
+        {activeDivisions.length > 0 && (
+          <div className="zone-divisions">
+            {activeDivisions.map((div) => (
+              <div
+                key={div.id}
+                className={`zone-div zone-div-${div.side.toLowerCase()}`}
+                title={`${div.name} (${div.role}) - Strength ${div.strength}`}
+              >
+                {div.role} S{div.strength}
+              </div>
+            ))}
           </div>
         )}
       </div>

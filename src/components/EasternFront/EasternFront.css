@@ -264,6 +264,35 @@
   margin-top: 0.5rem;
 }
 
+.zone-divisions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.zone-div {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+.zone-div-ukr {
+  background: rgba(0, 87, 183, 0.2);
+  border-color: #0057b7;
+  color: #0057b7;
+}
+
+.zone-div-rus {
+  background: rgba(255, 0, 0, 0.2);
+  border-color: #ff0000;
+  color: #ff0000;
+}
+
 /* Phase Controls */
 .phase-controls {
   padding: 1.5rem;
