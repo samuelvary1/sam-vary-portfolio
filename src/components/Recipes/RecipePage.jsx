@@ -55,17 +55,26 @@ const RecipePage = () => {
           <>
             <h2>Ingredients</h2>
             <ul className="ingredients-list">
-              {recipe.ingredients.map((item, index) => (
-                <li key={index}>
-                  {typeof item === "string"
-                    ? item
-                    : typeof item === "object" && item !== null
-                      ? Object.entries(item)
-                          .map(([key, value]) => `${key}: ${value}`)
-                          .join(", ")
-                      : String(item)}
-                </li>
-              ))}
+              {recipe.ingredients.map((item, index) => {
+                // Check if this is a section header (starts with "For the")
+                const isHeader =
+                  typeof item === "string" && item.startsWith("For the");
+
+                return (
+                  <li
+                    key={index}
+                    className={isHeader ? "ingredient-section-header" : ""}
+                  >
+                    {typeof item === "string"
+                      ? item
+                      : typeof item === "object" && item !== null
+                        ? Object.entries(item)
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join(", ")
+                        : String(item)}
+                  </li>
+                );
+              })}
             </ul>
           </>
         )}

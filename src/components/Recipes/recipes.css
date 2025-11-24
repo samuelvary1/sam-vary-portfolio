@@ -114,6 +114,19 @@ body.recipes-body {
   margin-bottom: 8px;
 }
 
+.ingredient-section-header {
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  list-style-type: none;
+  margin-left: -20px;
+  color: #5b3e2b;
+}
+
+.ingredient-section-header + li {
+  margin-top: 8px;
+}
+
 /* ========== Responsive ========== */
 @media (max-width: 600px) {
   .recipes-list-page,
