@@ -155,6 +155,91 @@
 .faction-card h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: var(--accent-gold);
+}
+
+.faction-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.faction-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.advantages,
+.challenges {
+  background: var(--bg-primary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.advantages h4,
+.challenges h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-gold);
+}
+
+.advantages ul,
+.challenges ul {
+  list-style: none;
+  padding: 0;
+}
+
+.advantages li,
+.challenges li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: 1rem;
+}
+
+.advantages li::before {
+  content: "✓";
+  color: var(--success-green);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.challenges li::before {
+  content: "⚠";
+  color: var(--danger-red);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+/* Selection Screen Layouts */
+.faction-selection,
+.difficulty-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.selection-container {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+
+.selection-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
 }
 
 /* Difficulty Selection */
@@ -297,7 +382,67 @@
 .brigade-name {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Faction Selection Button */
+.select-faction-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--ukraine-blue);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.select-faction-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Back button styles */
+.back-button {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 2rem;
+}
+
+.back-button:hover {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+/* Difficulty Selection Button */
+.select-difficulty-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+
+.select-difficulty-btn:hover {
+  background: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
 }
 
 .brigade-type {
