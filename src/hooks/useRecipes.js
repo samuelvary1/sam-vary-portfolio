@@ -12,6 +12,7 @@ const recipeSlugs = [
   "shepherds-pie-carrot-mushroom",
   "lasagna",
   "halal-cart-chicken",
+  "szechuan-meatballs",
   // Add more slugs here
 ];
 
