@@ -79,55 +79,107 @@ body.recipes-body {
   background-color: rgba(255, 250, 225, 0.95);
   border: 6px solid #8b5e3c;
   border-radius: 10px;
-  padding: 32px;
-  max-width: 700px;
+  padding: 24px;
+  max-width: 1200px;
   width: 100%;
   color: #2d1f1f;
   box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
 }
 
+.recipe-header {
+  border-bottom: 2px solid #8b5e3c;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
 .recipe-title {
   font-family: "MedievalSharp", cursive;
-  font-size: 36px;
+  font-size: 32px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   color: #5b3e2b;
+}
+
+.recipe-meta {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 14px;
+  color: #5b3e2b;
+  flex-wrap: wrap;
+}
+
+.recipe-meta span {
+  white-space: nowrap;
+}
+
+.recipe-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 30px;
+}
+
+.recipe-column h2 {
+  font-size: 22px;
+  color: #5b3e2b;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #8b5e3c;
+  padding-bottom: 6px;
 }
 
 .recipe-image {
   display: block;
   max-width: 100%;
+  max-height: 300px;
   margin: 20px auto;
   border: 3px solid #5d3c1c;
   border-radius: 4px;
+  object-fit: contain;
 }
 
 .ingredients-list,
 .instructions-list {
-  margin-top: 16px;
+  margin: 0;
   padding-left: 20px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.ingredients-list li,
+.ingredients-list li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
 .instructions-list li {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
 }
 
 .ingredient-section-header {
   font-weight: bold;
-  margin-top: 16px;
+  margin-top: 12px;
   margin-bottom: 4px;
   list-style-type: none;
   margin-left: -20px;
   color: #5b3e2b;
+  font-size: 15px;
+}
+
+.ingredient-section-header:first-child {
+  margin-top: 0;
 }
 
 .ingredient-section-header + li {
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 /* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .recipe-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
 @media (max-width: 600px) {
   .recipes-list-page,
   .parchment-box {
@@ -136,6 +188,11 @@ body.recipes-body {
   }
 
   .recipe-title {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  .recipe-meta {
+    font-size: 12px;
+    gap: 12px;
   }
 }

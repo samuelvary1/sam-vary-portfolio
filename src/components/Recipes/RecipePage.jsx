@@ -41,54 +41,64 @@ const RecipePage = () => {
   return (
     <div className="recipe-page">
       <div className="parchment-box">
-        <h1 className="recipe-title">{recipe.title || "Untitled Recipe"}</h1>
+        <div className="recipe-header">
+          <h1 className="recipe-title">{recipe.title || "Untitled Recipe"}</h1>
+          {(recipe.prep_time || recipe.cook_time || recipe.servings) && (
+            <div className="recipe-meta">
+              {recipe.prep_time && <span>⏱️ Prep: {recipe.prep_time}</span>}
+              {recipe.cook_time && <span>🔥 Cook: {recipe.cook_time}</span>}
+              {recipe.servings && <span>🍽️ Serves: {recipe.servings}</span>}
+            </div>
+          )}
+        </div>
 
         {recipe.image && typeof recipe.image === "string" && (
           <img
             src={recipe.image}
-            alt={`Handwritten notes for ${recipe.title}`}
+            alt={`${recipe.title}`}
             className="recipe-image"
           />
         )}
 
-        {Array.isArray(recipe.ingredients) && (
-          <>
-            <h2>Ingredients</h2>
-            <ul className="ingredients-list">
-              {recipe.ingredients.map((item, index) => {
-                // Check if this is a section header (starts with "For the")
-                const isHeader =
-                  typeof item === "string" && item.startsWith("For the");
+        <div className="recipe-content">
+          {Array.isArray(recipe.ingredients) && (
+            <div className="recipe-column">
+              <h2>Ingredients</h2>
+              <ul className="ingredients-list">
+                {recipe.ingredients.map((item, index) => {
+                  const isHeader =
+                    typeof item === "string" && item.startsWith("For the");
 
-                return (
-                  <li
-                    key={index}
-                    className={isHeader ? "ingredient-section-header" : ""}
-                  >
-                    {typeof item === "string"
-                      ? item
-                      : typeof item === "object" && item !== null
-                        ? Object.entries(item)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join(", ")
-                        : String(item)}
-                  </li>
-                );
-              })}
-            </ul>
-          </>
-        )}
+                  return (
+                    <li
+                      key={index}
+                      className={isHeader ? "ingredient-section-header" : ""}
+                    >
+                      {typeof item === "string"
+                        ? item
+                        : typeof item === "object" && item !== null
+                          ? Object.entries(item)
+                              .map(([key, value]) => `${key}: ${value}`)
+                              .join(", ")
+                          : String(item)}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
 
-        {Array.isArray(recipe.instructions) && (
-          <>
-            <h2>Instructions</h2>
-            <ol className="instructions-list">
-              {recipe.instructions.map((step, index) => (
-                <li key={index}>{step}</li>
-              ))}
-            </ol>
-          </>
-        )}
+          {Array.isArray(recipe.instructions) && (
+            <div className="recipe-column">
+              <h2>Instructions</h2>
+              <ol className="instructions-list">
+                {recipe.instructions.map((step, index) => (
+                  <li key={index}>{step}</li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
