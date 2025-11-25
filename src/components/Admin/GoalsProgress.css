@@ -159,14 +159,14 @@
 
 .goal-target {
   color: #9ca3af;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   margin: 0;
   font-style: italic;
 }
 
 .goal-percentage {
   color: #60a5fa;
-  font-size: 1.5rem;
+  font-size: 0.95rem;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -218,7 +218,7 @@
 
 .progress-bar-container {
   width: 100%;
-  height: 1rem;
+  height: 0.625rem;
   background: #374151;
   border-radius: 9999px;
   overflow: hidden;
@@ -243,8 +243,8 @@
 
 .save-section {
   position: sticky;
-  bottom: 1.5rem;
-  margin-bottom: 1.5rem;
+  bottom: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .save-button {
@@ -252,10 +252,10 @@
   background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
   color: white;
   font-weight: 700;
-  font-size: 1.125rem;
-  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.5rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   cursor: pointer;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
   transition: all 0.2s;
@@ -279,8 +279,8 @@
 .goals-footer {
   text-align: center;
   color: #6b7280;
-  font-size: 0.875rem;
-  margin-top: 2rem;
+  font-size: 0.7rem;
+  margin-top: 0.75rem;
 }
 
 .goals-loading {
@@ -322,8 +322,8 @@
   align-items: center;
   gap: 0.5rem;
   color: #d1d5db;
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.375rem;
 }
 
 .number-field {
@@ -1114,41 +1114,41 @@
 
 .countdown-to-quit {
   text-align: center;
-  padding: 1rem;
+  padding: 0.5rem;
   background: rgba(59, 130, 246, 0.1);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   border: 2px solid rgba(59, 130, 246, 0.3);
   grid-column: 1 / -1;
 }
 
 .countdown-to-quit .countdown-number {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #60a5fa;
   line-height: 1;
 }
 
 .countdown-to-quit .countdown-label {
-  font-size: 1rem;
+  font-size: 0.75rem;
   color: #d1d5db;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   font-weight: 500;
 }
 
 .quit-date-display {
-  margin-top: 0.75rem;
-  padding: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.25rem;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   color: #e5e7eb;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 500;
 }
 
 .sobriety-gauge {
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 0.75rem;
-  padding: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -1156,31 +1156,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.375rem;
 }
 
 .gauge-label {
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #f3f4f6;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .gauge-value {
-  font-size: 1.75rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #34d399;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .gauge-visual {
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 .gauge-svg {
   width: 100%;
   height: auto;
-  max-width: 140px;
+  max-width: 100px;
   margin: 0 auto;
   display: block;
 }
@@ -1192,33 +1192,33 @@
 .milestone-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.375rem;
+  gap: 0.25rem;
   justify-content: center;
-  margin-top: 0.75rem;
+  margin-top: 0.375rem;
 }
 
 .milestone-badges .badge {
-  padding: 0.25rem 0.5rem;
+  padding: 0.125rem 0.375rem;
   background: rgba(34, 197, 94, 0.25);
   border: 1px solid rgba(34, 197, 94, 0.5);
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.625rem;
   color: #6ee7b7;
   font-weight: 600;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .money-breakdown {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .breakdown-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.375rem 0;
-  font-size: 0.85rem;
+  padding: 0.25rem 0;
+  font-size: 0.7rem;
 }
 
 .breakdown-label {
@@ -1234,16 +1234,16 @@
 
 .sobriety-footer {
   text-align: center;
-  padding: 0.75rem;
+  padding: 0.5rem;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   grid-column: 1 / -1;
 }
 
 .sobriety-date {
   margin: 0;
   color: #d1d5db;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-style: italic;
   font-weight: 500;
 }
