@@ -1107,6 +1107,193 @@ export default function GoalsProgress() {
         );
 
       case "sobriety":
+        // Custom logic for quit-drinking goal
+        if (goal.id === "quit-drinking") {
+          // Use Nov 25, 2025 at 8:00AM as day 0
+          const quitDateSob = new Date("2025-11-25T08:00:00");
+          const now = new Date();
+          // Calculate days sober: day 0 is Nov 25, 2025, day 1 is Nov 26, etc.
+          let daysSober = 0;
+          if (now >= quitDateSob) {
+            // Calculate full days since 8:00AM Nov 25, 2025
+            const msSince = now.getTime() - quitDateSob.getTime();
+            daysSober = Math.floor(msSince / (24 * 60 * 60 * 1000));
+          }
+          // Calculate money saved
+          const weeklyCost = goal.weeklyCost || 0;
+          const dailyCost = weeklyCost / 7;
+          const moneySaved = daysSober * dailyCost;
+          // Days until quit date (if not yet quit)
+          const daysUntilSober =
+            now < quitDateSob
+              ? Math.ceil((quitDateSob - now) / (24 * 60 * 60 * 1000))
+              : 0;
+          return (
+            <div className="sobriety-tracker">
+              {daysUntilSober > 0 ? (
+                <div className="countdown-to-quit">
+                  <div className="countdown-number">{daysUntilSober}</div>
+                  <div className="countdown-label">
+                    day{daysUntilSober !== 1 ? "s" : ""} until quit day
+                  </div>
+                  <div className="quit-date-display">
+                    Quit Date: Nov 25, 2025, 8:00AM
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Days Sober Gauge */}
+                  <div className="sobriety-gauge">
+                    <div className="gauge-header">
+                      <span className="gauge-label">Days Sober</span>
+                      <span className="gauge-value">{daysSober}</span>
+                    </div>
+                    <div className="gauge-visual">
+                      <svg viewBox="0 0 200 120" className="gauge-svg">
+                        {/* Background arc */}
+                        <path
+                          d="M 20 100 A 80 80 0 0 1 180 100"
+                          fill="none"
+                          stroke="#e0e0e0"
+                          strokeWidth="20"
+                          strokeLinecap="round"
+                        />
+                        {/* Progress arc - fills based on milestones */}
+                        <path
+                          d="M 20 100 A 80 80 0 0 1 180 100"
+                          fill="none"
+                          stroke="#4caf50"
+                          strokeWidth="20"
+                          strokeLinecap="round"
+                          strokeDasharray={`${Math.min((daysSober / 365) * 251, 251)} 251`}
+                          className="gauge-progress"
+                        />
+                        {/* Center text */}
+                        <text
+                          x="100"
+                          y="90"
+                          textAnchor="middle"
+                          className="gauge-number"
+                          fill="#333"
+                          fontSize="32"
+                          fontWeight="bold"
+                        >
+                          {daysSober}
+                        </text>
+                        <text
+                          x="100"
+                          y="110"
+                          textAnchor="middle"
+                          className="gauge-subtitle"
+                          fill="#666"
+                          fontSize="14"
+                        >
+                          days
+                        </text>
+                      </svg>
+                    </div>
+                    <div className="milestone-badges">
+                      {daysSober >= 1 && <span className="badge">✓ 1 Day</span>}
+                      {daysSober >= 7 && (
+                        <span className="badge">✓ 1 Week</span>
+                      )}
+                      {daysSober >= 30 && (
+                        <span className="badge">✓ 1 Month</span>
+                      )}
+                      {daysSober >= 90 && (
+                        <span className="badge">✓ 3 Months</span>
+                      )}
+                      {daysSober >= 180 && (
+                        <span className="badge">✓ 6 Months</span>
+                      )}
+                      {daysSober >= 365 && (
+                        <span className="badge">✓ 1 Year</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Money Saved Gauge */}
+                  <div className="sobriety-gauge">
+                    <div className="gauge-header">
+                      <span className="gauge-label">Money Saved</span>
+                      <span className="gauge-value">
+                        ${moneySaved.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="gauge-visual">
+                      <svg viewBox="0 0 200 120" className="gauge-svg">
+                        {/* Background arc */}
+                        <path
+                          d="M 20 100 A 80 80 0 0 1 180 100"
+                          fill="none"
+                          stroke="#e0e0e0"
+                          strokeWidth="20"
+                          strokeLinecap="round"
+                        />
+                        {/* Progress arc - fills based on money milestones */}
+                        <path
+                          d="M 20 100 A 80 80 0 0 1 180 100"
+                          fill="none"
+                          stroke="#2196f3"
+                          strokeWidth="20"
+                          strokeLinecap="round"
+                          strokeDasharray={`${Math.min((moneySaved / 10000) * 251, 251)} 251`}
+                          className="gauge-progress"
+                        />
+                        {/* Center text */}
+                        <text
+                          x="100"
+                          y="90"
+                          textAnchor="middle"
+                          className="gauge-number"
+                          fill="#333"
+                          fontSize="28"
+                          fontWeight="bold"
+                        >
+                          ${Math.floor(moneySaved)}
+                        </text>
+                        <text
+                          x="100"
+                          y="110"
+                          textAnchor="middle"
+                          className="gauge-subtitle"
+                          fill="#666"
+                          fontSize="14"
+                        >
+                          saved
+                        </text>
+                      </svg>
+                    </div>
+                    <div className="money-breakdown">
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">
+                          Daily cost avoided:
+                        </span>
+                        <span className="breakdown-value">
+                          ${dailyCost.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Weekly savings:</span>
+                        <span className="breakdown-value">
+                          ${weeklyCost.toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sobriety Date */}
+                  <div className="sobriety-footer">
+                    <p className="sobriety-date">
+                      Sober since: Nov 25, 2025, 8:00AM
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        }
+        // Default sobriety logic for other goals
         const quitDateSob = new Date(goal.quitDate);
         const todaySob = new Date();
 
